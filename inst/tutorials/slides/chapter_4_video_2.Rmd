@@ -1,0 +1,124 @@
+---
+title: Communicating cohort findings through graphs
+
+---
+
+### Communicating cohort findings through graphs
+
+Traditionally, results from cohort studies are presented as tables, but in general, tables are not as effective as figures for communicating findings.
+
+### Figures should be preferred over tables
+
+*Why?* Humans are visual, figures are visual
+
+- Easier to interpret 
+- More information per space 
+
+*When?* 
+
+- Units are the same/similar 
+- Emphasize patterns or comparisons 
+- Lots of data to show 
+
+When deciding how to present your results, first think how you could plot your data. Figures are incredibly powerful at communicating information because they leverage our strong visual system. They're easier to interpret than tables and allow for greater information transmission. 
+
+Figures are especially useful when units of measure are the same or similar, when you want to emphasize patterns or comparisons, and when there is a lot of data to show.
+
+### Comparison of presentation: Figure vs table
+
+center_content: true
+```
+
+| Predictor               |Estimate (95% CI) |
+|:------------------------|:-----------------|
+| body_mass_index         |2.1 (0.7, 6.4)    |
+| systolic_blood_pressure |1.9 (0.8, 4.3)    |
+| fasting_blood_glucose   |1.5 (0.8, 3.1)    | 
+
+![Plot of models](https://assets.datacamp.com/production/repositories/2079/datasets/140d160b5870b6468e31abb9a971d337c4c79ceb/ch4-v2-models.png) 
+
+Let's illustrate the power of using a figure. We have the estimates for three predictors from three models. Reading this table takes some time because you read it, not just see it.
+
+Compare it with using a plot. You quickly get a sense of the results, the magnitude, direction of association, and their comparison. You don't work as hard to understand the results. This is why we should prefer plots.
+
+I mentioned in chapter 3 that there are many statistical techniques to analyze cohorts. Which one you'll use will dictate the plots you'll use. A common output is some type of regression-based estimate and measure of uncertainty, which this plot shows effectively. The standard error is also another measure of uncertainty.
+
+### Plotting estimates and confidence intervals (CI)
+
+``` r
+models %>%
+    filter(model == "unadjusted") %>%
+    ggplot(aes(y = predictor, x = estimate, 
+               xmin = conf.low, xmax = conf.high)) +
+    geom_point() +
+    geom_errorbarh() +
+    geom_vline(xintercept = 1)
+```
+
+![Plot of estimate and 95% confidence interval.](https://assets.datacamp.com/production/repositories/2079/datasets/25486b26544f91dfece966db92fae24f0a3e0f3c/ch4-v2-estimate-ci-basic.png) 
+
+We can make this type of plot using geom-underscore-point, geom-underscore-errorbarh, and geom-underscore-vline. 
+
+Each item on the y axis is a single model's predictor and associated estimate, as an odds ratio, and confidence interval. For this plot, it needs an x for the estimate, an xmin for the lower confidence limit and xmax for the upper confidence limit.
+
+Since the center line is one for odds ratios, we need to set the x-intercept to one. When you have many model results, this plot can easily show all the models, providing a bigger overview of the findings and making it easier to compare predictors.
+
+### Making the plot prettier
+
+``` r
+models %>%
+    filter(model == "unadjusted") %>%
+    ggplot(aes(y = predictor, x = estimate, 
+    		   xmin = conf.low, xmax = conf.high)) +
+    geom_point(size = 2) +
+    geom_errorbarh(height = 0.1) +
+    geom_vline(xintercept = 1, linetype = "dashed") +
+    theme_bw()
+```
+
+![(Slightly nicer) plot of estimate and 95% confidence interval.](https://assets.datacamp.com/production/repositories/2079/datasets/7bae2f71e5e1e6b0349ced75f3b5422af184c289/ch4-v2-estimate-ci-nicer.png) 
+
+There are couple things we could do to make the plot instantly prettier. The dot size in geom-underscore-point is a bit small so let's increase it to two using the size argument.
+
+The errorbar ends are also a bit long. We'll shorten to zero point one with the height argument. Larger values will lead to overlap.
+
+Let's differentiate the vline by setting the linetype argument to dashed. There are many other options for linetype such as dotted or solid.
+
+We can also change the theme. While there are several themes available, let's use theme-underscore-bw.
+
+### Unadjusted and adjusted models in a single plot
+
+``` r
+models %>%
+    ggplot(aes(y = predictor, x = estimate, 
+               xmin = conf.low, xmax = conf.high)) +
+    geom_point() +
+    geom_errorbarh(height = 0.2) +
+    geom_vline(xintercept = 1, linetype = "dashed") +
+    facet_grid(rows = vars(model))
+```
+
+![Showing both unadjusted and adjusted results](https://assets.datacamp.com/production/repositories/2079/datasets/07618ebbfd68c3d3a9c8e64fbe139b40d34e2ef4/ch4-v2-unadjusted-adjusted.png) 
+
+As stated in the STROBE best practices, you need to show both unadjusted and adjusted models. Showing both on a single plot is easy if your data is properly setup. With all models in a single dataframe, you can plot the unadjusted and adjusted models by splitting them using facet-underscore-grid. Use the vars function to set the model variable. With the rows argument, the model groups will be vertically stacked instead of side by side.
+
+### Got an interaction? Plot it
+
+- *Any interaction should be plotted* 
+    - Simplifies interpretation
+    - Should be main focus of findings
+- **But**, interactions are hard 
+    - Easy to model, difficult to visualize
+- Found an interaction? 
+    - Get specialized training or support
+
+Interactions are an extremely valuable source of scientific information and they need to be visualized to simplify the often difficult interpretation. 
+
+Although modeling interactions is easy, visualizing them can be incredibly difficult and time-consuming. Visualizing interactions is heavily dependent on the modeling technique. This could be the topic of an entire course, but here we will not go into more detail. 
+
+If your data has an interaction, get specialized training or support so you correctly visualize it.
+
+### Plotting time!
+
+Excellent, let's practice some of these skills.
+

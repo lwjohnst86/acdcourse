@@ -1,0 +1,434 @@
+---
+title: 'Introduction to cohorts and to analyzing them'
+output:
+ learnr::tutorial:
+   theme: sandstone
+   highlight: haddock
+   allow_skip: TRUE
+runtime: shiny_prerendered
+---
+
+<!-- TODO: Deal with previous `@sct` tags (now `-check` labels), they aren't supported. -->
+<!-- TODO: Confirm MCQ exercise has been correctly parsed. -->
+<!-- TODO: Check that Tab or Bullet Exercises were converted properly. -->
+<!-- TODO: Fix Tab or Bullet Exercise chunk labels, there will be duplicates. They need to follow the pattern as described in https://rstudio.github.io/learnr/exercises.html#hints_and_solutions -->
+<!-- TODO: Decide what to do with pre-exercise code from MCQ, they aren't supported. -->
+<!-- TODO: Decide what to do with `success_msg`, these aren't supported. -->
+<!-- TODO: Hint text needs to be moved to below the sample code chunk. -->
+
+```{r setup, include=FALSE}
+library(learnr)
+knitr::opts_chunk$set(echo = FALSE, warning = FALSE, message = FALSE)
+```
+
+## Introduction to cohort studies
+
+```{r, child='slides/chapter_1_video_1.Rmd'}
+```
+
+## What makes it a cohort?
+
+The Framingham cohort was set up to study what factors may influence the risk of
+cardiovascular disease (CVD). People from the town of Framingham, USA were
+recruited and followed over time. Data was collected on risk factors and CVD
+outcomes every few years.
+
+The `framingham` dataset has been loaded for you to *optionally* explore,
+however, do note that the dataset has not yet been tidied. We'll go through
+tidying it in Chapter 2.
+
+```{r what-makes-it-a-cohort-MultipleChoiceExercise-mcq, echo=FALSE}
+question("What specifically distinguishes the Framingham study as a *cohort*?",
+  answer("It studies a disease (CVD).", correct = FALSE, message = "Almost, but incorrect. Many types of scientific studies study a disease, but that alone doesn't distinguish them as a cohort study."),
+  answer("Participants all came from the town of Framingham, USA.", correct = TRUE, message = "Cohorts are people who share a common characteristic. In this case, the participants come from the same town and so have a similar environment."),
+  answer("Participants were followed over time.", correct = FALSE, message = "Almost, but incorrect. Many types of scientific studies follow their subjects over time (e.g. clinical trials), but that alone doesn't distinguish them as a cohort study."),
+  answer("Participants had risk factors measured.", correct = FALSE, message = "Incorrect. Many types of scientific studies measure risk factors, but that alone doesn't distinguish them as a cohort."),
+  allow_retry = TRUE
+)
+```
+
+```{r what-makes-it-a-cohort-MultipleChoiceExercise-hint-1, eval=FALSE}
+"Cohorts are people who have *something in common*."
+```
+
+## What cohort type is the Framingham Heart Study? {data-progressive=TRUE}
+
+It's usually possible to determine the cohort design from the variables within
+the dataset. There are at least two variables in the Framingham Heart study that
+give us some indication of the cohort design. Recall that cohorts involve a data
+collection *period*.
+
+The `dplyr` package has been loaded, as well as the `framingham` dataset. Again,
+note that `framingham` has not yet been tidied up, which we will do later in the
+course.
+
+```{r what-cohort-type-is-the-framingham-heart-study-NormalExercise-setup}
+library(dplyr)
+library(acdcourse)
+data("framingham")
+framingham$time <- NULL
+```
+
+### Exercise step
+
+**Instructions**:
+
+- Familiarize yourself with the variables in the `framingham` dataset.
+- Select the two variables that give the *most* indication on `framingham`'s cohort design.
+
+```{r what-cohort-type-is-the-framingham-heart-study-NormalExercise, exercise=TRUE, exercise.setup='what-cohort-type-is-the-framingham-heart-study-NormalExercise-setup'}
+# Check out the variable names
+names(framingham)
+
+# Select the two columns that indicate design
+framingham %>% 
+    select(___, ___)
+```
+
+```{r what-cohort-type-is-the-framingham-heart-study-NormalExercise-hint-1, eval=FALSE}
+"The Framingham cohort was designed to study the disease `cvd`."
+```
+
+```{r what-cohort-type-is-the-framingham-heart-study-NormalExercise-hint-2, eval=FALSE}
+# Check out the variable names
+names(framingham)
+
+# Select two columns that indicate design
+framingham %>% 
+    select(period, cvd)
+```
+
+```{r what-cohort-type-is-the-framingham-heart-study-NormalExercise-check, eval=FALSE}
+"Great job!"
+```
+
+### Exercise step
+
+```{r what-cohort-type-is-the-framingham-heart-study-MultipleChoiceExercise-mcq, echo=FALSE}
+question("What is Framingham's cohort design? Remember, *when* the disease occurs is what
+distinguishes prospective from retrospective cohorts.",
+  answer("Prospective.", correct = TRUE),
+  answer("Retrospective.", correct = FALSE, message = "Incorrect. Participants enter the study with a disease. In Framingham, participants did not have the disease."),
+  answer("Neither.", correct = FALSE, message = "Incorrect."),
+  answer("Both.", correct = FALSE, message = "Incorrect. It can't be both!"),
+  allow_retry = TRUE
+)
+```
+
+```{r exercise-NormalExercise-hint-1, eval=FALSE}
+"The study was designed to investigate how people *develop* CVD over time (i.e. they don't have the disease when the study starts)."
+```
+
+## Cohort types, variables, and the Framingham Study
+
+```{r, child='slides/chapter_1_video_2.Rmd'}
+```
+
+## Select the outcome and some exposures 
+
+To properly analyze the data you need to know what each variable represents.
+Usually it's fairly easy to identify the outcome (the disease). However, knowing
+which variables are potential exposures to investigate can be tricky, since
+modern cohort studies often measure hundreds of variables on each participant.
+
+Initially, it can be helpful to keep only the variables of interest. For now,
+select a few interesting variables, renaming them so they are more descriptive,
+and exploring them more.
+
+**Instructions**:
+
+- Run `names(framingham)` in the console to find the exact names of the variables. 
+- Choose the correct outcome for cardiovascular disease (CVD). Rename it to `got_cvd`.
+- Rename the three predictors to `total_cholesterol`, `body_mass_index` and `currently_smokes`.
+- Rename the `period` variable to `followup_visit_number`.
+
+```{r select-the-outcome-and-some-exposures-NormalExercise-setup}
+library(dplyr)
+library(acdcourse)
+data("framingham")
+```
+
+```{r select-the-outcome-and-some-exposures-NormalExercise, exercise=TRUE, exercise.setup='select-the-outcome-and-some-exposures-NormalExercise-setup'}
+# Select and rename the potential predictors and outcome
+explore_framingham <- framingham %>%
+    select(
+        # Format: new_variable_name = old_variable_name
+        # Outcome
+        _____ = cvd,
+        # Predictors
+        _____ = totchol,
+        _____ = bmi,
+        _____ = cursmoke,
+        # Visit number
+        _____ = period 
+    )
+explore_framingham
+```
+
+```{r select-the-outcome-and-some-exposures-NormalExercise-hint-1, eval=FALSE}
+"Rename `bmi` to `body_mass_index`, `totchol` to `total_cholesterol`, and `cursmoke` to `currently_smokes`."
+```
+
+```{r select-the-outcome-and-some-exposures-NormalExercise-hint-2, eval=FALSE}
+# Select and rename the potential predictors and outcome
+explore_framingham <- framingham %>%
+    select(
+        # Format: new_variable_name = old_variable_name
+        # Outcome
+        got_cvd = cvd,
+        # Predictors
+        total_cholesterol = totchol,
+        body_mass_index = bmi,
+        currently_smokes = cursmoke,
+        # Visit number
+        followup_visit_number = period 
+    )
+explore_framingham
+```
+
+```{r select-the-outcome-and-some-exposures-NormalExercise-check, eval=FALSE}
+"Great job! You've selected and renamed the variables correctly."
+```
+
+## Simple summary of the exposures by outcome
+
+Getting some simple summaries of the exposures by those with and without the
+disease should be done early in any analysis of cohort datasets. Even more so
+when there is a time component to the study, so you can identify how variables
+change over time or are different between groups.
+
+Using what was shown in the video, calculate some means based on some groupings.
+
+**Instructions**:
+
+- Group the data by `followup_visit_number` and `got_cvd` using the `dplyr` function `group_by()`.
+- Calculate the mean for `body_mass_index`, `currently_smokes`, and `total_cholesterol`  using `summarize()` and `mean()`.
+- Make sure that `mean()` drops `NA` values by setting the `na.rm` argument to `TRUE`.
+
+```{r simple-summary-of-the-exposures-by-outcome-NormalExercise-setup}
+library(dplyr)
+library(acdcourse)
+data("framingham")
+explore_framingham <- framingham %>%
+    select(
+        got_cvd = cvd,
+        total_cholesterol = totchol,
+        body_mass_index = bmi,
+        currently_smokes = cursmoke,
+        followup_visit_number = period
+    )
+```
+
+```{r simple-summary-of-the-exposures-by-outcome-NormalExercise, exercise=TRUE, exercise.setup='simple-summary-of-the-exposures-by-outcome-NormalExercise-setup'}
+explore_framingham %>% 
+    # Group by visit and CVD status
+    group_by(___, ___) %>% 
+    # Mean of body mass, smoking, and cholesterol
+    summarize(
+        body_mass_mean = mean(___, na.rm = ___),
+        smokes_mean = ___,
+        cholesterol_mean = ___
+    )
+```
+
+```{r simple-summary-of-the-exposures-by-outcome-NormalExercise-hint-1, eval=FALSE}
+"Use `na.rm = TRUE` with `mean()` to exclude `NA` from the mean calculation."
+```
+
+```{r simple-summary-of-the-exposures-by-outcome-NormalExercise-hint-2, eval=FALSE}
+explore_framingham %>% 
+    # Group by visit and CVD status
+    group_by(followup_visit_number, got_cvd) %>% 
+    # Mean of body mass, smoking, and cholesterol
+    summarize(
+        body_mass_mean = mean(body_mass_index, na.rm = TRUE),
+        smokes_mean = mean(currently_smokes, na.rm = TRUE),
+        cholesterol_mean = mean(total_cholesterol, na.rm = TRUE)
+    )
+```
+
+```{r simple-summary-of-the-exposures-by-outcome-NormalExercise-check, eval=FALSE}
+"Awesome! You learned how to compare the difference in some basic predictors in those who did and did not get CVD over the study duration."
+```
+
+## Prevalence and incidence in cohorts
+
+```{r, child='slides/chapter_1_video_3.Rmd'}
+```
+
+## Count number of participants and cases per visit {data-progressive=TRUE}
+
+Here, you will count the number of cases and non-cases for both prevalent
+myocardial infarction (MI), or `prevalent_mi`, and coronary heart disease (CHD),
+or `prevalent_chd`, at each visit. Remember, for longitudinal data, like that in
+prospective cohorts, you need to count by the time period since each participant
+will have several rows for each of the data collection visits.
+
+Both `dplyr` and `tidyr` are loaded and all variables have been added back into `explore_framingham`.
+
+```{r count-number-of-participants-and-cases-per-visit-NormalExercise-setup}
+library(dplyr)
+library(acdcourse)
+data("framingham")
+explore_framingham <- framingham %>%
+    rename(
+        got_cvd = cvd, 
+        total_cholesterol = totchol,
+        body_mass_index = bmi,
+        currently_smokes = cursmoke,
+        followup_visit_number = period,
+        prevalent_chd = prevchd,
+        prevalent_mi = prevmi
+    )
+```
+
+### Exercise step
+
+**Instructions**:
+
+- Use `count()` to find the number of participants at each `followup_visit_number`.
+
+```{r count-number-of-participants-and-cases-per-visit-NormalExercise, exercise=TRUE, exercise.setup='count-number-of-participants-and-cases-per-visit-NormalExercise-setup'}
+# Count number of participants per visit
+explore_framingham %>%
+    count(___)
+```
+
+```{r count-number-of-participants-and-cases-per-visit-NormalExercise-hint-1, eval=FALSE}
+"The code is `count(followup_visit_number)`."
+```
+
+```{r count-number-of-participants-and-cases-per-visit-NormalExercise-hint-2, eval=FALSE}
+# Count number of participants per visit
+explore_framingham %>% 
+    count(followup_visit_number)
+```
+
+```{r count-number-of-participants-and-cases-per-visit-NormalExercise-check, eval=FALSE}
+"Great!"
+```
+
+### Exercise step
+
+**Instructions**:
+
+- Count the number of participants with `prevalent_mi` at each `followup_visit_number`.
+
+
+```{r count-number-of-participants-and-cases-per-visit-NormalExercise-1, exercise=TRUE, exercise.setup='count-number-of-participants-and-cases-per-visit-NormalExercise-setup'}
+explore_framingham %>% 
+    count(followup_visit_number)
+
+# Count by visit, then prevalent cases of MI
+explore_framingham %>% 
+    count(___, ___)
+```
+
+```{r count-number-of-participants-and-cases-per-visit-NormalExercise-1-hint-1, eval=FALSE}
+"Include both variables in `count()`, separated by a comma."
+```
+
+```{r count-number-of-participants-and-cases-per-visit-NormalExercise-1-hint-2, eval=FALSE}
+explore_framingham %>% 
+    count(followup_visit_number)
+
+# Count by visit, then prevalent cases of MI
+explore_framingham %>% 
+    count(followup_visit_number, prevalent_mi)
+```
+
+```{r count-number-of-participants-and-cases-per-visit-NormalExercise-1-check, eval=FALSE}
+"Amazing!"
+```
+
+### Exercise step
+
+**Instructions**:
+
+- Lastly, do the same thing for `prevalent_chd`.
+
+```{r count-number-of-participants-and-cases-per-visit-NormalExercise-2, exercise=TRUE, exercise.setup='count-number-of-participants-and-cases-per-visit-NormalExercise-setup'}
+explore_framingham %>% 
+    count(followup_visit_number)
+
+explore_framingham %>% 
+    count(followup_visit_number, prevalent_mi)
+
+# Count by visit, then prevalent cases of CHD
+explore_framingham %>% 
+    count(___, ___)
+```
+
+```{r count-number-of-participants-and-cases-per-visit-NormalExercise-2-hint-1, eval=FALSE}
+"Use the same syntax as for the `prevalent_mi` code."
+```
+
+```{r count-number-of-participants-and-cases-per-visit-NormalExercise-2-hint-2, eval=FALSE}
+explore_framingham %>% 
+    count(followup_visit_number)
+
+explore_framingham %>% 
+    count(followup_visit_number, prevalent_mi)
+
+# Count by visit, then prevalent cases of CHD
+explore_framingham %>% 
+    count(followup_visit_number, prevalent_chd)
+```
+
+```{r count-number-of-participants-and-cases-per-visit-NormalExercise-2-check, eval=FALSE}
+"Woohoo! Nice job. You now know how to count the number of cases by visit."
+```
+
+## Remove prevalent cases at the baseline
+
+From the previous exercise, we know that there are prevalent cases of cardiovascular events at the first visit. Prevalent cases of disease at the recruitment visit can introduce bias, so we need to remove these cases before continuing with any further analyses.
+
+**Instructions**:
+
+- Exclude (with `!`) observations where `followup_visit_number` is equal to 1 *and* where `prevalent_chd` is equal to 1.
+- Count the number of observations to make sure that patients with CHD at the first visit were dropped.
+
+```{r remove-prevalent-cases-at-the-baseline-NormalExercise-setup}
+library(dplyr)
+library(acdcourse)
+data("framingham")
+explore_framingham <- framingham %>%
+    rename(
+        got_cvd = cvd, 
+        total_cholesterol = totchol,
+        body_mass_index = bmi,
+        participant_age = age,
+        currently_smokes = cursmoke,
+        followup_visit_number = period,
+        prevalent_chd = prevchd,
+        prevalent_mi = prevmi
+    )
+```
+
+```{r remove-prevalent-cases-at-the-baseline-NormalExercise, exercise=TRUE, exercise.setup='remove-prevalent-cases-at-the-baseline-NormalExercise-setup'}
+# Drop prevalent chd cases from first visit
+no_prevalent_cases <- explore_framingham %>% 
+    filter(!(___ == ___ & ___ == ___)) 
+
+# Confirm the number by counting visit then chd cases
+no_prevalent_cases %>% 
+    count(___, ___) 
+```
+
+```{r remove-prevalent-cases-at-the-baseline-NormalExercise-hint-1, eval=FALSE}
+"Filtering logic has the form `variable == condition`, for instance `followup_visit_number == 1`."
+```
+
+```{r remove-prevalent-cases-at-the-baseline-NormalExercise-hint-2, eval=FALSE}
+# Drop prevalent chd cases from first visit
+no_prevalent_cases <- explore_framingham %>% 
+    filter(!(followup_visit_number == 1 & prevalent_chd == 1)) 
+
+# Confirm the number by counting visit then chd cases
+no_prevalent_cases %>% 
+    count(followup_visit_number, prevalent_chd) 
+```
+
+```{r remove-prevalent-cases-at-the-baseline-NormalExercise-check, eval=FALSE}
+"Excellent! You've dropped baseline prevalent cases of CHD and started making sure that you've reduced bias in the final results!"
+```

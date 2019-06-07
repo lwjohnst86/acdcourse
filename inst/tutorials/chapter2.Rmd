@@ -1,0 +1,631 @@
+---
+title: 'Exploring, wrangling, and transforming cohort data'
+description: 'Before statistically analyzing cohort data, you''ll need to explore and wrangle it into an appropriately analyzable format. You''ll also learn about some common transformations to apply to variables in cohort studies.'
+output:
+ learnr::tutorial:
+   theme: sandstone
+runtime: shiny_prerendered
+---
+
+<!-- TODO: Deal with previous `@sct` tags (now `-check` labels), they aren't supported. -->
+<!-- TODO: Check that video content has been added. -->
+<!-- TODO: Confirm MCQ exercise has been correctly parsed. -->
+<!-- TODO: Check that Tab or Bullet Exercises were converted properly. -->
+<!-- TODO: Fix Tab or Bullet Exercise chunk labels, there will be duplicates. They need to follow the pattern as described in https://rstudio.github.io/learnr/exercises.html#hints_and_solutions -->
+<!-- TODO: Decide what to do with pre-exercise code from MCQ, they aren't supported. -->
+<!-- TODO: Decide what to do with `success_msg`, these aren't supported. -->
+<!-- TODO: Hint text needs to be moved to below the sample code chunk. -->
+
+```{r setup, include=FALSE}
+library(learnr)
+knitr::opts_chunk$set(echo = FALSE, warning = FALSE, message = FALSE)
+```
+## Pre-wrangling exploration
+
+```{r, child='slides/chapter_2_video_1.Rmd'}
+```
+
+## Plot univariate distributions
+
+Let's get comfortable creating some univariate histograms to start exploring the data. Create several histograms of a couple variables. The `ggplot2` package has been loaded.
+
+```{r plot-univariate-distributions-NormalExercise-setup}
+tidier_framingham <- readRDS('datasets/tidier_framingham.rds')
+library(ggplot2)
+```
+
+### Exercise
+
+**Instructions**:
+
+- Set `x` to `participant_age` and add a `geom_histogram()` layer.
+
+```{r exercise-NormalExercise-hint-1, eval=FALSE}
+"In the `aes()`, the argument should be `x = participant_age`."
+```
+
+```{r plot-univariate-distributions-NormalExercise, exercise=TRUE, exercise.setup='plot-univariate-distributions-NormalExercise-setup'}
+# Examine the age histogram
+ggplot(tidier_framingham, aes(x = ___)) +
+    ___()
+```
+
+```{r plot-univariate-distributions-NormalExercise-hint-2, eval=FALSE}
+# Examine the age histogram
+ggplot(tidier_framingham, aes(x = participant_age)) +
+    geom_histogram()
+```
+
+```{r plot-univariate-distributions-NormalExercise-check, eval=FALSE}
+"Nice!"
+```
+
+### Exercise
+
+**Instructions**:
+
+- Do the same thing, but set `x` to `systolic_blood_pressure`.
+
+```{r exercise-NormalExercise-hint-1, eval=FALSE}
+"The `aes()` should have `x = systolic_blood_pressure`."
+```
+
+```{r plot-univariate-distributions-NormalExercise, exercise=TRUE, exercise.setup='plot-univariate-distributions-NormalExercise-setup'}
+# Examine the systolic blood pressure histogram
+ggplot(tidier_framingham, aes(x = ___)) +
+    ___()
+```
+
+```{r plot-univariate-distributions-NormalExercise-hint-2, eval=FALSE}
+# Examine the systolic blood pressure histogram
+ggplot(tidier_framingham, aes(x = systolic_blood_pressure)) +
+    geom_histogram()
+```
+
+```{r plot-univariate-distributions-NormalExercise-check, eval=FALSE}
+"Great job! You've created histograms and examined two variables."
+```
+
+## Long data and visualizing variables over time
+
+Now that you've learned how to create histograms, let's convert some of the Framingham dataset into the long data format using `gather()`. Then, using the long data form, create histograms for multiple variables simultaneously for each followup visit. This will give us a quick overview of the data and their distribution. Pay attention to how the distribution of each variable looks like.
+
+```{r long-data-and-visualizing-variables-over-time-NormalExercise-setup}
+tidier_framingham <- readRDS('datasets/tidier_framingham.rds')
+library(dplyr)
+library(tidyr)
+library(ggplot2)
+```
+
+### Exercise
+
+**Instructions**:
+
+- Select the variables `total_cholesterol`, `high_density_lipoprotein`, and `low_density_lipoprotein`.
+- Using `gather()`, set the two new column names as `variable` and `value`, and then exclude `followup_visit_number` from being "gathered" (using the `-`).
+
+```{r exercise-NormalExercise-hint-1, eval=FALSE}
+"The `gather()` function should look like `gather(variable, value, -followup_visit_number)`."
+```
+
+```{r long-data-and-visualizing-variables-over-time-NormalExercise, exercise=TRUE, exercise.setup='long-data-and-visualizing-variables-over-time-NormalExercise-setup'}
+tidier_framingham %>%
+    select(
+        followup_visit_number,
+        # Select the three cholesterol-based variables
+        ___, ___, ___
+    ) %>%
+    gather(___, ___, -___)
+```
+
+```{r long-data-and-visualizing-variables-over-time-NormalExercise-hint-2, eval=FALSE}
+tidier_framingham %>%
+    select(
+        followup_visit_number,
+        # Select the three cholesterol-based variables
+        total_cholesterol, high_density_lipoprotein, low_density_lipoprotein
+    ) %>%
+    gather(variable, value, -followup_visit_number)
+```
+
+```{r long-data-and-visualizing-variables-over-time-NormalExercise-check, eval=FALSE}
+"Great!"
+```
+
+### Exercise
+
+**Instructions**:
+
+- `facet_wrap()` by the variables `followup_visit_number` and `variable`. Don't forget to use the `vars()` function.
+
+```{r exercise-NormalExercise-hint-1, eval=FALSE}
+"The `facet_wrap()` variables need to be within the `vars()` function and separated by a comma."
+```
+
+```{r long-data-and-visualizing-variables-over-time-NormalExercise, exercise=TRUE, exercise.setup='long-data-and-visualizing-variables-over-time-NormalExercise-setup'}
+tidier_framingham %>%
+    select(
+        followup_visit_number,
+        # Select the three cholesterol-based variables
+        total_cholesterol, high_density_lipoprotein, low_density_lipoprotein
+    ) %>%
+    gather(variable, value, -followup_visit_number) %>%
+    ggplot(aes(x = value)) +
+    geom_histogram() +
+    # Facet by followup and variables
+    ___(___(___, ___), 
+        scales = "free")
+```
+
+```{r long-data-and-visualizing-variables-over-time-NormalExercise-hint-2, eval=FALSE}
+tidier_framingham %>%
+    select(
+        followup_visit_number,
+        # Select the three cholesterol-based variables
+        total_cholesterol, high_density_lipoprotein, low_density_lipoprotein
+    ) %>%
+    gather(variable, value, -followup_visit_number) %>%
+    ggplot(aes(x = value)) +
+    geom_histogram() +
+    # Facet by followup and variables
+    facet_wrap(vars(followup_visit_number, variable), 
+               scales = "free")
+```
+
+```{r long-data-and-visualizing-variables-over-time-NormalExercise-check, eval=FALSE}
+"Great!"
+```
+
+### Exercise
+
+**Instructions**:
+
+- Select new variables `participant_age`, `body_mass_index`, and `cigarettes_per_day`, then run the plot again.
+
+```{r exercise-NormalExercise-hint-1, eval=FALSE}
+"Put the variables in the `select()` function."
+```
+
+```{r long-data-and-visualizing-variables-over-time-NormalExercise, exercise=TRUE, exercise.setup='long-data-and-visualizing-variables-over-time-NormalExercise-setup'}
+tidier_framingham %>%
+    select(
+        followup_visit_number,
+        # Select the three charactistics
+        ___, ___, ___
+    ) %>%
+    gather(variable, value, -followup_visit_number) %>%
+    ggplot(aes(x = value)) +
+    geom_histogram() +
+    facet_wrap(vars(followup_visit_number, variable), 
+               scales = "free")
+```
+
+```{r long-data-and-visualizing-variables-over-time-NormalExercise-hint-2, eval=FALSE}
+tidier_framingham %>%
+    select(
+        followup_visit_number,
+        # Select the three charactistics
+        body_mass_index, participant_age, cigarettes_per_day
+    ) %>%
+    gather(variable, value, -followup_visit_number) %>%
+    ggplot(aes(x = value)) +
+    geom_histogram() +
+    facet_wrap(vars(followup_visit_number, variable), 
+               scales = "free")
+```
+
+```{r long-data-and-visualizing-variables-over-time-NormalExercise-check, eval=FALSE}
+"Amazing!"
+```
+
+### Exercise
+
+There were several things to observe from the distributions of the variables and some things to consider for later analyses. Did you notice a few of them?
+
+Which of the answers below describes some observations about the data.
+
+```{r exercise-NormalExercise-hint-1, eval=FALSE}
+"Run the code again and check the histogram plots."
+
+```
+```{r long-data-and-visualizing-variables-over-time-MultipleChoiceExercise-mcq, echo=FALSE}
+# TODO: Add the question below in the quotation marks
+question("",
+  answer("The lipoprotein data was not available at visits 1 and 2.", correct = FALSE, message = "FIXME"),
+  answer("Most people smoked zero cigarettes per day.", correct = FALSE, message = "FIXME"),
+  answer("The participants' age had a "jagged", uneven distribution.", correct = FALSE, message = "FIXME"),
+  answer("[All of the above.]", correct = FALSE, message = "FIXME"),
+  answer("None of the above.", correct = FALSE, message = "FIXME"),
+  allow_retry = TRUE
+)
+```
+
+## Visually examine the outcomes with the exposures
+
+Boxplots are great for showing a distribution by a grouping variable (e.g. sex or disease status). Create multiple boxplots of several exposure variables with the outcome variable (CVD) by combining what we learned previously about converting to long form and using faceting. Since we want to plot CVD status on the x-axis, we'll need to exclude it from being "gathered".
+
+**Instructions**:
+
+- Select the variables `got_cvd`, `total_cholesterol`, `participant_age`, and `body_mass_index`.
+- Also exclude `got_cvd` from the `gather()` function and set `value` for the y-axis in `aes()`.
+- Add a `geom_boxplots()` layer.
+- Lastly, flip the plot using `coord_flip()`.
+
+```{r visually-examine-the-outcomes-with-the-exposures-NormalExercise-hint-1, eval=FALSE}
+"The initial `ggplot2` setup should be `ggplot(aes(x = value, y = variable))`."
+"Include `-got_cvd` after `-followup_visit_number` in `gather()`."
+```
+
+```{r visually-examine-the-outcomes-with-the-exposures-NormalExercise-setup}
+tidier_framingham <- readRDS('datasets/tidier_framingham.rds')
+library(dplyr)
+library(tidyr)
+library(ggplot2)
+tidier_framingham <- tidier_framingham %>% 
+    mutate(got_cvd = as.character(got_cvd))
+```
+
+```{r visually-examine-the-outcomes-with-the-exposures-NormalExercise, exercise=TRUE, exercise.setup='visually-examine-the-outcomes-with-the-exposures-NormalExercise-setup'}
+tidier_framingham %>% 
+    select(followup_visit_number,
+           # Select the disease and the three continuous variables
+           ___, ___,
+           ___, ___) %>% 
+    # Exclude also the disease
+    gather(variable, value, -followup_visit_number, -___) %>% 
+    ggplot(aes(y = ___, x = variable)) +
+    # Plot boxplots
+    ___() +
+    facet_wrap(vars(followup_visit_number), ncol = 1) +
+    # Flip the plot
+    ___()
+```
+
+```{r visually-examine-the-outcomes-with-the-exposures-NormalExercise-hint-2, eval=FALSE}
+tidier_framingham %>% 
+    select(followup_visit_number,
+           # Select the disease and the three continuous variables
+           got_cvd, total_cholesterol,
+           participant_age, body_mass_index) %>% 
+    # Exclude also the disease
+    gather(variable, value, -followup_visit_number, -got_cvd) %>% 
+    ggplot(aes(y = value, x = variable)) +
+    # Plot boxplots
+    geom_boxplot() +
+    facet_wrap(vars(followup_visit_number), ncol = 1) +
+    # Flip the plot
+    coord_flip()
+```
+
+```{r visually-examine-the-outcomes-with-the-exposures-NormalExercise-check, eval=FALSE}
+"Excellent! You quickly created a figure showing several continuous variables by the outcome, and over time! Notice how some variables are a bit higher in the `got_cvd` group and that over time these differences decreased? Also notice the problem of showing multiple variables that have vastly different values such as between body mass and cholesterol."
+```
+
+## Discrete data and tidying it for later analysis
+
+```{r, child='slides/chapter_2_video_2.Rmd'}
+```
+
+## Make discrete variables human-readable
+
+As you may have noticed, there are several discrete variables with ambiguous values. For instance, sex has the values as either 1 or 2, but what do those numbers mean? Often, you will encounter discrete data as integers rather than descriptive strings when working with cohort datasets. With data like this, you need to have a data dictionary to know what the numbers mean. Let's fix this problem and tidy up the data so it is more intuitive and descriptive.
+
+```{r make-discrete-variables-human-readable-NormalExercise-setup}
+tidier_framingham <- readRDS('datasets/tidier_framingham.rds')
+library(dplyr)
+```
+
+### Exercise
+
+**Instructions**:
+
+- Tidy education up with `case_when()` to: 1 = "0-11 years"; 2 = "High School"; 3 = "Vocational"; 4 = "College".
+
+```{r exercise-NormalExercise-hint-1, eval=FALSE}
+"The form for the `case_when()` should look like `education == 1 ~ "0-11 years"`, for each number-string pairing."
+```
+
+```{r make-discrete-variables-human-readable-NormalExercise, exercise=TRUE, exercise.setup='make-discrete-variables-human-readable-NormalExercise-setup'}
+tidier2_framingham <- tidier_framingham %>% 
+    mutate(education = case_when(
+      # Use the format: variable == number ~ "string"
+      education == ___ ~ ___,
+      TRUE ~ NA_character_))
+
+# Check changed education
+count(tidier2_framingham, education)
+```
+
+```{r make-discrete-variables-human-readable-NormalExercise-hint-2, eval=FALSE}
+tidier2_framingham <- tidier_framingham %>% 
+    mutate(education = case_when(
+      # Use the format: variable == number ~ "string"
+      education == 1 ~ "0-11 years",
+      education == 2 ~ "High School",
+      education == 3 ~ "Vocational",
+      education == 4 ~ "College",
+      TRUE ~ NA_character_))
+
+# Check changed education
+count(tidier2_framingham, education)
+```
+
+```{r make-discrete-variables-human-readable-NormalExercise-check, eval=FALSE}
+"Excellent!"
+```
+
+### Exercise
+
+**Instructions**:
+
+- Do the same thing for the `sex` variable, to: 1 = "Man"; 2 = "Woman".
+
+```{r exercise-NormalExercise-hint-1, eval=FALSE}
+"The form for the `case_when()` should look like `sex == 1 ~ "Man"`, for each number-string pairing."
+```
+
+```{r make-discrete-variables-human-readable-NormalExercise, exercise=TRUE, exercise.setup='make-discrete-variables-human-readable-NormalExercise-setup'}
+tidier2_framingham <- tidier_framingham %>% 
+    mutate(sex = case_when(
+      # Use the format: variable == number ~ "string"
+      sex == ___ ~ ___,
+      TRUE ~ NA_character_))
+    
+# Check changed education
+count(tidier2_framingham, sex)
+```
+
+```{r make-discrete-variables-human-readable-NormalExercise-hint-2, eval=FALSE}
+tidier2_framingham <- tidier_framingham %>% 
+    mutate(sex = case_when(
+      # Use the format: variable == number ~ "string"
+      sex == 1 ~ "Man",
+      sex == 2 ~ "Woman",
+      TRUE ~ NA_character_))
+    
+# Check changed education
+count(tidier2_framingham, sex)
+```
+
+```{r make-discrete-variables-human-readable-NormalExercise-check, eval=FALSE}
+"Awesome! You've tidied up discrete values to be understandable to humans!"
+```
+
+## Merge factor categories together
+
+Sometimes, categorical variables (as factors or characters) have many levels but only a few observations in one or more of the levels. It might make sense to combine categories together for some analyses or particular questions.
+
+The `forcats` package has been preloaded as well as the previous `tidier2_framingham` dataset you tidied.
+
+**Instructions**:
+
+- Recode the levels of `"Vocational"` and `"College"` education so both are named `"Post-Secondary"` using `fct_recode()`.
+- Confirm the education levels have been correctly recoded using `count()`.
+- You'll get a warning message about `NA` values. Ignore it as it doesn't matter.
+
+```{r merge-factor-categories-together-NormalExercise-hint-1, eval=FALSE}
+"`fct_recode()` recoding should be in the form `"new name" = "old name"`, for example: `"Post-Secondary" = "College"`."
+```
+
+```{r merge-factor-categories-together-NormalExercise-setup}
+tidier2_framingham <- readRDS('datasets/tidier2_framingham.rds')
+library(forcats)
+library(dplyr)
+tidier2_framingham$education_combined <- NULL
+```
+
+```{r merge-factor-categories-together-NormalExercise, exercise=TRUE, exercise.setup='merge-factor-categories-together-NormalExercise-setup'}
+tidier2_framingham <- tidier2_framingham %>% 
+    mutate(education_combined = ___(
+        # Merge college and vocational levels
+        education, 
+        # Form is: "new" = "old"
+        ___ = ___,
+        ___ = ___))
+
+# Confirm changes to variable
+count(tidier2_framingham, ___)
+```
+
+```{r merge-factor-categories-together-NormalExercise-hint-2, eval=FALSE}
+tidier2_framingham <- tidier2_framingham %>% 
+    mutate(education_combined = fct_recode(
+        # Merge college and vocational levels
+        education, 
+        # Form is: "new" = "old"
+        "Post-Secondary" = "College",
+        "Post-Secondary" = "Vocational"))
+
+# Confirm changes to variable
+count(tidier2_framingham, education_combined)
+```
+
+```{r merge-factor-categories-together-NormalExercise-check, eval=FALSE}
+"Great! You've combined two factor levels together into a new level."
+```
+
+## Variable transformations
+
+```{r, child='slides/chapter_2_video_3.Rmd'}
+```
+
+## Apply variable transformations
+
+There are several types of transformations you can choose from. Which one you choose depends on the question, the type of data and their values (e.g. discrete vs continuous), the statistical method you will use, and how you want your results to be interpreted.
+
+Recall the form for `mutate_at()` is:
+
+```{r}
+mutate_at(
+    # List variables in here:
+    vars(...), 
+    # List functions in here, with name-function pair:
+    list(name = function, ...)
+)
+```
+
+**Instructions**:
+
+- In `vars()`, add `body_mass_index` and `cigarettes_per_day`.
+- In `list()`, add `log`, `sqrt`, and `invert` (this function is loaded).
+- Check how these variables changed by selecting the two original variables names using the `contains()` function and piping to `summary()`.
+
+```{r apply-variable-transformations-NormalExercise-hint-1, eval=FALSE}
+"The `select()` function form should look like `contains("body_mass_index")`."
+```
+
+```{r apply-variable-transformations-NormalExercise-setup}
+tidier2_framingham <- readRDS('datasets/tidier2_framingham.rds')
+library(dplyr)
+invert <- function(x) 1 / x
+```
+
+```{r apply-variable-transformations-NormalExercise, exercise=TRUE, exercise.setup='apply-variable-transformations-NormalExercise-setup'}
+# Use three transformations on body mass index
+transformed_framingham <- tidier2_framingham %>% 
+    mutate_at(vars(___, ___), 
+              list(___ = ___, ___ = ___, ___ = ___))
+
+# Check the created variable summaries
+transformed_framingham %>% 
+    select(contains(___), 
+           contains(___)) %>% 
+    summary()
+```
+
+```{r apply-variable-transformations-NormalExercise-hint-2, eval=FALSE}
+# Use three transformations on body mass index
+transformed_framingham <- tidier2_framingham %>% 
+    mutate_at(vars(body_mass_index, cigarettes_per_day), 
+              list(log = log, sqrt = sqrt, invert = invert))
+
+# Check the created variable summaries
+transformed_framingham %>% 
+    select(contains("body_mass_index"), 
+           contains("cigarettes_per_day")) %>% 
+    summary()
+```
+
+```{r apply-variable-transformations-NormalExercise-check, eval=FALSE}
+"Excellent! You've transformed two variables into several forms."
+```
+
+## Compare the different transformations
+
+Visualize how each transformation influences the distribution of the data. Graphing these transformations can provide insight into helping you choose a transformation for the variable.
+
+Since we have several transformations, we want to plot them all on one plot. As we've done several times throughout the course, we need to use a long data format combined with facets to achieve this.
+
+The `transformed_framingham` dataset you previously wrangled has been loaded.
+
+```{r compare-the-different-transformations-NormalExercise-setup}
+transformed_framingham <- readRDS('datasets/transformed_framingham.rds')
+library(tidyr)
+library(dplyr)
+library(ggplot2)
+```
+
+### Exercise
+
+**Instructions**:
+
+- Pipe `transformed_framingham` into `select()` and use `contains()` to keep variables with `body_mass_index` in the name.
+
+```{r exercise-NormalExercise-hint-1, eval=FALSE}
+"Select the variables with `contains("body_mass_index")`."
+```
+
+```{r compare-the-different-transformations-NormalExercise, exercise=TRUE, exercise.setup='compare-the-different-transformations-NormalExercise-setup'}
+# Plot a histogram of body mass transforms
+bmi_transforms_plot <- ___ %>% 
+	# Keep variables with string in variable name
+    select(contains(___)) %>% 
+    gather(variable, value) %>% 
+    ggplot(aes(x = value)) +
+    geom_histogram() +
+    facet_wrap(vars(variable), scale = "free")
+
+bmi_transforms_plot
+```
+
+```{r compare-the-different-transformations-NormalExercise-hint-2, eval=FALSE}
+# Plot a histogram of body mass transforms
+bmi_transforms_plot <- transformed_framingham %>% 
+	# Keep variables with string in variable name
+    select(contains("body_mass_index")) %>% 
+    gather(variable, value) %>% 
+    ggplot(aes(x = value)) +
+    geom_histogram() +
+    facet_wrap(vars(variable), scale = "free")
+
+bmi_transforms_plot
+```
+
+```{r compare-the-different-transformations-NormalExercise-check, eval=FALSE}
+"Amazing!"
+```
+
+### Exercise
+
+**Instructions**:
+
+- Now do the same thing for `cigarettes_per_day`.
+
+```{r exercise-NormalExercise-hint-1, eval=FALSE}
+"Use `contains("cigarettes_per_day")`."
+```
+
+```{r compare-the-different-transformations-NormalExercise, exercise=TRUE, exercise.setup='compare-the-different-transformations-NormalExercise-setup'}
+# Plot a histogram of cigarettes per day transforms
+cpd_transforms_plot <- transformed_framingham %>% 
+	# Keep variables with string in variable name
+    select(contains("___")) %>% 
+    gather(variable, value) %>% 
+    ggplot(aes(x = value)) +
+    geom_histogram() +
+    facet_wrap(vars(variable), scale = "free")
+
+cpd_transforms_plot
+```
+
+```{r compare-the-different-transformations-NormalExercise-hint-2, eval=FALSE}
+# Plot a histogram of cigarettes per day transforms
+cpd_transforms_plot <- transformed_framingham %>% 
+	# Keep variables with string in variable name
+    select(contains("cigarettes_per_day")) %>% 
+    gather(variable, value) %>% 
+    ggplot(aes(x = value)) +
+    geom_histogram() +
+    facet_wrap(vars(variable), scale = "free")
+
+cpd_transforms_plot
+```
+
+```{r compare-the-different-transformations-NormalExercise-check, eval=FALSE}
+"Great! Check out how each transformation influences the distribution of body mass index and of the number of cigarettes smoked."
+```
+
+## How does the distribution change?
+
+Understanding how each transformation influences the units and the distribution of the data is an important step in properly applying these transformations. Try answering these questions about the shape of the data after each transformation.
+
+Both `bmi_transforms_plot` and `cpd_transforms_plot` are loaded for you to examine. Looking at the graphs, observe how each transformation influences the distribution of body mass index or cigarettes per day and think about how these new distributions might influence later analyses. 
+
+Which statement is true?
+
+```{r how-does-the-distribution-change-MultipleChoiceExercise-hint-1, eval=FALSE}
+"Run `bmi_transforms_plot` and `cpd_transforms_plot` in the console to look at the distributions."
+
+```
+```{r how-does-the-distribution-change-MultipleChoiceExercise-mcq, echo=FALSE}
+# TODO: Add the question below in the quotation marks
+question("",
+  answer("Square root and scale don't change the distribution but do change the unit.", correct = FALSE, message = "Almost. While this is true, it's not the only true answer."),
+  answer("Logarithm changes the distribution and unit.", correct = FALSE, message = "Almost. While this is true, it's not the only true answer."),
+  answer("Body mass already has a good distribution and has the original unit.", correct = FALSE, message = "Almost. While this is true, it's not the only true answer."),
+  answer("Scale can make interpreting easier as 1 unit = 1 standard deviation of the original unit.", correct = FALSE, message = "Almost. While this is true, it's not the only true answer."),
+  answer("All of the above.", correct = FALSE, message = "Yes! Which type of and when you might transform really depends on the research question, the data values, and how you will want the results from your analyses to be interpreted. This means you need to carefully think about and have justifications for what you do to the data."),
+  allow_retry = TRUE
+)
+```
+

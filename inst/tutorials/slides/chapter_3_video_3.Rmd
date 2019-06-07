@@ -1,0 +1,146 @@
+---
+title: Testing for interaction and sensitivity analyses
+
+---
+
+### Testing for interaction and sensitivity analyses
+
+An important part of any cohort analysis is testing for interactions of variables and running sensitivity analyses.
+
+### Interaction: Combining variables in a model
+
+- **Interaction testing**: Check if a variable modifies another variable's association on the outcome 
+    - E.g. A drug reduces risk of a disease in men, but not women 
+    - E.g. Greater risk for disease from obesity in some ethnicities 
+    - *Always* consider sex and ethnic ancestry 
+
+Interaction testing is when you combine variables in a model to see whether their individual values together modify the association with an outcome. For example, some drugs reduce risk for disease in men, but may be harmful or have no effect in women. Or that risk factors such as obesity have a larger effect in certain ethnicities. For sex and ethnicity, you should always check for interactions, as they have powerful impacts on health.
+
+### Several approaches to checking interactions
+
+- Visual inspection 
+    - Very effective
+- Stratified/subgroup analysis 
+    - Split dataset based on group
+    - Do separate analysis on splits
+- Formal test for interaction 
+    - Model possible differences
+
+There are several ways to check for interactions. The first, and often most effective, is to visualize the data. More formal methods include doing stratified analyses, by splitting up the dataset. You can also directly model interactions using interaction terms in your analyses.
+
+### Modeling differences using interaction terms
+
+**Interaction terms using R formula**: 
+
+```
+outcome ~ predictor + sex + predictor:sex
+``` 
+
+**Simplified version in formula**: 
+
+```
+outcome ~ predictor * sex
+``` 
+
+There are several ways to model interactions. One way is similar to mathematically writing it out, with the predictor colon sex specifying the interaction. 
+
+However, you can also use a shorthand with the asterisk between the two terms. These two formula are equivalent.
+
+### Running a model with an interaction
+
+``` r
+model_with_interaction <- glmer(
+    got_cvd ~ body_mass_index_scaled * sex + (1 | subject_id),
+    data = tidied_framingham, family = binomial)
+summary(model_with_interaction)
+```
+
+```
+Generalized linear mixed model fit by maximum likelihood (Laplace Approximation)
+Fixed effects:
+                                Estimate Std. Error z value Pr(>|z|)    
+(Intercept)                     -12.3403     0.3203 -38.530   <2e-16 ***
+body_mass_index_scaled            0.1272     0.2681   0.475   0.6351    
+sexWoman                         -0.9423     0.3696  -2.549   0.0108 *  
+body_mass_index_scaled:sexWoman   0.1672     0.3412   0.490   0.6241    <-- This
+```
+
+- Interaction interpretation is difficult and complex 
+	- Refer to [Statistical Modeling in R (Part 2)](https://www.datacamp.com/courses/statistical-modeling-in-r-part-2) course
+
+Here is a mixed model interaction using the Framingham dataset. We are testing the interaction between scaled body mass index and sex. Notice the asterisks to denote the interaction. 
+
+The model summary gives a lot of information, most of which I've cut to show the main fixed effects. With interactions we can't interpret using just one estimate as we would with no interactions. We must use the estimates from each of the interaction terms, which are the three estimates from this model. 
+
+Interpreting interaction results can be quite challenging. If you encounter interactions in your own modeling or want to learn more, check out Chapter 1 of the Statistical Modeling in R Part Two DataCamp course, which describes model interactions in great detail.
+
+### Checking if an interactive association exists
+
+``` r
+library(MuMIn)
+model_no_interaction <- glmer(
+    got_cvd ~ body_mass_index_scaled + sex + (1 | subject_id),
+    data = tidied_framingham, family = binomial)
+
+model_with_interaction <- glmer(
+    got_cvd ~ body_mass_index_scaled * sex + (1 | subject_id),
+    data = tidied_framingham, family = binomial)
+
+# Compare models
+model.sel(model_no_interaction, model_with_interaction, rank = "AIC")
+```
+
+```
+Model selection table 
+                       ...    logLik      AIC    delta    weight
+model_no_interaction   ... -1822.493 3652.985 0.000000 0.7069518 <-- Here
+model_with_interaction ... -1822.373 3654.746 1.761251 0.2930482
+Models ranked by AIC(x) 
+```
+
+To determine if an interaction does exist, you need to compare models with and without an interaction using the model dot sel function. The function accepts many models as arguments. Set the ranking method using the rank argument. We'll use AIC, which you'll recall is a measure that balances a model's fitness to the data and how many predictors are included. A smaller compared to larger AIC value means the model is relatively better.
+
+Running the function outputs several columns. The important ones are AIC, delta, and weight. The interaction model's delta is two more AIC, indicating it is slightly worse, while the no interaction model's weight value tells us that it is seventy percent more likely better. This tells us that including an interaction gives no additional information, so we can remove it.
+
+### Checking robustness of results with sensitivity analyses
+
+> Sensitivity analysis: "assess the robustness of association by checking change in results by changing assumptions"
+
+- Very common in epidemiology
+- Examples: 
+    - Are people who miss collection visits different from others?
+    - Does the statistical technique change results?
+
+Sensitivity analysis is a way to determine how robust your results are under different assumptions.
+
+Examples include whether people who miss the data collection visit are different or if the results change with a different statistical technique.
+
+### Example: Previous diabetes increases risk of CVD
+
+``` r
+no_diabetes_framingham <- tidied_framingham %>%
+    filter(diabetes == 0)
+
+glmer(got_cvd ~ body_mass_index_scaled + (1 | subject_id),
+      data = tidied_framingham, family = binomial) %>%
+    fixef()
+#>           (Intercept) body_mass_index_scaled 
+#>             -12.86217                0.23932 
+``` 
+
+``` r
+glmer(got_cvd ~ body_mass_index_scaled + (1 | subject_id),
+      data = no_diabetes_framingham, family = binomial) %>%
+    fixef()
+#>           (Intercept) body_mass_index_scaled 
+#>           -12.8966567              0.2529004 
+``` 
+
+Here's an example. Individuals with diabetes have a much higher risk of developing CVD because of toxicity from high blood glucose. Depending on the predictors we include, we may need to remove diabetes cases as they may be biasing the estimates. We should compare how including participants with diabetes changes the model by two models, with and without diabetes cases. Then output the estimates for both using the fixef function.
+
+The estimate for BMI in the model without diabetes cases is slightly higher than the estimate that includes diabetes cases. This suggests that diabetes cases may be reducing the estimate. However, the differences are very small, so if there is bias it isn't large.
+
+### Time to practice!
+
+Alright, let's do some exercises!
+
