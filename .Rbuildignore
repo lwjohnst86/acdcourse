@@ -6,3 +6,5 @@
 ^inst/tutorials/chapter4\.Rmd$
 ^LICENSE\.md$
 ^data-raw$
+^README\.Rmd$
+^\.travis\.yml$
