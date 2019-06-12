@@ -1,20 +1,13 @@
 ---
-title: 'Introduction to cohorts and to analyzing them'
+title: 'Chapter 1: Introduction to cohorts and to analyzing them'
 output:
  learnr::tutorial:
-   theme: sandstone
-   highlight: haddock
+   theme: journal
+   highlight: pygments
+   #ace_theme: chrome
    allow_skip: TRUE
 runtime: shiny_prerendered
 ---
-
-<!-- TODO: Deal with previous `@sct` tags (now `-check` labels), they aren't supported. -->
-<!-- TODO: Confirm MCQ exercise has been correctly parsed. -->
-<!-- TODO: Check that Tab or Bullet Exercises were converted properly. -->
-<!-- TODO: Fix Tab or Bullet Exercise chunk labels, there will be duplicates. They need to follow the pattern as described in https://rstudio.github.io/learnr/exercises.html#hints_and_solutions -->
-<!-- TODO: Decide what to do with pre-exercise code from MCQ, they aren't supported. -->
-<!-- TODO: Decide what to do with `success_msg`, these aren't supported. -->
-<!-- TODO: Hint text needs to be moved to below the sample code chunk. -->
 
 ```{r setup, include=FALSE}
 library(learnr)
