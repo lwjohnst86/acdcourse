@@ -1,7 +1,0 @@
-citHeader("To cite acdcourse in publications use:")
-
-citEntry(
-  entry    = "Article",
-  title    = "Analyzing Cohort Datasets in R",
-  author   = "Luke W. Johnston"
-)
