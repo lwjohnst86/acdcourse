@@ -131,14 +131,14 @@ citation("acdcourse")
 #> 
 #> To cite package 'acdcourse' in publications use:
 #> 
-#>   Luke Johnston (NA). acdcourse: Course Material on Analyzing
-#>   Cohort Datasets in R.. R package version 0.0.0.9000.
+#>   Luke Johnston (NA). acdcourse: Course on Analyzing Cohort
+#>   Datasets in R. R package version 0.0.0.9000.
 #>   https://github.com/lwjohnst86/acdcourse
 #> 
 #> A BibTeX entry for LaTeX users is
 #> 
 #>   @Manual{,
-#>     title = {acdcourse: Course Material on Analyzing Cohort Datasets in R.},
+#>     title = {acdcourse: Course on Analyzing Cohort Datasets in R},
 #>     author = {Luke Johnston},
 #>     note = {R package version 0.0.0.9000},
 #>     url = {https://github.com/lwjohnst86/acdcourse},
