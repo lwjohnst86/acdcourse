@@ -3,4 +3,9 @@
 language: R
 cache: packages
 
+addons:
+  apt:
+    packages:
+      - libv8-dev
+
 warnings_are_errors: false
