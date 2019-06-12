@@ -1,11 +1,8 @@
----
-title: Use tables effectively to show your results
-
----
 
 ### Use tables effectively to show your results
 
-Sadly we can't have everything as figures. Tables can also be useful for communicating certain types of results.
+Sadly we can't have everything as figures. Tables can also be useful for
+communicating certain types of results.
 
 ### When are tables preferred?
 
@@ -18,7 +15,10 @@ Basically, *whenever you can't use figures*
 
 When is it best to use tables? Basically, whenever you can't use figures. 
 
-Use tables when, for example, the units of measure are too dissimilar, when the items are distinct or comparison between them isn't important, when presenting multiple but different models, or when you want to show the raw numbers so it's easier to extract it.
+Use tables when, for example, the units of measure are too dissimilar, when the
+items are distinct or comparison between them isn't important, when presenting
+multiple but different models, or when you want to show the raw numbers so it's
+easier to extract it.
 
 ### Creating a table of participant characteristics
 
@@ -48,11 +48,18 @@ tidied_framingham %>%
 4 - High School      3410 (30.1%)
 ``` 
 
-Presenting basic participant characteristics, as indicated by STROBE best practices, is a great example for using a table. Here you can show summary statistics of the outcomes, predictors, and other characteristics.
+Presenting basic participant characteristics, as indicated by STROBE best
+practices, is a great example for using a table. Here you can show summary
+statistics of the outcomes, predictors, and other characteristics.
 
-The carpenter package provides an easy way of creating these tables. We start by using outline-underscore-table, piping in the data. This function also takes a argument to set the grouping variable, such as visit number, so they are arranged as the table columns. We haven't added rows, so it outputs nothing.. 
+The carpenter package provides an easy way of creating these tables. We start by
+using `outline_table()`, piping in the data. This function also takes a
+argument to set the grouping variable, such as visit number, so they are
+arranged as the table columns. We haven't added rows, so it outputs nothing..
 
-Let's use add-underscore-rows and add a factor variable like combined education. A common statistic for factors is the count with percent of total, so let's set stat to stat-underscore-n-percent.
+Let's use `add_rows()` and add a factor variable like combined education.
+A common statistic for factors is the count with percent of total, so let's set
+stat to `stat_nPct()`.
 
 ### Creating a table of participant characteristics
 
@@ -78,7 +85,9 @@ tidied_framingham %>%
 7 heart_rate         75.0 (69.0-85.0)
 ``` 
 
-Now let's add some more rows to the table for BMI, using stat-underscore-mean-sd for the mean and standard deviation, and participant age and heart rate, using stat-underscore-median-iqr for the median and interquartile range.
+Now let's add some more rows to the table for BMI, using `stat_meanSD`
+for the mean and standard deviation, and participant age and heart rate, using
+`stat_medianIQR` for the median and interquartile range.
 
 ### Renaming table headers
 
@@ -106,7 +115,9 @@ basic_char_table
 7 heart_rate         75.0 (69.0-85.0)
 ``` 
 
-Great! But the table headers aren't informative. We set them using the renaming function and the header argument, then set the new names for the columns. We'll name only one column as Characteristics.
+Great! But the table headers aren't informative. We set them using the renaming
+function and the header argument, then set the new names for the columns. We'll
+name only one column as Characteristics.
 
 ### Render data into actual table
 
@@ -124,7 +135,9 @@ build_table(basic_char_table)
 | participant_age    | 54.0 (48.0-62.0) |
 | heart_rate         | 75.0 (69.0-85.0) | 
 
-If you use R Markdown, we can use build-underscore-table to convert the output into a Markdown table. Now you have a basic characteristics table to use when presenting your cohort analysis!
+If you use R Markdown, we can use `build_table()` to convert the output
+into a Markdown table. Now you have a basic characteristics table to use when
+presenting your cohort analysis!
 
 ### Wrangling model results into table format
 
@@ -137,7 +150,11 @@ If you use R Markdown, we can use build-underscore-table to convert the output i
 
 How to get this? 
 
-At times you may need to present either your main or supplemental results as a table. Even if you present your main findings as a figure, providing the model estimates as text numbers could be helpful for other researchers who might use your findings as part of a meta-analysis of cohort studies. Here, we're showing the confidence interval.
+At times you may need to present either your main or supplemental results as a
+table. Even if you present your main findings as a figure, providing the model
+estimates as text numbers could be helpful for other researchers who might use
+your findings as part of a meta-analysis of cohort studies. Here, we're showing
+the confidence interval.
 
 So, how do we get our results into this form?
 
@@ -161,9 +178,14 @@ models %>%
 4 adjusted   fasting_blood_glucose   1.52 (0.75 to 3.07)
 ``` 
 
-Most of these functions should be familiar, except for glue. As a reminder, mutate-at applies a function to each variable contained within the vars function. Here we are rounding the variable's values to two. 
+Most of these functions should be familiar, except for glue. As a reminder,
+mutate-at applies a function to each variable contained within the vars
+function. Here we are rounding the variable's values to two.
 
-Next, we again use mutate but with the glue function. Glue helps create a character string that changes based on the variable given between the curly braces. We use glue to format a string with the estimate and confidence interval in brackets. 
+Next, we again use mutate but with the glue function. Glue helps create a
+character string that changes based on the variable given between the curly
+braces. We use glue to format a string with the estimate and confidence interval
+in brackets.
 
 Finally, let's keep the most relevant variables and output the dataframe.
 
@@ -186,9 +208,14 @@ table_models
 2 systolic_blood_pressure 1.86 (0.78 to 4.43) 1.86 (0.8 to 4.29) 
 ``` 
 
-Next, by using the spread function from tidyr, the models will be represented as individual columns. The first argument to spread takes the model variable name that will represent the new columns while the second argument takes the estimate-underscore-ci variable that has the values that will make up the new columns.
+Next, by using the spread function from tidyr, the models will be represented as
+individual columns. The first argument to spread takes the model variable name
+that will represent the new columns while the second argument takes the
+`estimate_ci` variable that has the values that will make up the new
+columns.
 
-So, with minimal code, we've gotten the results to appear very similar to our desired table.
+So, with minimal code, we've gotten the results to appear very similar to our
+desired table.
 
 ### Create R Markdown table with kable
 
@@ -205,9 +232,12 @@ table_models %>%
 |fasting blood glucose   |1.52 (0.75 to 3.07) |1.55 (0.78 to 3.09) |
 |systolic blood pressure |1.86 (0.78 to 4.43) |1.86 (0.8 to 4.29)  |
 
-We could continue to replace underscores with spaces using the str-underscore-replace-underscore-all function from stringr. Like many search and replace functions, give arguments for the character vector, the string to search for, and the replacement string. If you use rmarkdown, the kable function from knitr can create nicely formatted table.
+We could continue to replace underscores with spaces using the
+`str_replace_all()` function from stringr. Like many search
+and replace functions, give arguments for the character vector, the string to
+search for, and the replacement string. If you use rmarkdown, the kable function
+from knitr can create nicely formatted table.
 
 ### Time to create some tables!
 
 Now let's try making some tables!
-

@@ -1,11 +1,14 @@
----
-title: Presenting cohort findings is tricky, be careful
 
----
+Cohorts are important scientific sources of health and wellness information.
+Because of this, how results are presented needs to be carefully considered. The
+medium of presentation, be it plots or tables, can impact how the findings are
+seen and consumed. In this chapter we will cover some tips and ways of
+presenting cohort findings.
 
 ### Presenting cohort findings is tricky, be careful
 
-Since cohort studies focus on health and disease, the way results are presented can directly impact people's lives and health, so care needs to be taken!
+Since cohort studies focus on health and disease, the way results are presented
+can directly impact people's lives and health, so care needs to be taken!
 
 ### Describe results cautiously, carefully
 
@@ -16,11 +19,19 @@ Since cohort studies focus on health and disease, the way results are presented 
 - Both "non-significant" and "significant" results important 
 - Show magnitude and uncertainty over "statistical significance" 
 
-In observational cohort studies, you need to use a healthy dose of caution when interpreting and presenting results, as indicated in the STROBE best practices. STROBE, if you recall, was designed to make cohort studies more rigorous and standardized.
+In observational cohort studies, you need to use a healthy dose of caution when
+interpreting and presenting results, as indicated in the STROBE best practices.
+STROBE, if you recall, was designed to make cohort studies more rigorous and
+standardized.
 
-Emphasize more tangible health impacts when presenting results and try to be as clear and understandable as possible. Your audience or readers will likely be public health professionals or clinicians who aren't trained in interpreting complex models, so be simple and concise. 
+Emphasize more tangible health impacts when presenting results and try to be as
+clear and understandable as possible. Your audience or readers will likely be
+public health professionals or clinicians who aren't trained in interpreting
+complex models, so be simple and concise.
 
-Keep in mind that both non-significant and significant findings are important from a health standpoint. Show all results, emphasizing the magnitude of association and the uncertainty of that association.
+Keep in mind that both non-significant and significant findings are important
+from a health standpoint. Show all results, emphasizing the magnitude of
+association and the uncertainty of that association.
 
 ### Causal reasoning in epidemiology
 
@@ -29,11 +40,18 @@ Keep in mind that both non-significant and significant findings are important fr
 - Using stronger causal language depends on magnitude and temporal response 
     - E.g. with smoking and lung cancer
 
-Oftentimes, observational findings are interpreted causally. While the field of causal reasoning in epidemiology has expanded recently, it is still new, so use caution with causal language. 
+Oftentimes, observational findings are interpreted causally. While the field of
+causal reasoning in epidemiology has expanded recently, it is still new, so use
+caution with causal language.
 
-Unfortunately, humans often interpret associations as causal, so as the researcher you need to be extremely careful when presenting findings from observational research. 
+Unfortunately, humans often interpret associations as causal, so as the
+researcher you need to be extremely careful when presenting findings from
+observational research.
 
-There are however times when causal language is justified, for example with the observation of cigarette smoking and lung cancer. But usually it isn't completely clear whether a causal relationship exists. Keep these in mind when you present cohort study results.
+There are however times when causal language is justified, for example with the
+observation of cigarette smoking and lung cancer. But usually it isn't
+completely clear whether a causal relationship exists. Keep these in mind when
+you present cohort study results.
 
 ### Multiple models as lists, tidying with map
 
@@ -54,13 +72,22 @@ tidied_unadjusted_models_list <- unadjusted_models_list %>%
             select(effect, term, estimate, conf.low, conf.high))
 ```
 
-Given you'll likely be working with multiple models, my suggestion is put your models into a single list, since working with lists is very easy in R thanks to the purrr package. 
+Given you'll likely be working with multiple models, my suggestion is put your
+models into a single list, since working with lists is very easy in R thanks to
+the purrr package.
 
-Here, I've ran two models using what we learned from the previous chapter and stored them as a list into the object unadjusted models list. I did the same thing for adjusted models by storing them as a list, but haven't shown the code.
+Here, I've ran two models using what we learned from the previous chapter and
+stored them as a list into the object unadjusted models list. I did the same
+thing for adjusted models by storing them as a list, but haven't shown the code.
 
-Then, to apply the tidy function to each of those models, we use the map function from the purrr package. Map takes two arguments. The list object and the function we want to use. We use the function with the tilde symbol beforehand and refer to the model object by dot x.
+Then, to apply the tidy function to each of those models, we use the map
+function from the purrr package. Map takes two arguments. The list object and
+the function we want to use. We use the function with the tilde symbol
+beforehand and refer to the model object by dot x.
 
-Using map leverages R's powerful functional programming strengths. purrr provides a wonderful and consistent interface for using this functional programming.
+Using map leverages R's powerful functional programming strengths. purrr
+provides a wonderful and consistent interface for using this functional
+programming.
 
 ### Contents are multiple models stored in sequence
 
@@ -87,9 +114,13 @@ unadjusted_models_list
 3 ran_pars sd__(Intercept)        56.8        NA           NA        
 ```
 
-The contents are a list of two model results. These results are for the unadjusted models. The adjusted models list looks the same, except there are additional predictors.
+The contents are a list of two model results. These results are for the
+unadjusted models. The adjusted models list looks the same, except there are
+additional predictors.
 
-Plotting or creating tables of these results would be better done using a single dataframe, so we'll need to combine them together. But before we do, we'll need to add some details to distinguish each model.
+Plotting or creating tables of these results would be better done using a single
+dataframe, so we'll need to combine them together. But before we do, we'll need
+to add some details to distinguish each model.
 
 ### Use map to add more model details
 
@@ -115,7 +146,9 @@ map(unadjusted_models_list, ~mutate(.x, model = "Unadjusted"))
 3 ran_pars sd__(Intercept)        56.8        NA           NA         Unadjust…
 ```
 
-Let's use map to add more information to the model objects in the list. We'll add a tag to each model item in the list to indicate that the models are unadjusted.
+Let's use map to add more information to the model objects in the list. We'll
+add a tag to each model item in the list to indicate that the models are
+unadjusted.
 
 The model column is now added to each model in the list.
 
@@ -138,7 +171,9 @@ map(unadjusted_models_list, ~mutate(.x, model = "Unadjusted")) %>%
 6 ran_pars sd__(Intercept)    56.8          NA        NA       Unadjus…
 ```
 
-Then, we can convert the list of models into a single dataframe of the results. We do this using dplyr's bind-underscore-rows function to stack the list dataframes into one.
+Then, we can convert the list of models into a single dataframe of the results.
+We do this using dplyr's `bind_rows()` function to stack the list
+dataframes into one.
 
 ### Bind multiple lists and continue piping
 
@@ -166,9 +201,11 @@ bind_rows(
 10 ran_pars sd__(Intercept)         55.5        NA            NA       Adjusted  got_cvd
 ```
 
-Let's do the same thing with the list of adjusted models, but instead, we'll bind rows of both unadjusted and adjusted models. This puts all model items into a single dataframe. Lastly, let's add information about the outcome. We now have a single model dataframe that we can use to create plots and tables.
+Let's do the same thing with the list of adjusted models, but instead, we'll
+bind rows of both unadjusted and adjusted models. This puts all model items into
+a single dataframe. Lastly, let's add information about the outcome. We now have
+a single model dataframe that we can use to create plots and tables.
 
 ### Let's practice wrangling!
 
 Now you know how to wrangling model results. Let's practice!
-

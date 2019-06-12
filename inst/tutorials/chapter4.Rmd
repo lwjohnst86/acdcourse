@@ -1,59 +1,55 @@
 ---
-title: 'Presentation of results from cohort analyses'
-description: 'Cohorts are important scientific sources of health and wellness information. Because of this, how results are presented needs to be carefully considered. The medium of presentation, be it plots or tables, can impact how the findings are seen and consumed. In this chapter we will cover some tips and ways of presenting cohort findings.'
+title: 'Chapter 4: Presentation of results from cohort analyses'
 output:
  learnr::tutorial:
-   theme: sandstone
+   theme: journal
+   highlight: pygments
+   #ace_theme: chrome
+   allow_skip: TRUE
 runtime: shiny_prerendered
 ---
-
-<!-- TODO: Deal with previous `@sct` tags (now `-check` labels), they aren't supported. -->
-<!-- TODO: Check that video content has been added. -->
-<!-- TODO: Confirm MCQ exercise has been correctly parsed. -->
-<!-- TODO: Check that Tab or Bullet Exercises were converted properly. -->
-<!-- TODO: Fix Tab or Bullet Exercise chunk labels, there will be duplicates. They need to follow the pattern as described in https://rstudio.github.io/learnr/exercises.html#hints_and_solutions -->
-<!-- TODO: Decide what to do with pre-exercise code from MCQ, they aren't supported. -->
-<!-- TODO: Decide what to do with `success_msg`, these aren't supported. -->
-<!-- TODO: Hint text needs to be moved to below the sample code chunk. -->
 
 ```{r setup, include=FALSE}
 library(learnr)
 knitr::opts_chunk$set(echo = FALSE, warning = FALSE, message = FALSE)
 ```
+
 ## Presenting cohort findings is tricky, be careful
 
 ```{r, child='slides/chapter_4_video_1.Rmd'}
 ```
 
-## Adding more details to each model item in a list
+## Adding more details to each model item in a list {data-progressive=TRUE}
 
 Imagine you've ran several models. You:
 
 - Scaled predictors to compare estimates.
 - Set confounders and other predictors as baseline age, sex, smoking, and education.
-- Have each predictor with unadjusted and adjusted models (time and subject ID were included in all).
+- Have each predictor with unadjusted and adjusted models (time and subject ID
+were included in all).
 - Tidied models and exponentiated estimates.
 
-You have 8 models in total, stored as a list. We should add more details to each model to differentiate them from each other. Use `map()` from `purrr` to wrangle each model simultaneously. The new code here, `term[2]`, selects the main predictor, which is the second element in the `term` column.
+You have 8 models in total, stored as a list. We should add more details to each
+model to differentiate them from each other. Use `map()` from `purrr` to wrangle
+each model simultaneously. The new code here, `term[2]`, selects the main
+predictor, which is the second element in the `term` column.
 
 ```{r adding-more-details-to-each-model-item-in-a-list-NormalExercise-setup}
-load('datasets/unadjusted_models_list.rda')
-load('datasets/adjusted_models_list.rda')
+capture.output({
+data("unadjusted_models_list", package = "acdcourse")
+data("adjusted_models_list", package = "acdcourse")
 library(dplyr)
 library(purrr)
+})
 ```
 
-### Exercise
+### Exercise step
 
 **Instructions**:
 
 - Using `map()`, add a `model` column to indicate the models are `"Unadjusted"`.
 
-```{r exercise-NormalExercise-hint-1, eval=FALSE}
-"Add the adjustment column using `model = "Unadjusted"`."
-```
-
-```{r adding-more-details-to-each-model-item-in-a-list-NormalExercise, exercise=TRUE, exercise.setup='adding-more-details-to-each-model-item-in-a-list-NormalExercise-setup'}
+```{r adding-more-details-to-each-model-item-in-a-list-NormalExercise-1, exercise=TRUE, exercise.setup='adding-more-details-to-each-model-item-in-a-list-NormalExercise-setup'}
 # Add predictor and model type to each list item
 unadjusted_models_list <- ___(
     unadjusted_models_list,
@@ -66,7 +62,11 @@ unadjusted_models_list <- ___(
            ))
 ```
 
-```{r adding-more-details-to-each-model-item-in-a-list-NormalExercise-hint-2, eval=FALSE}
+```{r adding-more-details-to-each-model-item-in-a-list-NormalExercise-1-hint-1, eval=FALSE}
+'Add the adjustment column using `model = "Unadjusted"`.'
+```
+
+```{r adding-more-details-to-each-model-item-in-a-list-NormalExercise-1-hint-2, eval=FALSE}
 # Add predictor and model type to each list item
 unadjusted_models_list <- map(
     unadjusted_models_list,
@@ -79,22 +79,17 @@ unadjusted_models_list <- map(
            ))
 ```
 
-```{r adding-more-details-to-each-model-item-in-a-list-NormalExercise-check, eval=FALSE}
+```{r adding-more-details-to-each-model-item-in-a-list-NormalExercise-1-check, eval=FALSE}
 "Nice!"
 ```
 
-### Exercise
+### Exercise step
 
 **Instructions**:
 
 - Do the same thing for the `"Adjusted"` model list.
 
-```{r exercise-NormalExercise-hint-1, eval=FALSE}
-"Refer to each list object in `map` with `.x`."
-"Include the `~` before `mutate`."
-```
-
-```{r adding-more-details-to-each-model-item-in-a-list-NormalExercise, exercise=TRUE, exercise.setup='adding-more-details-to-each-model-item-in-a-list-NormalExercise-setup'}
+```{r adding-more-details-to-each-model-item-in-a-list-NormalExercise-2, exercise=TRUE, exercise.setup='adding-more-details-to-each-model-item-in-a-list-NormalExercise-setup'}
 # Add predictor and model type to each list item
 adjusted_models_list <- map(
     adjusted_models_list,
@@ -107,7 +102,12 @@ adjusted_models_list <- map(
            ))
 ```
 
-```{r adding-more-details-to-each-model-item-in-a-list-NormalExercise-hint-2, eval=FALSE}
+```{r adding-more-details-to-each-model-item-in-a-list-NormalExercise-2-hint-1, eval=FALSE}
+"Refer to each list object in `map` with `.x`."
+"Include the `~` before `mutate`."
+```
+
+```{r adding-more-details-to-each-model-item-in-a-list-NormalExercise-2-hint-2, eval=FALSE}
 # Add predictor and model type to each list item
 adjusted_models_list <- map(
     adjusted_models_list,
@@ -120,27 +120,27 @@ adjusted_models_list <- map(
            ))
 ```
 
-```{r adding-more-details-to-each-model-item-in-a-list-NormalExercise-check, eval=FALSE}
+```{r adding-more-details-to-each-model-item-in-a-list-NormalExercise-2-check, eval=FALSE}
 "Excellent! You made use of map to add more details to each model object."
 ```
 
 ## Combining the list of models into one data frame
 
-The most efficient approach to later plotting and creating tables is to have all models in a single data frame. You've already prepared them a bit, now it's time to combine them together so you can continue working with them.
+The most efficient approach to later plotting and creating tables is to have all
+models in a single data frame. You've already prepared them a bit, now it's time
+to combine them together so you can continue working with them.
 
 **Instructions**:
 
 - Use `bind_rows()` to combine `unadjusted_models_list` and `adjusted_models_list`.
 - Continuing the pipe, add an `outcome` column with the value `"got_cvd"`.
-- Finally, use `filter()` to keep only conditions where the `predictor` equals `term` and `effect` equals `"fixed"`.
-
-```{r combining-the-list-of-models-into-one-data-frame-NormalExercise-hint-1, eval=FALSE}
-"Filter when predictor and term are the same (`predictor == term`)."
-```
+- Finally, use `filter()` to keep only conditions where the `predictor` equals
+`term` and `effect` equals `"fixed"`.
 
 ```{r combining-the-list-of-models-into-one-data-frame-NormalExercise-setup}
-load('datasets/unadjusted_models_list.rda')
-load('datasets/adjusted_models_list.rda')
+capture.output({
+data("unadjusted_models_list", package = "acdcourse")
+data("adjusted_models_list", package = "acdcourse")
 library(dplyr)
 library(purrr)
 unadjusted_models_list <- map(
@@ -151,6 +151,7 @@ adjusted_models_list <- map(
     adjusted_models_list,
     ~mutate(.x, predictor = term[2], model = "Adjusted")
 )
+})
 ```
 
 ```{r combining-the-list-of-models-into-one-data-frame-NormalExercise, exercise=TRUE, exercise.setup='combining-the-list-of-models-into-one-data-frame-NormalExercise-setup'}
@@ -162,8 +163,10 @@ all_models <- bind_rows(
     mutate(outcome = ___) %>% 
 	# Keep only predictor rows and fixed effects
     filter(___ == , ___ == ___)
+```
 
-all_models
+```{r combining-the-list-of-models-into-one-data-frame-NormalExercise-hint-1, eval=FALSE}
+"Filter when predictor and term are the same (`predictor == term`)."
 ```
 
 ```{r combining-the-list-of-models-into-one-data-frame-NormalExercise-hint-2, eval=FALSE}
@@ -175,8 +178,6 @@ all_models <- bind_rows(
     mutate(outcome = "got_cvd") %>% 
 	# Keep only predictor rows and fixed effects
     filter(predictor == term, effect == "fixed")
-
-all_models
 ```
 
 ```{r combining-the-list-of-models-into-one-data-frame-NormalExercise-check, eval=FALSE}
@@ -188,191 +189,187 @@ all_models
 ```{r, child='slides/chapter_4_video_2.Rmd'}
 ```
 
-## Plotting model estimate and uncertainty
+## Plotting model estimate and uncertainty {data-progressive=TRUE}
 
-Statistical analysis used on cohort data usually output some time of regression estimate along with a measure of uncertainty (e.g. 95% confidence interval). Sometimes it makes sense to present these results in a table, but often the better approach is to create a figure instead. Figures show magnitude, direction, uncertainty, and comparison of results very effectively.
+Statistical analysis used on cohort data usually output some time of regression
+estimate along with a measure of uncertainty (e.g. 95% confidence interval).
+Sometimes it makes sense to present these results in a table, but often the
+better approach is to create a figure instead. Figures show magnitude,
+direction, uncertainty, and comparison of results very effectively.
 
-Create a plot of the unadjusted model results that highlights the estimate and uncertainty of the estimate.
+Create a plot of the unadjusted model results that highlights the estimate and
+uncertainty of the estimate.
 
 ```{r plotting-model-estimate-and-uncertainty-NormalExercise-setup}
-load('datasets/all_models.rda')
+capture.output({
+data("all_models", package = "acdcourse")
 library(dplyr)
 library(ggplot2)
+})
 ```
 
-### Exercise
+### Exercise step
 
 **Instructions**:
 
 - For this exercise, filter to keep `model` that is equal to `"Unadjusted"`.
 
-```{r exercise-NormalExercise-hint-1, eval=FALSE}
-"Filter should be `model == "Unadjusted"`."
-```
-
-```{r plotting-model-estimate-and-uncertainty-NormalExercise, exercise=TRUE, exercise.setup='plotting-model-estimate-and-uncertainty-NormalExercise-setup'}
+```{r plotting-model-estimate-and-uncertainty-NormalExercise-1, exercise=TRUE, exercise.setup='plotting-model-estimate-and-uncertainty-NormalExercise-setup'}
 # Keep only unadjusted models
 unadjusted_results <- all_models %>% 
     filter(___ == ___)
-
-# Check filtered data
-unadjusted_results
 ```
 
-```{r plotting-model-estimate-and-uncertainty-NormalExercise-hint-2, eval=FALSE}
+```{r plotting-model-estimate-and-uncertainty-NormalExercise-1-hint-1, eval=FALSE}
+'Filter should be `model == "Unadjusted"`.'
+```
+
+```{r plotting-model-estimate-and-uncertainty-NormalExercise-1-hint-2, eval=FALSE}
 # Keep only unadjusted models
 unadjusted_results <- all_models %>% 
     filter(model == "Unadjusted")
-
-# Check filtered data
-unadjusted_results
 ```
 
-```{r plotting-model-estimate-and-uncertainty-NormalExercise-check, eval=FALSE}
+```{r plotting-model-estimate-and-uncertainty-NormalExercise-1-check, eval=FALSE}
 "Great!"
 ```
 
-### Exercise
+### Exercise step
 
 **Instructions**:
 
-- Set `y` as `predictor`, `x` as `estimate`, `xmin` as `conf.low`, and `xmax` as `conf.high`.
+- Set `y` as `predictor`, `x` as `estimate`, `xmin` as `conf.low`, and `xmax` as
+`conf.high`.
 - Add `geom_point()` and `geom_errorbarh()` layers.
 
-```{r exercise-NormalExercise-hint-1, eval=FALSE}
-"The `errorbarh` (horizontal) requires `xmin = conf.low, xmax = conf.high`."
-```
-
-```{r plotting-model-estimate-and-uncertainty-NormalExercise, exercise=TRUE, exercise.setup='plotting-model-estimate-and-uncertainty-NormalExercise-setup'}
+```{r plotting-model-estimate-and-uncertainty-NormalExercise-2, exercise=TRUE, exercise.setup='plotting-model-estimate-and-uncertainty-NormalExercise-setup'}
 unadjusted_results <- all_models %>% 
     filter(model == "Unadjusted")
 
 # Create a dot and error bar plot
-model_plot <- unadjusted_results %>% 
+unadjusted_results %>% 
     ggplot(aes(y = ___, x = ___,
               xmin = ___, xmax = ___)) +
     ___() +
     ___()
-
-# Check the plot
-model_plot
 ```
 
-```{r plotting-model-estimate-and-uncertainty-NormalExercise-hint-2, eval=FALSE}
+```{r plotting-model-estimate-and-uncertainty-NormalExercise-2-hint-1, eval=FALSE}
+"The `errorbarh` (horizontal) requires `xmin = conf.low, xmax = conf.high`."
+```
+
+```{r plotting-model-estimate-and-uncertainty-NormalExercise-2-hint-2, eval=FALSE}
 unadjusted_results <- all_models %>% 
     filter(model == "Unadjusted")
 
 # Create a dot and error bar plot
-model_plot <- unadjusted_results %>% 
+unadjusted_results %>% 
     ggplot(aes(y = predictor, x = estimate, 
                xmin = conf.low, xmax = conf.high)) +
     geom_point() +
     geom_errorbarh()
-
-# Check the plot
-model_plot
 ```
 
-```{r plotting-model-estimate-and-uncertainty-NormalExercise-check, eval=FALSE}
+```{r plotting-model-estimate-and-uncertainty-NormalExercise-2-check, eval=FALSE}
 "Great!"
 ```
 
-### Exercise
+### Exercise step
 
 **Instructions**:
 
-- Use `geom_vline()` to add a vertical line, setting `xintercept` as 1 for the "center line".
+- Use `geom_vline()` to add a vertical line, setting `xintercept` as 1 for the
+"center line".
 
-```{r exercise-NormalExercise-hint-1, eval=FALSE}
-"Set `xintercept = 1` for the center line."
-```
-
-```{r plotting-model-estimate-and-uncertainty-NormalExercise, exercise=TRUE, exercise.setup='plotting-model-estimate-and-uncertainty-NormalExercise-setup'}
+```{r plotting-model-estimate-and-uncertainty-NormalExercise-3, exercise=TRUE, exercise.setup='plotting-model-estimate-and-uncertainty-NormalExercise-setup'}
 unadjusted_results <- all_models %>% 
     filter(model == "Unadjusted")
 
 # Create a dot and error bar plot
-model_plot <- unadjusted_results %>% 
+unadjusted_results %>% 
     ggplot(aes(y = predictor, x = estimate, 
                xmin = conf.low, xmax = conf.high)) +
     geom_point() +
     geom_errorbarh() +
     # Add vertical line
     ___(xintercept = ___)
-
-# Check the plot
-model_plot
 ```
 
-```{r plotting-model-estimate-and-uncertainty-NormalExercise-hint-2, eval=FALSE}
+```{r plotting-model-estimate-and-uncertainty-NormalExercise-3-hint-1, eval=FALSE}
+"Set `xintercept = 1` for the center line."
+```
+
+```{r plotting-model-estimate-and-uncertainty-NormalExercise-3-hint-2, eval=FALSE}
 unadjusted_results <- all_models %>% 
     filter(model == "Unadjusted")
 
 # Create a dot and error bar plot
-model_plot <- unadjusted_results %>% 
+unadjusted_results %>% 
     ggplot(aes(y = predictor, x = estimate, 
                xmin = conf.low, xmax = conf.high)) +
     geom_point() +
     geom_errorbarh() +
     # Add vertical line
     geom_vline(xintercept = 1)
-
-# Check the plot
-model_plot
 ```
 
-```{r plotting-model-estimate-and-uncertainty-NormalExercise-check, eval=FALSE}
+```{r plotting-model-estimate-and-uncertainty-NormalExercise-3-check, eval=FALSE}
 "Excellent! See how this graph shows the uncertainty around individual model estimates? This is an effective way of presenting results from models."
 ```
 
 ## Create a more polished plot
 
-Now that we've created this plot, let's polish it up. We want it to be "publication quality", since we'll eventually present this figure to others.
+Now that we've created this plot, let's polish it up. We want it to be
+"publication quality", since we'll eventually present this figure to others.
 
-As with the previous exercise, use the `unadjusted_results` data frame you created to plot the findings. This time, make the plot more polished and presentable.
+As with the previous exercise, use the `unadjusted_results` data frame you
+created to plot the findings. This time, make the plot more polished and
+presentable.
 
 **Instructions**:
 
-- Set the point `size` to 3, the error bar `height` to 0.1, and the `linetype` to `"dotted"`.
-- Include appropriate axis labels (`"Predictors"` on the y and `"Odds Ratio (95% CI)"` on the x). Recall that CI means confidence interval.
+- Set the point `size` to 3, the error bar `height` to 0.1, and the `linetype`
+to `"dotted"`.
+- Include appropriate axis labels (`"Predictors"` on the y and `"Odds Ratio (95%
+CI)"` on the x). Recall that CI means confidence interval.
 - Set the theme to `theme_classic()`.
 
-```{r create-a-more-polished-plot-NormalExercise-hint-1, eval=FALSE}
-"The labels should be of the form `x = "Axis Label"` (e.g. for the x-axis)."
-```
-
 ```{r create-a-more-polished-plot-NormalExercise-setup}
-load('datasets/all_models.rda')
+capture.output({
+data("all_models", package = "acdcourse")
 library(dplyr)
 library(ggplot2)
 unadjusted_results <- all_models %>% 
     filter(model == "Unadjusted")
+})
 ```
 
 ```{r create-a-more-polished-plot-NormalExercise, exercise=TRUE, exercise.setup='create-a-more-polished-plot-NormalExercise-setup'}
 # Make the plot more polished
-model_plot <- unadjusted_results %>% 
+unadjusted_results %>% 
     ggplot(aes(y = predictor, x = estimate, xmin = conf.low, xmax = conf.high)) +
     geom_point(size = ___) +
     geom_errorbarh(height = ___) +
     geom_vline(xintercept = 1, linetype = ___) +
     labs(y = ___, x = ___) +
-	# Set the theme
+	  # Set the theme
     ___()
-model_plot
+```
+
+```{r create-a-more-polished-plot-NormalExercise-hint-1, eval=FALSE}
+'The labels should be of the form `x = "Axis Label"` (e.g. for the x-axis).'
 ```
 
 ```{r create-a-more-polished-plot-NormalExercise-hint-2, eval=FALSE}
 # Make the plot more polished
-model_plot <- unadjusted_results %>% 
+unadjusted_results %>% 
     ggplot(aes(y = predictor, x = estimate, xmin = conf.low, xmax = conf.high)) +
     geom_point(size = 3) +
     geom_errorbarh(height = 0.1) +
     geom_vline(xintercept = 1, linetype = "dotted") +
     labs(y = "Predictors", x = "Odds ratio (95% CI)") +
-	# Set the theme
+    # Set the theme
     theme_classic()
-model_plot
 ```
 
 ```{r create-a-more-polished-plot-NormalExercise-check, eval=FALSE}
@@ -388,19 +385,17 @@ The STROBE best practices indicate to show both "crude" (unadjusted) and adjuste
 - Use the `all_models` data frame this time.
 - Using `facet_grid()` to split the plot by `rows` with the `model` variable (called inside `vars()`).
 
-```{r visualize-unadjusted-and-adjusted-model-results-NormalExercise-hint-1, eval=FALSE}
-"The faceting variable should be called as `vars(model)`."
-```
-
 ```{r visualize-unadjusted-and-adjusted-model-results-NormalExercise-setup}
-load('datasets/all_models.rda')
+capture.output({
+data("all_models", package = "acdcourse")
 library(ggplot2)
 library(magrittr)
+})
 ```
 
-```{r visualize-unadjusted-and-adjusted-model-results-NormalExercise, exercise=TRUE, exercise.setup='visualize-unadjusted-and-adjusted-model-results-NormalExercise-setup'}
+```{r visualize-unadjusted-and-adjusted-model-results-NormalExercise, exercise=TRUE, eval=FALSE, exercise.setup='visualize-unadjusted-and-adjusted-model-results-NormalExercise-setup'}
 # Show results of both adjusted and unadjusted
-plot_all_models <- ___ %>% 
+___ %>% 
     ggplot(aes(y = predictor, x = estimate, xmin = conf.low, xmax = conf.high)) +
     geom_point(size = 3) +
     geom_errorbarh(height = 0.1) +
@@ -409,12 +404,15 @@ plot_all_models <- ___ %>%
     ___(rows = vars(___)) +
     labs(y = "Predictors", x = "Odds ratio (95% CI)") +
     theme_classic()
-plot_all_models
+```
+
+```{r visualize-unadjusted-and-adjusted-model-results-NormalExercise-hint-1, eval=FALSE}
+"The faceting variable should be called as `vars(model)`."
 ```
 
 ```{r visualize-unadjusted-and-adjusted-model-results-NormalExercise-hint-2, eval=FALSE}
 # Show results of both adjusted and unadjusted
-plot_all_models <- all_models %>% 
+all_models %>% 
     ggplot(aes(y = predictor, x = estimate, xmin = conf.low, xmax = conf.high)) +
     geom_point(size = 3) +
     geom_errorbarh(height = 0.1) +
@@ -423,7 +421,6 @@ plot_all_models <- all_models %>%
     facet_grid(rows = vars(model)) +
     labs(y = "Predictors", x = "Odds ratio (95% CI)") +
     theme_classic()
-plot_all_models
 ```
 
 ```{r visualize-unadjusted-and-adjusted-model-results-NormalExercise-check, eval=FALSE}
@@ -435,234 +432,224 @@ plot_all_models
 ```{r, child='slides/chapter_4_video_3.Rmd'}
 ```
 
-## Present the basic characteristics of the cohort
+## Present the basic characteristics of the cohort {data-progressive=TRUE}
 
-A classic use for tables is showing the basic characteristics of a cohort dataset, as there are diverse data types and summary statistics that need to be shown. Including a basic participant characteristics table is part of the STROBE best practices. This table can be quite informative for others when they interpret your analysis results.
+A classic use for tables is showing the basic characteristics of a cohort
+dataset, as there are diverse data types and summary statistics that need to be
+shown. Including a basic participant characteristics table is part of the STROBE
+best practices. This table can be quite informative for others when they
+interpret your analysis results.
 
-Using the `carpenter` package, create a table showing summary statistics for each data collection visit.
+Using the `carpenter` package, create a table showing summary statistics for
+each data collection visit.
 
 ```{r present-the-basic-characteristics-of-the-cohort-NormalExercise-setup}
-load('datasets/tidied_framingham.rda')
+capture.output({
+data("tidied_framingham", package = "acdcourse")
 library(carpenter)
 library(dplyr)
+})
 ```
 
-### Exercise
+### Exercise step
 
 **Instructions**:
 
 - Set `"followup_visit_number"` for the `header` argument of `outline_table()`.
 
-```{r exercise-NormalExercise-hint-1, eval=FALSE}
-"Use quotes around `followup_visit_number`."
-```
-
-```{r present-the-basic-characteristics-of-the-cohort-NormalExercise, exercise=TRUE, exercise.setup='present-the-basic-characteristics-of-the-cohort-NormalExercise-setup'}
+```{r present-the-basic-characteristics-of-the-cohort-NormalExercise-1, exercise=TRUE, exercise.setup='present-the-basic-characteristics-of-the-cohort-NormalExercise-setup'}
 # Create a table of summary statistics
-characteristics_table <- tidied_framingham %>% 
+tidied_framingham %>% 
 	# These discrete variables are numeric, but must be factors
 	mutate_at(vars(followup_visit_number, got_cvd), as.factor) %>% 
 	# Set followup visit number as table column
     outline_table(header = ___) 
-
-# Check the table
-characteristics_table
 ```
 
-```{r present-the-basic-characteristics-of-the-cohort-NormalExercise-hint-2, eval=FALSE}
+```{r present-the-basic-characteristics-of-the-cohort-NormalExercise-1-hint-1, eval=FALSE}
+"Use quotes around `followup_visit_number`."
+```
+
+```{r present-the-basic-characteristics-of-the-cohort-NormalExercise-1-hint-2, eval=FALSE}
 # Create a table of summary statistics
-characteristics_table <- tidied_framingham %>% 
-	# These discrete variables are numeric, but must be factors
+tidied_framingham %>% 
+    # These discrete variables are numeric, but must be factors
     mutate_at(vars(followup_visit_number, got_cvd), as.factor) %>% 
-	# Set followup visit number as table column
+	  # Set followup visit number as table column
     outline_table(header = "followup_visit_number") 
-
-# Check the table
-characteristics_table
 ```
 
-```{r present-the-basic-characteristics-of-the-cohort-NormalExercise-check, eval=FALSE}
+```{r present-the-basic-characteristics-of-the-cohort-NormalExercise-1-check, eval=FALSE}
 "Nice!"
 ```
 
-### Exercise
+### Exercise step
 
 **Instructions**:
 
-- Add a row for the `"got_cvd"`, `"sex"`, and `"education_combined"` variables, using `stat_nPct` for the `stat` argument.
+- Add a row for the `"got_cvd"`, `"sex"`, and `"education_combined"` variables,
+using `stat_nPct` for the `stat` argument.
 
-```{r exercise-NormalExercise-hint-1, eval=FALSE}
-"The variables should be quoted, e.g. `"sex"`."
-```
-
-```{r present-the-basic-characteristics-of-the-cohort-NormalExercise, exercise=TRUE, exercise.setup='present-the-basic-characteristics-of-the-cohort-NormalExercise-setup'}
+```{r present-the-basic-characteristics-of-the-cohort-NormalExercise-2, exercise=TRUE, exercise.setup='present-the-basic-characteristics-of-the-cohort-NormalExercise-setup'}
 # Create a table of summary statistics
-characteristics_table <- tidied_framingham %>% 
+tidied_framingham %>% 
     mutate_at(vars(followup_visit_number, got_cvd), as.factor) %>% 
     outline_table(header = "followup_visit_number") %>% 
     # Show n (%) for discrete variables as rows
     add_rows(c(___, ___, ___), stat = ___)
-
-# Check the table
-characteristics_table
 ```
 
-```{r present-the-basic-characteristics-of-the-cohort-NormalExercise-hint-2, eval=FALSE}
+```{r present-the-basic-characteristics-of-the-cohort-NormalExercise-2-hint-1, eval=FALSE}
+"The variables should be quoted, e.g. `"sex"`."
+```
+
+```{r present-the-basic-characteristics-of-the-cohort-NormalExercise-2-hint-2, eval=FALSE}
 # Create a table of summary statistics
-characteristics_table <- tidied_framingham %>% 
+tidied_framingham %>% 
     mutate_at(vars(followup_visit_number, got_cvd), as.factor) %>% 
     outline_table(header = "followup_visit_number") %>% 
     # Show n (%) for discrete variables as rows
     add_rows(c("got_cvd", "sex", "education_combined"), stat = stat_nPct)
-
-# Check the table
-characteristics_table
 ```
 
-```{r present-the-basic-characteristics-of-the-cohort-NormalExercise-check, eval=FALSE}
+```{r present-the-basic-characteristics-of-the-cohort-NormalExercise-2-check, eval=FALSE}
 "Great!"
 ```
 
-### Exercise
+### Exercise step
 
 **Instructions**:
 
-- Add rows for `"total_cholesterol"`, `"body_mass_index"`, and `"participant_age"` using `stat_medianIQR` for the `stat` argument.
+- Add rows for `"total_cholesterol"`, `"body_mass_index"`, and
+`"participant_age"` using `stat_medianIQR` for the `stat` argument.
 
-```{r exercise-NormalExercise-hint-1, eval=FALSE}
-"The variables need to be surrounded by quotes, just like the function above."
-```
-
-```{r present-the-basic-characteristics-of-the-cohort-NormalExercise, exercise=TRUE, exercise.setup='present-the-basic-characteristics-of-the-cohort-NormalExercise-setup'}
+```{r present-the-basic-characteristics-of-the-cohort-NormalExercise-3, exercise=TRUE, exercise.setup='present-the-basic-characteristics-of-the-cohort-NormalExercise-setup'}
 # Create a table of summary statistics
-characteristics_table <- tidied_framingham %>% 
+tidied_framingham %>% 
     mutate_at(vars(followup_visit_number, got_cvd), as.factor) %>% 
     outline_table(header = "followup_visit_number") %>% 
     add_rows(c("got_cvd", "sex", "education_combined"), stat = stat_nPct) %>% 
     # Show median (range) for continuous variables
     add_rows(c(___, ___, ___), stat = ___)
-
-# Check the table
-characteristics_table
 ```
 
-```{r present-the-basic-characteristics-of-the-cohort-NormalExercise-hint-2, eval=FALSE}
+```{r present-the-basic-characteristics-of-the-cohort-NormalExercise-3-hint-1, eval=FALSE}
+"The variables need to be surrounded by quotes, just like the function above."
+```
+
+```{r present-the-basic-characteristics-of-the-cohort-NormalExercise-3-hint-2, eval=FALSE}
 # Create a table of summary statistics
-characteristics_table <- tidied_framingham %>% 
+tidied_framingham %>% 
     mutate_at(vars(followup_visit_number, got_cvd), as.factor) %>% 
     outline_table(header = "followup_visit_number") %>% 
     add_rows(c("got_cvd", "sex", "education_combined"), stat = stat_nPct) %>% 
     # Show median (range) for continuous variables
     add_rows(c("total_cholesterol", "body_mass_index", "participant_age"), stat = stat_medianIQR)
-
-# Check the table
-characteristics_table
 ```
 
-```{r present-the-basic-characteristics-of-the-cohort-NormalExercise-check, eval=FALSE}
+```{r present-the-basic-characteristics-of-the-cohort-NormalExercise-3-check, eval=FALSE}
 "Great!"
 ```
 
-### Exercise
+### Exercise step
 
 **Instructions**:
 
-- Rename the table `"header"` to `"Measures"`, `"Baseline"`, `"Second followup"`, and `"Third followup"`, then `build_table()` to markdown format.
+- Rename the table `"header"` to `"Measures"`, `"Baseline"`, `"Second
+followup"`, and `"Third followup"`, then `build_table()` to markdown format.
 
-```{r exercise-NormalExercise-hint-1, eval=FALSE}
+```{r present-the-basic-characteristics-of-the-cohort-NormalExercise-4, exercise=TRUE, exercise.setup='present-the-basic-characteristics-of-the-cohort-NormalExercise-setup', results="markup"}
+tidied_framingham %>% 
+    mutate_at(vars(followup_visit_number, got_cvd), as.factor) %>% 
+    outline_table(header = "followup_visit_number") %>% 
+    add_rows(c("got_cvd", "sex", "education_combined"), stat = stat_nPct) %>% 
+    add_rows(c("participant_age", "body_mass_index", "total_cholesterol"), stat = stat_medianIQR) %>% 
+    # Rename headers to better titles
+    renaming("header", c(___, ___, ___, ___)) %>% 
+    # Build the table and convert to markdown form
+    ___()
+```
+
+```{r present-the-basic-characteristics-of-the-cohort-NormalExercise-4-hint-1, eval=FALSE}
 "The new column headers should be given as a character vector."
 ```
 
-```{r present-the-basic-characteristics-of-the-cohort-NormalExercise, exercise=TRUE, exercise.setup='present-the-basic-characteristics-of-the-cohort-NormalExercise-setup'}
-characteristics_table <- tidied_framingham %>% 
+```{r present-the-basic-characteristics-of-the-cohort-NormalExercise-4-hint-2, eval=FALSE}
+tidied_framingham %>% 
     mutate_at(vars(followup_visit_number, got_cvd), as.factor) %>% 
     outline_table(header = "followup_visit_number") %>% 
     add_rows(c("got_cvd", "sex", "education_combined"), stat = stat_nPct) %>% 
     add_rows(c("participant_age", "body_mass_index", "total_cholesterol"), stat = stat_medianIQR) %>% 
     # Rename headers to better titles
-    renaming("header", c(___, ___, ___, ___))
-
-# Build the table and convert to markdown form
-build_table(___)
+    renaming("header", c("Measures", "Baseline", "Second followup", "Third followup")) %>% 
+    # Build the table and convert to markdown form
+    build_table()
 ```
 
-```{r present-the-basic-characteristics-of-the-cohort-NormalExercise-hint-2, eval=FALSE}
-characteristics_table <- tidied_framingham %>% 
-    mutate_at(vars(followup_visit_number, got_cvd), as.factor) %>% 
-    outline_table(header = "followup_visit_number") %>% 
-    add_rows(c("got_cvd", "sex", "education_combined"), stat = stat_nPct) %>% 
-    add_rows(c("participant_age", "body_mass_index", "total_cholesterol"), stat = stat_medianIQR) %>% 
-    # Rename headers to better titles
-    renaming("header", c("Measures", "Baseline", "Second followup", "Third followup"))
-
-# Build the table and convert to markdown form
-build_table(characteristics_table)
-```
-
-```{r present-the-basic-characteristics-of-the-cohort-NormalExercise-check, eval=FALSE}
+```{r present-the-basic-characteristics-of-the-cohort-NormalExercise-4-check, eval=FALSE}
 "Nice job! You've gotten the data formatted as a table for easy inclusion in a document or report and have provided basic participant characteristics from each cohort visit."
 ```
 
-## Supplemental tables of raw numbers for results
+## Supplemental tables of raw numbers for results {data-progressive=TRUE}
 
-While the main messaging and presentation of results should emphasize figures over tables, often it is useful to other researchers (especially those doing meta-analyses or aggregating results) that the raw model results be given as well. Here we can use tables to give this data, as a supplement to the figure.
+While the main messaging and presentation of results should emphasize figures
+over tables, often it is useful to other researchers (especially those doing
+meta-analyses or aggregating results) that the raw model results be given as
+well. Here we can use tables to give this data, as a supplement to the figure.
 
-Provide the estimates and confidence intervals of the unadjusted and adjusted model results in a table format that you could include in a document or report. The packages `glue`, `stringr`, and `knitr` have been loaded.
+Provide the estimates and confidence intervals of the unadjusted and adjusted
+model results in a table format that you could include in a document or report.
+The packages `glue`, `stringr`, and `knitr` have been loaded.
 
 ```{r supplemental-tables-of-raw-numbers-for-results-NormalExercise-setup}
-load('datasets/all_models.rda')
+capture.output({
+data("all_models", package = "acdcourse")
 library(knitr)
 library(glue)
 library(dplyr)
 library(tidyr)
 library(stringr)
+})
 ```
 
-### Exercise
+### Exercise step
 
 **Instructions**:
 
-- Round the `estimate`, `conf.low`, and `conf.high` to 2 digits using the function `round` (don't use with `()`).
+- Round the `estimate`, `conf.low`, and `conf.high` to 2 digits using the
+function `round` (don't use with `()`).
 
-```{r exercise-NormalExercise-hint-1, eval=FALSE}
-"`mutate_at()` takes variables (as the first argument) inside `vars()` and applies a function like `round` as the second argument."
-```
-
-```{r supplemental-tables-of-raw-numbers-for-results-NormalExercise, exercise=TRUE, exercise.setup='supplemental-tables-of-raw-numbers-for-results-NormalExercise-setup'}
+```{r supplemental-tables-of-raw-numbers-for-results-NormalExercise-1, exercise=TRUE, exercise.setup='supplemental-tables-of-raw-numbers-for-results-NormalExercise-setup'}
 # Prepare the results for the table
 table_model_results <- all_models %>% 
     # Round values of variables to 3
     mutate_at(vars(___, ___, ___), ___, digits = ___)
-
-# View wrangled data
-table_model_results
 ```
 
-```{r supplemental-tables-of-raw-numbers-for-results-NormalExercise-hint-2, eval=FALSE}
+```{r supplemental-tables-of-raw-numbers-for-results-NormalExercise-1-hint-1, eval=FALSE}
+"`mutate_at()` takes variables (as the first argument) inside `vars()` and applies a function like `round` as the second argument."
+```
+
+```{r supplemental-tables-of-raw-numbers-for-results-NormalExercise-1-hint-2, eval=FALSE}
 # Prepare the results for the table
 table_model_results <- all_models %>% 
     # Round values of variables to 3
     mutate_at(vars(estimate, conf.low, conf.high), round, digits = 2)
-
-# View wrangled data
-table_model_results
 ```
 
-```{r supplemental-tables-of-raw-numbers-for-results-NormalExercise-check, eval=FALSE}
+```{r supplemental-tables-of-raw-numbers-for-results-NormalExercise-1-check, eval=FALSE}
 "Great!"
 ```
 
-### Exercise
+### Exercise step
 
 **Instructions**:
 
-- Use `glue()` to create a new variable in the form `estimate (conf.low, conf.high)`, then replace underscores with spaces in `predictor` with `str_replace_all()`.
+- Use `glue()` to create a new variable in the form `estimate (conf.low,
+conf.high)`, then replace underscores with spaces in `predictor` with
+`str_replace_all()`.
 
-```{r exercise-NormalExercise-hint-1, eval=FALSE}
-"The estimate and CI variables should be placed inside the `{}` in `glue()`."
-```
-
-```{r supplemental-tables-of-raw-numbers-for-results-NormalExercise, exercise=TRUE, exercise.setup='supplemental-tables-of-raw-numbers-for-results-NormalExercise-setup'}
+```{r supplemental-tables-of-raw-numbers-for-results-NormalExercise-2, exercise=TRUE, exercise.setup='supplemental-tables-of-raw-numbers-for-results-NormalExercise-setup'}
 # Prepare the results for the table
 table_model_results <- all_models %>% 
     mutate_at(vars(estimate, conf.low, conf.high), round, digits = 2) %>% 
@@ -670,12 +657,13 @@ table_model_results <- all_models %>%
     mutate(estimate_ci = glue("{___} ({___}, {___})"),
            # Underscores to spaces in predictor
            predictor = str_replace_all(___, "_", " "))
-
-# View wrangled data
-table_model_results
 ```
 
-```{r supplemental-tables-of-raw-numbers-for-results-NormalExercise-hint-2, eval=FALSE}
+```{r supplemental-tables-of-raw-numbers-for-results-NormalExercise-2-hint-1, eval=FALSE}
+"The estimate and CI variables should be placed inside the `{}` in `glue()`."
+```
+
+```{r supplemental-tables-of-raw-numbers-for-results-NormalExercise-2-hint-2, eval=FALSE}
 # Prepare the results for the table
 table_model_results <- all_models %>% 
     mutate_at(vars(estimate, conf.low, conf.high), round, digits = 2) %>% 
@@ -683,29 +671,23 @@ table_model_results <- all_models %>%
     mutate(estimate_ci = glue("{estimate} ({conf.low}, {conf.high})"),
            # Underscores to spaces in predictor
            predictor = str_replace_all(predictor, "_", " "))
-
-# View wrangled data
-table_model_results
 ```
 
-```{r supplemental-tables-of-raw-numbers-for-results-NormalExercise-check, eval=FALSE}
+```{r supplemental-tables-of-raw-numbers-for-results-NormalExercise-2-check, eval=FALSE}
 "Amazing!"
 ```
 
-### Exercise
+### Exercise step
 
 **Instructions**:
 
-- Keeping `model`, `predictor`, and `estimate_ci` variables, use `spread` on `model` and `estimate_ci`.
+- Keeping `model`, `predictor`, and `estimate_ci` variables, use `spread` on
+`model` and `estimate_ci`.
 - Create the formatted table with `kable()`.
 
-```{r exercise-NormalExercise-hint-1, eval=FALSE}
-"`spread` takes two arguments: 1) the current discrete column (`model`) that will be the new columns names, and 2) the values (`estimate_ci`) that will be in the new columns."
-```
-
-```{r supplemental-tables-of-raw-numbers-for-results-NormalExercise, exercise=TRUE, exercise.setup='supplemental-tables-of-raw-numbers-for-results-NormalExercise-setup'}
+```{r supplemental-tables-of-raw-numbers-for-results-NormalExercise-3, exercise=TRUE, exercise.setup='supplemental-tables-of-raw-numbers-for-results-NormalExercise-setup'}
 # Prepare the results for the table
-table_model_results <- all_models %>% 
+all_models %>% 
     mutate_at(vars(estimate, conf.low, conf.high), round, digits = 2) %>% 
     mutate(estimate_ci = glue("{estimate} ({conf.low}, {conf.high})"),
            predictor = predictor %>% 
@@ -713,15 +695,18 @@ table_model_results <- all_models %>%
                str_replace_all("_", " ")) %>%
     # Keep then spread variables for final table
     select(___, ___, ___) %>% 
-    spread(___, ___)
-
-# Create a Markdown table
-kable(___, caption = "Estimates and 95% CI from all models.")
+    spread(___, ___) %>% 
+    # Create a Markdown table
+    kable(caption = "Estimates and 95% CI from all models.")
 ```
 
-```{r supplemental-tables-of-raw-numbers-for-results-NormalExercise-hint-2, eval=FALSE}
+```{r supplemental-tables-of-raw-numbers-for-results-NormalExercise-3-hint-1, eval=FALSE}
+"`spread` takes two arguments: 1) the current discrete column (`model`) that will be the new columns names, and 2) the values (`estimate_ci`) that will be in the new columns."
+```
+
+```{r supplemental-tables-of-raw-numbers-for-results-NormalExercise-3-hint-2, eval=FALSE}
 # Prepare the results for the table
-table_model_results <- all_models %>% 
+all_models %>% 
     mutate_at(vars(estimate, conf.low, conf.high), round, digits = 2) %>% 
     mutate(estimate_ci = glue("{estimate} ({conf.low}, {conf.high})"),
            predictor = predictor %>% 
@@ -729,12 +714,11 @@ table_model_results <- all_models %>%
                str_replace_all("_", " ")) %>%
     # Keep then spread variables for final table
     select(model, predictor, estimate_ci) %>% 
-    spread(model, estimate_ci)
-
-# Create a Markdown table
-kable(table_model_results, caption = "Estimates and 95% CI from all models.")
+    spread(model, estimate_ci) %>% 
+    # Create a Markdown table
+    kable(caption = "Estimates and 95% CI from all models.")
 ```
 
-```{r supplemental-tables-of-raw-numbers-for-results-NormalExercise-check, eval=FALSE}
+```{r supplemental-tables-of-raw-numbers-for-results-NormalExercise-3-check, eval=FALSE}
 "Amazing! You've wrangled the data and prepared it to be presented as a table! You can now easily add this to your manuscript (especially easy if you use R Markdown)."
 ```
