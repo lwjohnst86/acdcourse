@@ -1,11 +1,8 @@
----
-title: Exploring before wrangling
 
----
-
-### Pre-wrangling exploration
-
-We've gone over the basics of cohorts and some initial explorations. In this chapter we'll cover common wrangling tasks and visually exploring cohort data.
+We've gone over the basics of cohorts and some initial explorations. In this
+chapter we'll cover common wrangling tasks and visually exploring cohort data.
+Before statistically analyzing cohort data, you'll need to explore and wrangle
+it into an appropriately analyzable format. 
 
 ### Univariate ("one variable") visualizations
 
@@ -18,9 +15,16 @@ ggplot(tidier_framingham,
     geom_histogram()
 ```
 
-![histogram](https://assets.datacamp.com/production/repositories/2079/datasets/adcd763375b8bcba52f68c14e34c7ef2c6c2cd33/ch2-v1-histogram.png) 
+![Histogram of body mass index](images/ch2-v1-histogram.png) 
 
-A useful way to look at data is with univariate distributions using histograms, which count the number of times a given value occurs. We'll create histograms using ggplot2. We first set up the plot using the ggplot function. This takes two arguments, the dataset and the aesthetic mapping or aes function. Aes indicates where to map variables to plot aspects like the x-axis. We want a univariate plot, so we'll set x to a continuous variable like body mass. The histogram layer is added with the plus sign followed by geom-underscore-histogram.
+A useful way to look at data is with univariate distributions using histograms,
+which count the number of times a given value occurs. We'll create histograms
+using ggplot2. We first set up the plot using the ggplot function. This takes
+two arguments, the dataset and the aesthetic mapping or aes function. Aes
+indicates where to map variables to plot aspects like the x-axis. We want a
+univariate plot, so we'll set x to a continuous variable like body mass. The
+histogram layer is added with the plus sign followed by
+`geom_histogram()`.
 
 ### Visualize many variables with "longer" data
 
@@ -43,9 +47,13 @@ head(wide_form, 4)
 4       6238            29.4              52
 ```
 
-If we want to visualize several variables, plotting them one by one is less than ideal. There's an easier way though, by using ggplot facets. We'll go over facets soon, but to optimally use facets we'll need the data in the long form.
+If we want to visualize several variables, plotting them one by one is less than
+ideal. There's an easier way though, by using ggplot facets. We'll go over
+facets soon, but to optimally use facets we'll need the data in the long form.
 
-Our data right now is in wide form. To illustrate, I'm only using a couple variables. Wider data has variables as columns and those variables' values are the individual rows.
+Our data right now is in wide form. To illustrate, I'm only using a couple
+variables. Wider data has variables as columns and those variables' values are
+the individual rows.
 
 ### Convert to "longer" form using gather from tidyr
 
@@ -71,9 +79,18 @@ long_form
 8       6238 participant_age  52  
 ``` 
 
-We use the gather function from tidyr to convert to long form. For illustration I'll only show four rows using head. Gather takes four arguments: data, key, value, and the variable selection. Data is already given by the pipe. The key is the name to give the new column that will contain the original variable names. The value is the name to give the new column that will contain the variable values. We'll simply call the new columns variable and value. The last optional argument is the one or more variables we want to include or exclude from gathering. Here we want to exclude subject ID by using minus.
+We use the gather function from tidyr to convert to long form. For illustration
+I'll only show four rows using head. Gather takes four arguments: data, key,
+value, and the variable selection. Data is already given by the pipe. The key is
+the name to give the new column that will contain the original variable names.
+The value is the name to give the new column that will contain the variable
+values. We'll simply call the new columns variable and value. The last optional
+argument is the one or more variables we want to include or exclude from
+gathering. Here we want to exclude subject ID by using minus.
 
-Longer data is in more of a stacked form, with variable names as data in a column here called variable and their associated value in a new column, again, here called value.
+Longer data is in more of a stacked form, with variable names as data in a
+column here called variable and their associated value in a new column, again,
+here called value.
 
 ### Visually explore multiple variables
 
@@ -85,11 +102,19 @@ wide_form %>%
     facet_wrap(vars(variable), scale = "free", nrow = 1)
 ``` 
 
-![facetted histograms](http://assets.datacamp.com/production/repositories/2079/datasets/2acc30ca29c22a921db27611193a3a0363d075fa/ch2-v1-two-histograms.png) 
+![Facetted histograms of mutliple variables.](images/ch2-v1-two-histograms.png) 
 
-Let's now use this long data by piping it into ggplot. We then set x to the value column with the original data. Then we add the histogram geom and to facet use the facet-underscore-wrap function. This function takes several arguments, but the first is the variables you want to facet. The one or more variables to facet need to be wrapped in the vars function. We're setting scale to free as the variables' values have different ranges. Setting nrow to one puts all the facets in one row.
+Let's now use this long data by piping it into ggplot. We then set x to the
+value column with the original data. Then we add the histogram geom and to facet
+use the `facet_wrap()` function. This function takes several arguments,
+but the first is the variables you want to facet. The one or more variables to
+facet need to be wrapped in the vars function. We're setting scale to free as
+the variables' values have different ranges. Setting nrow to one puts all the
+facets in one row.
 
-Now we have a single plot with multiple histograms! You can very quickly explore more of the data. Longer data can also be leveraged for many other analysis tasks too, which we'll cover in later chapters.
+Now we have a single plot with multiple histograms! You can very quickly explore
+more of the data. Longer data can also be leveraged for many other analysis
+tasks too, which we'll cover in later chapters.
 
 ### Visually explore the exposure by outcome
 
@@ -105,15 +130,21 @@ tidier_framingham %>%
 
 - `coord_flip()` for horizontal boxplots 
 
-![boxplot](http://assets.datacamp.com/production/repositories/2079/datasets/1a49396f8978317db2445c06cebd1ebdf75f6223/ch2-v1-boxplot.png) 
+![Boxplot of CVD and body mass index.](images/ch2-v1-boxplot.png) 
 
-Univariate visualizations are great but let's explore how the exposures look in relation to the outcome. For categorical outcomes like CVD, boxplots are great for showing the data's distribution using the median, the twenty-fifth and seventy-fifth percentile, and a measure of slightly more extreme values.
+Univariate visualizations are great but let's explore how the exposures look in
+relation to the outcome. For categorical outcomes like CVD, boxplots are great
+for showing the data's distribution using the median, the twenty-fifth and
+seventy-fifth percentile, and a measure of slightly more extreme values.
 
-Since CVD's values are either zero or one, we'll need to convert it to categorical with mutate and as-dot-character. Then we set x to be CVD and y needs to be a continuous variable. Add the geom-underscore-boxplot layer and we get a boxplot figure!
+Since CVD's values are either zero or one, we'll need to convert it to
+categorical with mutate and as-dot-character. Then we set x to be CVD and y
+needs to be a continuous variable. Add the `geom_boxplot()` layer and we
+get a boxplot figure!
 
-To make the boxplots horizontal instead of vertical, you'll need to use coord-underscore-flip.
+To make the boxplots horizontal instead of vertical, you'll need to use
+`coord_flip()`.
 
 ### Exploring time!
 
 Alright, let's visualize some variables!
-
