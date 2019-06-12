@@ -1,5 +1,5 @@
 Package: acdcourse
-Title: Course Material on Analyzing Cohort Datasets in R.
+Title: Analyzing Cohort Datasets in R
 Version: 0.0.0.9000
 Authors@R: 
     person(given = "Luke",
@@ -7,7 +7,9 @@ Authors@R:
            role = c("aut", "cre"),
            email = "lwjohnst@gmail.com",
            comment = c(ORCID = "0000-0003-4169-2616"))
-Description: Tutorials on how to analyze cohort datasets using R.
+Description: Four tutorial chapters covering the basics on how to analyze cohort 
+    datasets using R.
+Depends: R (>= 3.5.0)
 License: CCBY-4.0
 Encoding: UTF-8
 LazyData: true

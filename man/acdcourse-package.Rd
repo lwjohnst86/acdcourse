@@ -4,9 +4,10 @@
 \name{acdcourse-package}
 \alias{acdcourse}
 \alias{acdcourse-package}
-\title{acdcourse: Course Material on Analyzing Cohort Datasets in R.}
+\title{acdcourse: Analyzing Cohort Datasets in R}
 \description{
-Tutorials on how to analyze cohort datasets using R.
+Four tutorial chapters covering the basics on how to analyze cohort 
+    datasets using R.
 }
 \seealso{
 Useful links:
