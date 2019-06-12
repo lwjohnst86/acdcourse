@@ -35,25 +35,24 @@ learnr::run_tutorial("chapter4", package = "acd.course")
 
 ## Learner persona
 
-Link to [student profiles][profile-site]. This course will be useful to two
-learners, and possibly a third (dependent on field of study):
+This course will be useful / primarily targetted to three (hypothetical)
+learners:
 
-* Catalina: She will likely already know most of the basic statistical
+* Catherine: She will likely already know most of the basic statistical
 techniques in the course. However, this course may give her material on creating
 her own course, as this course will present various types of cohort study designs
 and how to interpret the results from the statistical analyses (in the cohort
 context). This will be useful to her medical students, who rely on this type of
 data to make medical decisions that could save people's lives.
-* Jasmine: The material in this course will teach her some fundamentals on how to
+* Jamie: The material in this course will teach her some fundamentals on how to
 apply statistical techniques using code. If she teaches health insurance policy 
 research at her alma mater, knowing the specifics of analyzing cohort datasets
 would help make her students better with creating/analyzing/studying health
 insurance policies.
-* Mohan (or maybe another biomedical graduate student?): He will likely not be
-interested in the statistical portion of this course, though he may find the 
-sections with the code to analyze and interpret the cohort data useful. If he was
-in any biomedical or health sciences graduate programs, he would find this course
-very useful.
+* Moe: He will likely not be interested in the statistical portion of this
+course, though he may find the sections with the code to analyze and interpret
+the cohort data useful. If he was in any biomedical or health sciences graduate
+programs, he would find this course very useful.
 
 ## General course outline
 
@@ -91,14 +90,14 @@ main analysis that may be more specific to cohort datasets
 results from cohort studies in a way that is meaningful and interpretable to end
 users, the clinicians and the public health professionals
 
-### Prerequisites
+### Prerequisite or familiar knowledge / concepts
 
-- [Intro to Tidyverse](https://github.com/datacamp/courses-intro-to-tidyverse)
-- [Descriptive Epidemiology in R](https://github.com/datacamp/courses-descriptive-epidemiology-in-r)
-- [Correlation and Regression](https://github.com/datacamp/courses-intro-stats-correlation-regression)
-- [Multiple and Logistic Regression](https://www.datacamp.com/courses/multiple-and-logistic-regression)
-- [Hierarchical and Mixed Effects Models](https://www.datacamp.com/courses/hierarchical-and-mixed-effects-models)
-- [Network Analysis in R](https://www.datacamp.com/courses/network-analysis-in-r)
+- Tidyverse R packages
+- Descriptive epidemiology
+- Statistics: 
+    - Correlation and regression
+    - Multiple and Logistic Regression
+    - Mixed Effects Models
+    - Network Analysis
 
-[profile-site]: https://github.com/datacamp/learner-profiles
-
+<!-- TODO: Include links to some of these resources -->
