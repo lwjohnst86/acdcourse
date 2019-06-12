@@ -1,11 +1,14 @@
----
-title: Statistical analyses for cohort studies
 
----
+There are a wide range of statistical techniques you could apply to cohort
+datasets, and they depend heavily on the study design, research questions, and
+the type of data collected. In this chapter we will focus some approaches to
+choosing the statistical method and how to think about analyzing cohorts. We'll
+be focusing on using mixed effect models and how to extract the revelant results
+from the statistical models.
 
-### Statistical analyses for cohort studies
-
-In this chapter, we'll be covering statistical analyses. We'll be focusing mainly on general concepts but with a focus on a common and powerful statistical technique.
+In this chapter, we'll be covering statistical analyses. We'll be focusing
+mainly on general concepts but with a focus on a common and powerful statistical
+technique.
 
 ### Common analyses for cohorts
 
@@ -18,7 +21,13 @@ In this chapter, we'll be covering statistical analyses. We'll be focusing mainl
     - Linear regression
     - Logistic regression
 
-There are many ways to analyze cohorts, depending on the data, the research questions, and the study design. For prospective cohorts with multiple measures over time, you would generally use mixed effects or generalized estimated equations, while other study designs tend to use simpler techniques such as linear or logistic regression or cox models. Cohorts usually study a disease, which is generally binary like has or doesn't have, and requires techniques that use a binomial distribution.
+There are many ways to analyze cohorts, depending on the data, the research
+questions, and the study design. For prospective cohorts with multiple measures
+over time, you would generally use mixed effects or generalized estimated
+equations, while other study designs tend to use simpler techniques such as
+linear or logistic regression or cox models. Cohorts usually study a disease,
+which is generally binary like has or doesn't have, and requires techniques that
+use a binomial distribution.
 
 For the rest of the chapter, we'll focus on mixed effects modeling.
 
@@ -28,8 +37,6 @@ For the rest of the chapter, we'll focus on mixed effects modeling.
     - Has "fixed" (population-level) and "random" (individual-level) terms
     - Used with multiple measures on same "statistical unit" (e.g. person over time)
 
-&nbsp;
-
 ``` r
 # Example syntax:
 library(lme4)
@@ -38,9 +45,14 @@ glmer(outcome ~ predictor1 + predictor2 +
       data = dataset, family = binomial)
 ```
 
-Mixed effects models are powerful methods that contain a fixed term that indicates the overall effect and a random term that indicates the individual effect. You would use this method when data has been collected on each participant multiple times, as is common in prospective cohorts. 
+Mixed effects models are powerful methods that contain a fixed term that
+indicates the overall effect and a random term that indicates the individual
+effect. You would use this method when data has been collected on each
+participant multiple times, as is common in prospective cohorts.
 
-We'll use the glmer function from lme4. If you are familiar with the glm function, or with generalized linear models, glmer is very similar except that you add a random term.
+We'll use the glmer function from lme4. If you are familiar with the glm
+function, or with generalized linear models, glmer is very similar except that
+you add a random term.
 
 ### Formula meaning in mixed models
 
@@ -55,11 +67,13 @@ outcome ~ predictor + (1 | random_term)
     - Variables thought to influence outcome
     - Using more variables: `predictor1 + predictor2 + ...`
 
-There are three parts to a mixed model formula: the outcome or y, the predictors or x, and the random term. 
+There are three parts to a mixed model formula: the outcome or y, the predictors
+or x, and the random term. The outcome in cohorts is usually the disease. 
 
-The outcome in cohorts is usually the disease. 
-
-The predictor is the fixed term and can be one or more predictor variables, separated by a plus sign. The main predictor of interest, called the exposure, is the one we hypothesize has a role in the the disease. Other predictors include potential confounders, which we will cover later.
+The predictor is the fixed term and can be one or more predictor variables,
+separated by a plus sign. The main predictor of interest, called the exposure,
+is the one we hypothesize has a role in the the disease. Other predictors
+include potential confounders, which we will cover later.
 
 ### Formula meaning in mixed models
 
@@ -74,9 +88,16 @@ outcome ~ predictor + (1 | random_term)
     - `1` = same slope for all 
     - `random_term` = each person has own intercept 
 
-Lastly, there is the random effects variable. The name random means there is a dependency between observations, such as with siblings in a family or a person measured over time. 
+Lastly, there is the random effects variable. The name random means there is a
+dependency between observations, such as with siblings in a family or a person
+measured over time.
 
-The form has two parts, a left and right side. The left side calculates slopes for each random unit while the right side calculates intercepts for each unit. The one here says to have the same slopes and that each random unit on the right will have a different intercept. For example, in a prospective cohort, individuals measured over time will all start at their own weight at the start and change over time.
+The form has two parts, a left and right side. The left side calculates slopes
+for each random unit while the right side calculates intercepts for each unit.
+The one here says to have the same slopes and that each random unit on the right
+will have a different intercept. For example, in a prospective cohort,
+individuals measured over time will all start at their own weight at the start
+and change over time.
 
 ### Recall transforming variables for modeling
 
@@ -92,11 +113,16 @@ changed_dataset <- dataset %>%
     - E.g. Weight of mother in kg and weight of newborn in grams
 - Often involves trial and error for transformations 
 
-In chapter 2 we covered transforming variables. Here we will put that knowledge to use. Some modeling techniques are fussy with the data you give it. Usually the model function informs you of any issue. 
+In chapter 2 we covered transforming variables. Here we will put that knowledge
+to use. Some modeling techniques are fussy with the data you give it. Usually
+the model function informs you of any issue.
 
-For instance, with mixed effects models, large differences in the variances of variables in the formula can cause computational problems. A good example would be the weight differences between a mother in kg and a newborn in grams.
+For instance, with mixed effects models, large differences in the variances of
+variables in the formula can cause computational problems. A good example would
+be the weight differences between a mother in kg and a newborn in grams.
 
-You'll often have to do some trial and error of scaling, logging, or other transformations  before the model computes a correct error-free output.
+You'll often have to do some trial and error of scaling, logging, or other
+transformations  before the model computes a correct error-free output.
 
 ### Running mixed effects models using glmer
 
@@ -108,7 +134,13 @@ glmer(outcome ~ center_predictor + predictor_divided_100 +
       data = changed_dataset, family = binomial)
 ``` 
 
-We've covered what to include in the formula and how to transform some variables. Now for how we put it together in the glmer function. glmer takes several arguments, but the three most important ones are the formula, the data, and the family function. The family argument is used to indicate how to handle the outcome variable. Since the outcome is binary, you either have the disease or don't, we need to use the binomial distribution family to obtain the correct results.
+We've covered what to include in the formula and how to transform some
+variables. Now for how we put it together in the glmer function. glmer takes
+several arguments, but the three most important ones are the formula, the data,
+and the family function. The family argument is used to indicate how to handle
+the outcome variable. Since the outcome is binary, you either have the disease
+or don't, we need to use the binomial distribution family to obtain the correct
+results.
 
 ### Lesson summary
 
@@ -118,9 +150,10 @@ We've covered what to include in the formula and how to transform some variables
 - Formula: `y ~ x + (1 | random)`
     - Any variable, including transformed can be added
 
-To summarize, mixed effects models are common, allow you to consider individual's differences with the random term, that the glmer takes three arguments, and that the formula can include any variable in the dataset.
+To summarize, mixed effects models are common, allow you to consider
+individual's differences with the random term, that the glmer takes three
+arguments, and that the formula can include any variable in the dataset.
 
 ### Let's practice with mixed effects models!
 
 Let's do some practice!
-

@@ -1,25 +1,19 @@
 ---
-title: 'Statistical methods for cohort data'
-description: 'There are a wide range of statistical techniques you could apply to cohort datasets, and they depend heavily on the study design, research questions, and the type of data collected. In this chapter we will focus some approaches to choosing the statistical method and how to think about analyzing cohorts. We'll be focusing on using mixed effect models and how to extract the revelant results from the statistical models.'
+title: 'Chapter 3: Statistical methods for cohort data'
 output:
  learnr::tutorial:
-   theme: sandstone
+   theme: journal
+   highlight: pygments
+   #ace_theme: chrome
+   allow_skip: TRUE
 runtime: shiny_prerendered
 ---
-
-<!-- TODO: Deal with previous `@sct` tags (now `-check` labels), they aren't supported. -->
-<!-- TODO: Check that video content has been added. -->
-<!-- TODO: Confirm MCQ exercise has been correctly parsed. -->
-<!-- TODO: Check that Tab or Bullet Exercises were converted properly. -->
-<!-- TODO: Fix Tab or Bullet Exercise chunk labels, there will be duplicates. They need to follow the pattern as described in https://rstudio.github.io/learnr/exercises.html#hints_and_solutions -->
-<!-- TODO: Decide what to do with pre-exercise code from MCQ, they aren't supported. -->
-<!-- TODO: Decide what to do with `success_msg`, these aren't supported. -->
-<!-- TODO: Hint text needs to be moved to below the sample code chunk. -->
 
 ```{r setup, include=FALSE}
 library(learnr)
 knitr::opts_chunk$set(echo = FALSE, warning = FALSE, message = FALSE)
 ```
+
 ## Statistical analyses for cohort studies
 
 ```{r, child='slides/chapter_3_video_1.Rmd'}
@@ -27,36 +21,57 @@ knitr::opts_chunk$set(echo = FALSE, warning = FALSE, message = FALSE)
 
 ## What questions can be asked from Framingham?
 
-Because the Framingham study is a prospective cohort, with certain limits to the data and with three data collection visits, there are restrictions to the types of questions we can ask and reliably answer. Choose the most valid and most appropriate question that we could ask of the Framingham data.
+Because the Framingham study is a prospective cohort, with certain limits to the
+data and with three data collection visits, there are restrictions to the types
+of questions we can ask and reliably answer. 
 
-The `tidied_framingham` dataset is loaded. Before answering, look at the variables available in the dataset, and the age range of the participants.
+```{r what-questions-can-be-asked-from-framingham-MultipleChoiceExercise-mcq, echo=FALSE}
+question(
+  "Choose the most valid and most appropriate question that we could ask of the Framingham data.",
+  answer(
+    "Will lower body mass during adolescence increase the risk for CVD?",
+    correct = FALSE,
+    message = "Incorrect. While cohorts could answer this question, Framingham participants are all in middle age so we can't answer questions outside of that time frame."
+  ),
+  answer(
+    "Does smoking increase the risk for CVD?",
+    correct = TRUE,
+    message = "Correct! The Framingham dataset collected information on smoking status and can assess relative risk between exposure status."
+  ),
+  answer(
+    "Does having many close friends lower the risk for CVD?",
+    correct = FALSE,
+    message = "Incorrect. While cohorts could answer this question, the Framingham Study did not collect this information."
+  ),
+  answer(
+    "All of the above.", 
+    correct = FALSE, 
+    message = "Incorrect. One of the above is a valid question."
+  ),
+  allow_retry = TRUE
+)
+```
 
 ```{r what-questions-can-be-asked-from-framingham-MultipleChoiceExercise-hint-1, eval=FALSE}
 "Remember, these are questions to ask *of the Framingham study*. The variables in the question must exist in the dataset."
 "Use `glimpse(tidied_framingham)` to see which variables are available."
 "Use `summary(tidied_framingham)` to see the minimum and maximum ages of the participants."
-
-```
-```{r what-questions-can-be-asked-from-framingham-MultipleChoiceExercise-mcq, echo=FALSE}
-# TODO: Add the question below in the quotation marks
-question("",
-  answer("Will lower body mass during adolescence increase the risk for CVD?", correct = FALSE, message = "Incorrect. While cohorts could answer this question, Framingham participants are all in middle age so we can't answer questions outside of that time frame."),
-  answer("Does smoking increase the risk for CVD?", correct = FALSE, message = "Correct! The Framingham dataset collected information on smoking status and can assess relative risk between exposure status."),
-  answer("Does having many close friends lower the risk for CVD?", correct = FALSE, message = "Incorrect. While cohorts could answer this question, the Framingham Study did not collect this information."),
-  answer("All of the above.", correct = FALSE, message = "Incorrect. One of the above is a valid question."),
-  allow_retry = TRUE
-)
 ```
 
-## Get familiar with mixed effects models
+## Get familiar with mixed effects models {data-progressive=TRUE}
 
-Let's get you familiar with using and running `glmer()` models. There is some tweaking involved when running `glmer()` models, such as transforming variables before hand. Often this requires some trial and error to get right. For now, practice running some models.
+Let's get you familiar with using and running `glmer()` models. There is some
+tweaking involved when running `glmer()` models, such as transforming variables
+before hand. Often this requires some trial and error to get right. For now,
+practice running some models.
 
-The `lme4` package has been loaded for you. Since `glmer()` is computationally expensive, the Framingham dataset has been reduced in size and is loaded as `sample_tidied_framingham`.
+The `lme4` package has been loaded for you. Since `glmer()` is computationally
+expensive, the Framingham dataset has been reduced in size and is loaded as
+`sample_tidied_framingham`.
 
 Recall that the pattern for using `glmer()` is:
 
-```{r}
+``` r
 model <- glmer(
     outcome_var ~ predictor_var + (1 | person_id),
     data = dataset,
@@ -64,22 +79,21 @@ model <- glmer(
 )
 ```
 
-```{r get-familiar-with-mixed-effects-models-NormalExercise-setup}
-load('datasets/sample_tidied_framingham.rda')
-library(lme4)
+```{r get-familiar-with-mixed-effects-models-NormalExercise-setup, include=FALSE}
+capture.output({
+data(sample_tidied_framingham, package = "acdcourse")
+library(lme4, quietly = TRUE)
+})
 ```
 
-### Exercise
+### Exercise step
 
 **Instructions**:
 
-- Run a model looking at how `total_cholesterol_scaled` relates to the outcome `got_cvd` (have `subject_id` as the random term).
+- Run a model looking at how `total_cholesterol_scaled` relates to the outcome
+`got_cvd` (have `subject_id` as the random term).
 
-```{r exercise-NormalExercise-hint-1, eval=FALSE}
-"The formula should be `got_cvd ~ total_cholesterol_scaled + (1 | subject_id)`."
-```
-
-```{r get-familiar-with-mixed-effects-models-NormalExercise, exercise=TRUE, exercise.setup='get-familiar-with-mixed-effects-models-NormalExercise-setup'}
+```{r get-familiar-with-mixed-effects-models-NormalExercise-1, exercise=TRUE, exercise.setup='get-familiar-with-mixed-effects-models-NormalExercise-setup'}
 # Model scaled cholesterol on CVD
 model <- glmer(
     ___ ~ ___ + ___,
@@ -92,7 +106,11 @@ model <- glmer(
 summary(model)
 ```
 
-```{r get-familiar-with-mixed-effects-models-NormalExercise-hint-2, eval=FALSE}
+```{r get-familiar-with-mixed-effects-models-NormalExercise-1-hint-1, eval=FALSE}
+"The formula should be `got_cvd ~ total_cholesterol_scaled + (1 | subject_id)`."
+```
+
+```{r get-familiar-with-mixed-effects-models-NormalExercise-1-hint-2, eval=FALSE}
 # Model scaled cholesterol on CVD
 model <- glmer(
     got_cvd ~ total_cholesterol_scaled + (1 | subject_id),
@@ -105,21 +123,18 @@ model <- glmer(
 summary(model)
 ```
 
-```{r get-familiar-with-mixed-effects-models-NormalExercise-check, eval=FALSE}
+```{r get-familiar-with-mixed-effects-models-NormalExercise-1-check, eval=FALSE}
 "Amazing!"
 ```
 
-### Exercise
+### Exercise step
 
 **Instructions**:
 
-- Try another predictor. Run a model with `fasting_blood_glucose_scaled` as a predictor instead of cholesterol.
+- Try another predictor. Run a model with `fasting_blood_glucose_scaled` as a
+predictor instead of cholesterol.
 
-```{r exercise-NormalExercise-hint-1, eval=FALSE}
-"Using the same formula as the previous step, replace `total_cholesterol_scaled` with `fasting_blood_glucose_scaled`."
-```
-
-```{r get-familiar-with-mixed-effects-models-NormalExercise, exercise=TRUE, exercise.setup='get-familiar-with-mixed-effects-models-NormalExercise-setup'}
+```{r get-familiar-with-mixed-effects-models-NormalExercise-2, exercise=TRUE, exercise.setup='get-familiar-with-mixed-effects-models-NormalExercise-setup'}
 # Model scaled fasting blood glucose on CVD
 model <- glmer(
     ___ ~ ___ + ___,
@@ -132,7 +147,11 @@ model <- glmer(
 summary(model)
 ```
 
-```{r get-familiar-with-mixed-effects-models-NormalExercise-hint-2, eval=FALSE}
+```{r get-familiar-with-mixed-effects-models-NormalExercise-2-hint-1, eval=FALSE}
+"Using the same formula as the previous step, replace `total_cholesterol_scaled` with `fasting_blood_glucose_scaled`."
+```
+
+```{r get-familiar-with-mixed-effects-models-NormalExercise-2-hint-2, eval=FALSE}
 # Model scaled fasting blood glucose on CVD
 model <- glmer(
     got_cvd ~ fasting_blood_glucose_scaled + (1 | subject_id), 
@@ -145,17 +164,23 @@ model <- glmer(
 summary(model)
 ```
 
-```{r get-familiar-with-mixed-effects-models-NormalExercise-check, eval=FALSE}
+```{r get-familiar-with-mixed-effects-models-NormalExercise-2-check, eval=FALSE}
 "Great job! You've become a bit more familiar with coding and running mixed effects models in R. You ran two models to get practice on setting predictors and the formula. Now we can get to more complicated modeling aspects."
 ```
 
-## Why transforming may be required
+## Why transforming may be required {data-progressive=TRUE}
 
-You need to consider many things with `glmer()` models, e.g. large variable variances. Often `glmer()` will warn you of a problem, which you must fix using your knowledge of transformations. Getting it right often involves trial and error.
+You need to consider many things with `glmer()` models, e.g. large variable
+variances. Often `glmer()` will warn you of a problem, which you must fix using
+your knowledge of transformations. Getting it right often involves trial and
+error.
 
-These exercises will (likely) generate warnings or errors. Compare the different transformations and notice why problems occur. Recall that we are using a smaller dataset, `sample_tidied_framingham`. The general template for `glmer()` is:
+These exercises will (likely) generate warnings or errors. Compare the different
+transformations and notice why problems occur. Recall that we are using a
+smaller dataset, `sample_tidied_framingham`. The general template for `glmer()`
+is:
 
-```{r}
+``` r
 model <- glmer(
     outcome_var ~ predictor_var + (1 | person_id),
     data = dataset,
@@ -164,21 +189,20 @@ model <- glmer(
 ```
 
 ```{r why-transforming-may-be-required-NormalExercise-setup}
-load('datasets/sample_tidied_framingham.rda')
+capture.output({
+data(sample_tidied_framingham, package = "acdcourse")
 library(lme4)
+})
 ```
 
-### Exercise
+### Exercise step
 
 **Instructions**:
 
-- As before, run a model but use `total_cholesterol` instead (`got_cvd` as the outcome); you will get a warning.
+- As before, run a model but use `total_cholesterol` instead (`got_cvd` as the
+outcome); you will get a warning.
 
-```{r exercise-NormalExercise-hint-1, eval=FALSE}
-"Don't forget the random term: `(1 | subject_id)`."
-```
-
-```{r why-transforming-may-be-required-NormalExercise, exercise=TRUE, exercise.setup='why-transforming-may-be-required-NormalExercise-setup'}
+```{r why-transforming-may-be-required-NormalExercise-1, exercise=TRUE, exercise.setup='why-transforming-may-be-required-NormalExercise-setup'}
 # Model total cholesterol on CVD
 model <- glmer(
     ___ ~ ___ + (1 | ___),
@@ -190,7 +214,11 @@ model <- glmer(
 summary(model)
 ```
 
-```{r why-transforming-may-be-required-NormalExercise-hint-2, eval=FALSE}
+```{r why-transforming-may-be-required-NormalExercise-1-hint-1, eval=FALSE}
+"Don't forget the random term: `(1 | subject_id)`."
+```
+
+```{r why-transforming-may-be-required-NormalExercise-1-hint-2, eval=FALSE}
 # Model total cholesterol on CVD
 model <- glmer(
     got_cvd ~ total_cholesterol + (1 | subject_id),
@@ -202,21 +230,17 @@ model <- glmer(
 summary(model)
 ```
 
-```{r why-transforming-may-be-required-NormalExercise-check, eval=FALSE}
+```{r why-transforming-may-be-required-NormalExercise-1-check, eval=FALSE}
 "Amazing job!"
 ```
 
-### Exercise
+### Exercise step
 
 **Instructions**:
 
 - Now use `total_cholesterol_centered` in the model; you will get a warning.
 
-```{r exercise-NormalExercise-hint-1, eval=FALSE}
-"Replace the original cholesterol variable with `total_cholesterol_centered` in the formula."
-```
-
-```{r why-transforming-may-be-required-NormalExercise, exercise=TRUE, exercise.setup='why-transforming-may-be-required-NormalExercise-setup'}
+```{r why-transforming-may-be-required-NormalExercise-2, exercise=TRUE, exercise.setup='why-transforming-may-be-required-NormalExercise-setup'}
 # Model with centered cholesterol on CVD
 model <- glmer(
     got_cvd ~ ___ + (1 | subject_id), 
@@ -228,7 +252,11 @@ model <- glmer(
 summary(model)
 ```
 
-```{r why-transforming-may-be-required-NormalExercise-hint-2, eval=FALSE}
+```{r why-transforming-may-be-required-NormalExercise-2-hint-1, eval=FALSE}
+"Replace the original cholesterol variable with `total_cholesterol_centered` in the formula."
+```
+
+```{r why-transforming-may-be-required-NormalExercise-2-hint-2, eval=FALSE}
 # Model with centered cholesterol on CVD
 model <- glmer(
     got_cvd ~ total_cholesterol_centered + (1 | subject_id), 
@@ -240,21 +268,18 @@ model <- glmer(
 summary(model)
 ```
 
-```{r why-transforming-may-be-required-NormalExercise-check, eval=FALSE}
+```{r why-transforming-may-be-required-NormalExercise-2-check, eval=FALSE}
 "Great!"
 ```
 
-### Exercise
+### Exercise step
 
 **Instructions**:
 
-- Use the `total_cholesterol_scaled` variable instead; the warning should now be fixed.
+- Use the `total_cholesterol_scaled` variable instead; the warning should now be
+fixed.
 
-```{r exercise-NormalExercise-hint-1, eval=FALSE}
-"Include `total_cholesterol_scaled` in the formula."
-```
-
-```{r why-transforming-may-be-required-NormalExercise, exercise=TRUE, exercise.setup='why-transforming-may-be-required-NormalExercise-setup'}
+```{r why-transforming-may-be-required-NormalExercise-3, exercise=TRUE, exercise.setup='why-transforming-may-be-required-NormalExercise-setup'}
 # Model with scaled cholesterol
 model <- glmer(
     got_cvd ~ ___ + (1 | subject_id),
@@ -266,7 +291,11 @@ model <- glmer(
 summary(model)
 ```
 
-```{r why-transforming-may-be-required-NormalExercise-hint-2, eval=FALSE}
+```{r why-transforming-may-be-required-NormalExercise-3-hint-1, eval=FALSE}
+"Include `total_cholesterol_scaled` in the formula."
+```
+
+```{r why-transforming-may-be-required-NormalExercise-3-hint-2, eval=FALSE}
 # Model with scaled cholesterol
 model <- glmer(
     got_cvd ~ total_cholesterol_scaled + (1 | subject_id),
@@ -278,27 +307,32 @@ model <- glmer(
 summary(model)
 ```
 
-```{r why-transforming-may-be-required-NormalExercise-check, eval=FALSE}
+```{r why-transforming-may-be-required-NormalExercise-3-check, eval=FALSE}
 "Amazing! You've solved the warnings about non-convergence and rescaling issue! Often it requires some trial and error to find which transformations are optimal for the model technique."
 ```
 
 ## Include time in the mixed effect model
 
-Before the development of mixed effects modeling, analyzing longitudinal data was fairly difficult because repeated measures violated the assumption of independent observations. This time component is a key strength of longitudinal studies like with prospective cohorts. But to use that strength you need to, well, include time in the model!
+Before the development of mixed effects modeling, analyzing longitudinal data
+was fairly difficult because repeated measures violated the assumption of
+independent observations. This time component is a key strength of longitudinal
+studies like with prospective cohorts. But to use that strength you need to,
+well, include time in the model!
 
-Include an additional predictor (`followup_visit_number`) in the `glmer()` formula. Recall that `got_cvd` is the outcome and `subject_id` is the random term.
+Include an additional predictor (`followup_visit_number`) in the `glmer()`
+formula. Recall that `got_cvd` is the outcome and `subject_id` is the random
+term.
 
 **Instructions**:
 
-- Run a model with two predictors: `total_cholesterol_scaled` and `followup_visit_number`.
-
-```{r include-time-in-the-mixed-effect-model-NormalExercise-hint-1, eval=FALSE}
-"The formula should be `total_cholesterol_scaled + followup_visit_number`."
-```
+- Run a model with two predictors: `total_cholesterol_scaled` and
+`followup_visit_number`.
 
 ```{r include-time-in-the-mixed-effect-model-NormalExercise-setup}
-load('datasets/sample_tidied_framingham.rda')
+capture.output({
+data(sample_tidied_framingham, package = "acdcourse")
 library(lme4)
+})
 ```
 
 ```{r include-time-in-the-mixed-effect-model-NormalExercise, exercise=TRUE, exercise.setup='include-time-in-the-mixed-effect-model-NormalExercise-setup'}
@@ -312,6 +346,10 @@ model <- glmer(
 
 # View the model summary
 summary(model)
+```
+
+```{r include-time-in-the-mixed-effect-model-NormalExercise-hint-1, eval=FALSE}
+"The formula should be `total_cholesterol_scaled + followup_visit_number`."
 ```
 
 ```{r include-time-in-the-mixed-effect-model-NormalExercise-hint-2, eval=FALSE}
@@ -336,11 +374,14 @@ summary(model)
 ```{r, child='slides/chapter_3_video_2.Rmd'}
 ```
 
-## Model selection using DAGs
+## Model selection using DAGs {data-progressive=TRUE}
 
-Building a DAG that approximates the biology is difficult. It requires domain knowledge, so consult experts to confirm the DAG. Remember, you will build an incomplete DAG. This is but one step to finding confounders.
+Building a DAG that approximates the biology is difficult. It requires domain
+knowledge, so consult experts to confirm the DAG. Remember, you will build an
+incomplete DAG. This is but one step to finding confounders.
 
-Let's determine which variables to adjust for when systolic blood pressure (`SBP`) is the exposure and `CVD` is the outcome. Assume that: 
+Let's determine which variables to adjust for when systolic blood pressure
+(`SBP`) is the exposure and `CVD` is the outcome. Assume that:
 
 - `Sex` influences `SBP` and `Smoking`
 - `Smoking` influences `SBP` and `CVD`
@@ -349,12 +390,12 @@ Let's determine which variables to adjust for when systolic blood pressure (`SBP
 
 Create a `dagitty()` object to identify what to adjust for.
 
-Recall that for `dagitty`: `x -> y` means "x influences y" and that `x -> {y z}` means "x influences y and z"; `dagitty` is already loaded.
+Recall that for `dagitty`: `x -> y` means "x influences y" and that `x -> {y z}`
+means "x influences y and z"; `dagitty` is already loaded.
 
-Learn more about graphs and networks in the [Network Analysis in R](https://www.datacamp.com/courses/network-analysis-in-r) course.
-
-```{r model-selection-using-dags-NormalExercise-setup}
-library(dagitty)
+```{r model-selection-using-dags-NormalExercise-setup, out.width="80%"}
+capture.output({
+library(dagitty, quietly = TRUE)
 
 variable_pathways <- dagitty("dag {
     SBP -> CVD
@@ -363,60 +404,60 @@ variable_pathways <- dagitty("dag {
     BMI -> {SBP CVD FastingGlucose}
     FastingGlucose -> CVD
 }")
+})
 plot(graphLayout(variable_pathways))
 ```
 
-### Exercise
+### Exercise step
 
 **Instructions**:
 
 - Using both the links between variables described in the context above and the plot as a guide, create a DAG of the hypothetical pathways.
 - Visually inspect the plot of the `variable_pathway` graph.
 
-```{r exercise-NormalExercise-hint-1, eval=FALSE}
-"The form for a pathway is `start_variable -> {one or more end variables}`."
-```
-
-```{r model-selection-using-dags-NormalExercise, exercise=TRUE, exercise.setup='model-selection-using-dags-NormalExercise-setup'}
+```{r model-selection-using-dags-NormalExercise-1, exercise=TRUE, exercise.setup='model-selection-using-dags-NormalExercise-setup'}
 # Include the links between variables
 variable_pathways <- dagitty("dag {
     SBP -> CVD
     ___ -> {___ ___}
     ___ -> {___ ___ ___}
-    ___ -> ___}")
+    ___ -> ___
+    }")
 
 # Plot potential confounding pathways
 plot(graphLayout(variable_pathways))
 ```
 
-```{r model-selection-using-dags-NormalExercise-hint-2, eval=FALSE}
+```{r model-selection-using-dags-NormalExercise-1-hint-1, eval=FALSE}
+"The form for a pathway is `start_variable -> {one or more end variables}`."
+```
+
+```{r model-selection-using-dags-NormalExercise-1-hint-2, eval=FALSE}
 # Include the links between variables
 variable_pathways <- dagitty("dag {
     SBP -> CVD
     Sex -> {SBP Smoking}
     Smoking -> {SBP CVD}
     BMI -> {SBP CVD FastingGlucose}
-    FastingGlucose -> CVD}")
+    FastingGlucose -> CVD
+    }")
 
 # Plot potential confounding pathways
 plot(graphLayout(variable_pathways))
 ```
 
-```{r model-selection-using-dags-NormalExercise-check, eval=FALSE}
+```{r model-selection-using-dags-NormalExercise-1-check, eval=FALSE}
 "Great!"
 ```
 
-### Exercise
+### Exercise step
 
 **Instructions**:
 
-- Identify the (minimal) model `adjustmentSets()` of variables from the `variable_pathways` graph, selecting `"SBP"` as exposure and `"CVD"` as outcome.
+- Identify the (minimal) model `adjustmentSets()` of variables from the
+`variable_pathways` graph, selecting `"SBP"` as exposure and `"CVD"` as outcome.
 
-```{r exercise-NormalExercise-hint-1, eval=FALSE}
-"The `adjustmentSets()` requires the DAG object and the outcome (CVD) and the predictor (SBP)."
-```
-
-```{r model-selection-using-dags-NormalExercise, exercise=TRUE, exercise.setup='model-selection-using-dags-NormalExercise-setup'}
+```{r model-selection-using-dags-NormalExercise-2, exercise=TRUE, exercise.setup='model-selection-using-dags-NormalExercise-setup'}
 # Include the links between variables
 variable_pathways <- dagitty("dag {
     SBP -> CVD
@@ -432,7 +473,11 @@ plot(graphLayout(variable_pathways))
 adjustmentSets(___, exposure = ___, outcome = ___)
 ```
 
-```{r model-selection-using-dags-NormalExercise-hint-2, eval=FALSE}
+```{r model-selection-using-dags-NormalExercise-2-hint-1, eval=FALSE}
+"The `adjustmentSets()` requires the DAG object and the outcome (CVD) and the predictor (SBP)."
+```
+
+```{r model-selection-using-dags-NormalExercise-2-hint-2, eval=FALSE}
 # Include the links between variables
 variable_pathways <- dagitty("dag {
     SBP -> CVD
@@ -448,53 +493,53 @@ plot(graphLayout(variable_pathways))
 adjustmentSets(variable_pathways, exposure = "SBP", outcome = "CVD")
 ```
 
-```{r model-selection-using-dags-NormalExercise-check, eval=FALSE}
+```{r model-selection-using-dags-NormalExercise-2-check, eval=FALSE}
 "Excellent job!"
 ```
 
-### Exercise
+### Exercise step
 
-According to the output of the `adjustmentSets()`, what variables does DAG suggest you adjust for in the model to get less biased results?
-
-```{r exercise-NormalExercise-hint-1, eval=FALSE}
-"Run the `adjustmentSets()` function again."
-
-```
 ```{r model-selection-using-dags-MultipleChoiceExercise-mcq, echo=FALSE}
-# TODO: Add the question below in the quotation marks
-question("",
-  answer("Sex and FastingGlucose", correct = FALSE, message = "FIXME"),
-  answer("[BMI and Smoking]", correct = FALSE, message = "FIXME"),
-  answer("Smoking, Sex, BMI", correct = FALSE, message = "FIXME"),
-  answer("All variables", correct = FALSE, message = "FIXME"),
-  answer("No variables", correct = FALSE, message = "FIXME"),
+question("According to the output of the `adjustmentSets()`, what variables does DAG suggest you adjust for in the model to get less biased results?",
+  answer("Sex and FastingGlucose", correct = FALSE),
+  answer("BMI and Smoking", correct = TRUE),
+  answer("Smoking, Sex, BMI", correct = FALSE),
+  answer("All variables", correct = FALSE),
+  answer("No variables", correct = FALSE),
   allow_retry = TRUE
 )
 ```
 
-## Model selection using Information Criterion
+## Model selection using Information Criterion {data-progressive=TRUE}
 
-It's best to use multiple methods to decide on which variables to include in a model. The information criterion methods are powerful tools for choosing variables to adjust for. Using the functions from the `MuMIn` package, determine which model has the best fit for the models being compared by using AIC to rank them. A *smaller* AIC is better.
+It's best to use multiple methods to decide on which variables to include in a
+model. The information criterion methods are powerful tools for choosing
+variables to adjust for. Using the functions from the `MuMIn` package, determine
+which model has the best fit for the models being compared by using AIC to rank
+them. A *smaller* AIC is better.
 
-As many models will be computed and compared, for *DataCamp lesson purposes only*, we kept computing time short by: greatly reducing the sample size and number of variables in the data, called `model_sel_df`; and, setting `nAQG = 0` (reduces estimation precision, but increases speed). `MuMIn` also requires `na.action = "na.fail"` to be set in `glmer()`.
+As many models will be computed and compared, for *these lesson purposes only*,
+we kept computing time short by: greatly reducing the sample size and number of
+variables in the data, called `model_sel_df`; and, setting `nAQG = 0` (reduces
+estimation precision, but increases speed). `MuMIn` also requires `na.action =
+"na.fail"` to be set in `glmer()`.
 
 ```{r model-selection-using-information-criterion-NormalExercise-setup}
-model_sel_df <- readRDS('datasets/model_sel_df.Rds')
+capture.output({
+data(model_sel_df, package = "acdcourse")
 library(MuMIn)
 library(lme4)
+})
 ```
 
-### Exercise
+### Exercise step
 
 **Instructions**:
 
-- Add `systolic_blood_pressure_scaled`, `sex`, `body_mass_index_scaled`, `currently_smokes`, and `followup_visit_number` to the formula.
+- Add `systolic_blood_pressure_scaled`, `sex`, `body_mass_index_scaled`,
+`currently_smokes`, and `followup_visit_number` to the formula.
 
-```{r exercise-NormalExercise-hint-1, eval=FALSE}
-"Model formulas are in the form: `got_cvd ~ predictor1 + predictor2 + (1 | subject_id)`."
-```
-
-```{r model-selection-using-information-criterion-NormalExercise, exercise=TRUE, exercise.setup='model-selection-using-information-criterion-NormalExercise-setup'}
+```{r model-selection-using-information-criterion-NormalExercise-1, exercise=TRUE, exercise.setup='model-selection-using-information-criterion-NormalExercise-setup'}
 # Set the model formula
 model <- glmer(
     got_cvd ~ ___ + ___ +
@@ -507,7 +552,11 @@ model <- glmer(
 )
 ```
 
-```{r model-selection-using-information-criterion-NormalExercise-hint-2, eval=FALSE}
+```{r model-selection-using-information-criterion-NormalExercise-1-hint-1, eval=FALSE}
+"Model formulas are in the form: `got_cvd ~ predictor1 + predictor2 + (1 | subject_id)`."
+```
+
+```{r model-selection-using-information-criterion-NormalExercise-1-hint-2, eval=FALSE}
 # Set the model formula
 model <- glmer(
     got_cvd ~ systolic_blood_pressure_scaled + body_mass_index_scaled +
@@ -515,28 +564,24 @@ model <- glmer(
     data = model_sel_df, 
     family = binomial,
     na.action = "na.fail",
- 	# Speeds up computation, reduces precision
+    # Speeds up computation, reduces precision
   	nAGQ = 0 
 )
 ```
 
-```{r model-selection-using-information-criterion-NormalExercise-check, eval=FALSE}
+```{r model-selection-using-information-criterion-NormalExercise-1-check, eval=FALSE}
 "Great job!"
 ```
 
-### Exercise
+### Exercise step
 
 **Instructions**:
 
-- `dredge()` through the combinations of variables, subset by `systolic_blood_pressure_scaled` in the model and rank by `"AIC"`.
+- `dredge()` through the combinations of variables, subset by
+`systolic_blood_pressure_scaled` in the model and rank by `"AIC"`.
 - Print the top 3 `selection` models.
 
-```{r exercise-NormalExercise-hint-1, eval=FALSE}
-"Give `model` as the first argument to `dredge()`."
-"Both `rank` and `subset` should be a character string."
-```
-
-```{r model-selection-using-information-criterion-NormalExercise, exercise=TRUE, exercise.setup='model-selection-using-information-criterion-NormalExercise-setup'}
+```{r model-selection-using-information-criterion-NormalExercise-2, exercise=TRUE, exercise.setup='model-selection-using-information-criterion-NormalExercise-setup'}
 model <- glmer(
     got_cvd ~ systolic_blood_pressure_scaled + body_mass_index_scaled +
         currently_smokes + sex + followup_visit_number + (1 | subject_id),
@@ -553,7 +598,12 @@ selection <- dredge(___, rank = ___, subset = ___)
 head(as.data.frame(selection), 3)
 ```
 
-```{r model-selection-using-information-criterion-NormalExercise-hint-2, eval=FALSE}
+```{r model-selection-using-information-criterion-NormalExercise-2-hint-1, eval=FALSE}
+"Give `model` as the first argument to `dredge()`."
+"Both `rank` and `subset` should be a character string."
+```
+
+```{r model-selection-using-information-criterion-NormalExercise-2-hint-2, eval=FALSE}
 model <- glmer(
     got_cvd ~ systolic_blood_pressure_scaled + body_mass_index_scaled +
         currently_smokes + sex + followup_visit_number + (1 | subject_id),
@@ -570,57 +620,59 @@ selection <- dredge(model, rank = "AIC", subset = "systolic_blood_pressure_scale
 head(as.data.frame(selection), 3)
 ```
 
-```{r model-selection-using-information-criterion-NormalExercise-check, eval=FALSE}
+```{r model-selection-using-information-criterion-NormalExercise-2-check, eval=FALSE}
 "Great job!"
 ```
 
-### Exercise
+### Exercise step
 
-Based on the output of `dredge()`, what variables are adjusted for in the top model?
-
-```{r exercise-NormalExercise-hint-1, eval=FALSE}
-"Check which variables have missingness in the rows `selection`."
-
-```
 ```{r model-selection-using-information-criterion-MultipleChoiceExercise-mcq, echo=FALSE}
-# TODO: Add the question below in the quotation marks
-question("",
-  answer("BMI and smoking", correct = FALSE, message = "FIXME"),
-  answer("Sex and smoking", correct = FALSE, message = "FIXME"),
-  answer("[Sex and BMI]", correct = FALSE, message = "FIXME"),
-  answer("All of the variables", correct = FALSE, message = "FIXME"),
+question("Based on the output of `dredge()`, what variables are adjusted for in the top model?",
+  answer("BMI and smoking", correct = FALSE),
+  answer("Sex and smoking", correct = FALSE),
+  answer("Sex and BMI", correct = TRUE),
+  answer("All of the variables", correct = FALSE),
   allow_retry = TRUE
 )
 ```
+
+*Hint: Check which variables have missingness in the rows `selection`.*
 
 ## Testing for interactions and sensitivity analyses
 
 ```{r, child='slides/chapter_3_video_3.Rmd'}
 ```
 
-## Determining sex interaction with the predictor
+## Determining sex interaction with the predictor {data-progressive=TRUE}
 
-In the past (and still very common today), most research was done with mostly or entirely males. Clinical trials, experimental animal models, and observational studies tended to explicitly study males, as female hormonal cycles can act as a confounding factor. This often had harmful consequences, since there are massive gender differences in responses to drug treatment and other disease interventions. Most journals and funding agencies now *require* that differences in sex, and ethnicity, are investigated.
+In the past (and still very common today), most research was done with mostly or
+entirely males. Clinical trials, experimental animal models, and observational
+studies tended to explicitly study males, as female hormonal cycles can act as a
+confounding factor. This often had harmful consequences, since there are massive
+gender differences in responses to drug treatment and other disease
+interventions. Most journals and funding agencies now *require* that differences
+in sex, and ethnicity, are investigated.
 
-Since the Framingham study has almost entirely individuals of European-ancestry, we can only test sex interactions. Compare models without and with interactions for sex.
+Since the Framingham study has almost entirely individuals of European-ancestry,
+we can only test sex interactions. Compare models without and with interactions
+for sex.
 
 ```{r determining-sex-interaction-with-the-predictor-NormalExercise-setup}
-load('datasets/sample_tidied_framingham.rda')
+capture.output({
+data("sample_tidied_framingham", package = "acdcourse")
 library(lme4)
 library(MuMIn)
+})
 ```
 
-### Exercise
+### Exercise step
 
 **Instructions**:
 
-- Run `glmer()` models with `total_cholesterol_scaled`, `sex`, and `followup_visit_number`, without an interaction term.
+- Run `glmer()` models with `total_cholesterol_scaled`, `sex`, and
+`followup_visit_number`, without an interaction term.
 
-```{r exercise-NormalExercise-hint-1, eval=FALSE}
-"The predictors should be added together like `predictor1 + predictor2`."
-```
-
-```{r determining-sex-interaction-with-the-predictor-NormalExercise, exercise=TRUE, exercise.setup='determining-sex-interaction-with-the-predictor-NormalExercise-setup'}
+```{r determining-sex-interaction-with-the-predictor-NormalExercise-1, exercise=TRUE, exercise.setup='determining-sex-interaction-with-the-predictor-NormalExercise-setup'}
 # Model without interaction
 model_no_interaction <- glmer(
     got_cvd ~ ___ + ___ + ___ + (1 | subject_id), 
@@ -629,7 +681,11 @@ model_no_interaction <- glmer(
 summary(model_no_interaction)
 ```
 
-```{r determining-sex-interaction-with-the-predictor-NormalExercise-hint-2, eval=FALSE}
+```{r determining-sex-interaction-with-the-predictor-NormalExercise-1-hint-1, eval=FALSE}
+"The predictors should be added together like `predictor1 + predictor2`."
+```
+
+```{r determining-sex-interaction-with-the-predictor-NormalExercise-1-hint-2, eval=FALSE}
 # Model without interaction
 model_no_interaction <- glmer(
     got_cvd ~ total_cholesterol_scaled + sex + followup_visit_number + (1 | subject_id), 
@@ -638,21 +694,18 @@ model_no_interaction <- glmer(
 summary(model_no_interaction)
 ```
 
-```{r determining-sex-interaction-with-the-predictor-NormalExercise-check, eval=FALSE}
+```{r determining-sex-interaction-with-the-predictor-NormalExercise-1-check, eval=FALSE}
 "Great! Next step."
 ```
 
-### Exercise
+### Exercise step
 
 **Instructions**:
 
-- Create the same formula, but this time with an interaction, denoted by `*`, between `total_cholesterol_scaled` and `sex`.
+- Create the same formula, but this time with an interaction, denoted by `*`,
+between `total_cholesterol_scaled` and `sex`.
 
-```{r exercise-NormalExercise-hint-1, eval=FALSE}
-"The interaction should be `total_cholesterol_scaled * sex`."
-```
-
-```{r determining-sex-interaction-with-the-predictor-NormalExercise, exercise=TRUE, exercise.setup='determining-sex-interaction-with-the-predictor-NormalExercise-setup'}
+```{r determining-sex-interaction-with-the-predictor-NormalExercise-2, exercise=TRUE, exercise.setup='determining-sex-interaction-with-the-predictor-NormalExercise-setup'}
 # Model without interaction
 model_no_interaction <- glmer(
     got_cvd ~ total_cholesterol_scaled + sex + followup_visit_number + (1 | subject_id), 
@@ -667,7 +720,11 @@ model_sex_interaction <- glmer(
 summary(model_sex_interaction)
 ```
 
-```{r determining-sex-interaction-with-the-predictor-NormalExercise-hint-2, eval=FALSE}
+```{r determining-sex-interaction-with-the-predictor-NormalExercise-2-hint-1, eval=FALSE}
+"The interaction should be `total_cholesterol_scaled * sex`."
+```
+
+```{r determining-sex-interaction-with-the-predictor-NormalExercise-2-hint-2, eval=FALSE}
 # Model without interaction
 model_no_interaction <- glmer(
     got_cvd ~ total_cholesterol_scaled + sex + followup_visit_number + (1 | subject_id), 
@@ -682,21 +739,17 @@ model_sex_interaction <- glmer(
 summary(model_sex_interaction)
 ```
 
-```{r determining-sex-interaction-with-the-predictor-NormalExercise-check, eval=FALSE}
+```{r determining-sex-interaction-with-the-predictor-NormalExercise-2-check, eval=FALSE}
 "Great! Next step."
 ```
 
-### Exercise
+### Exercise step
 
 **Instructions**:
 
 - Include both model objects in `model.sel()`, with an `"AIC"` rank.
 
-```{r exercise-NormalExercise-hint-1, eval=FALSE}
-"Include both models, `model_no_interaction` and `model_sex_interaction`, in the `model.sel()` function, separated by a comma."
-```
-
-```{r determining-sex-interaction-with-the-predictor-NormalExercise, exercise=TRUE, exercise.setup='determining-sex-interaction-with-the-predictor-NormalExercise-setup'}
+```{r determining-sex-interaction-with-the-predictor-NormalExercise-3, exercise=TRUE, exercise.setup='determining-sex-interaction-with-the-predictor-NormalExercise-setup'}
 # Model without interaction
 model_no_interaction <- glmer(
     got_cvd ~ total_cholesterol_scaled + sex + followup_visit_number + (1 | subject_id), 
@@ -713,7 +766,11 @@ model_sex_interaction <- glmer(
 model.sel(___, ___, rank = ___)
 ```
 
-```{r determining-sex-interaction-with-the-predictor-NormalExercise-hint-2, eval=FALSE}
+```{r determining-sex-interaction-with-the-predictor-NormalExercise-3-hint-1, eval=FALSE}
+"Include both models, `model_no_interaction` and `model_sex_interaction`, in the `model.sel()` function, separated by a comma."
+```
+
+```{r determining-sex-interaction-with-the-predictor-NormalExercise-3-hint-2, eval=FALSE}
 # Model without interaction
 model_no_interaction <- glmer(
     got_cvd ~ total_cholesterol_scaled + sex + followup_visit_number + (1 | subject_id), 
@@ -730,78 +787,81 @@ model_sex_interaction <- glmer(
 model.sel(model_no_interaction, model_sex_interaction, rank = "AIC")
 ```
 
-```{r determining-sex-interaction-with-the-predictor-NormalExercise-check, eval=FALSE}
+```{r determining-sex-interaction-with-the-predictor-NormalExercise-3-check, eval=FALSE}
 "Great!"
 ```
 
-### Exercise
+### Exercise step
 
-Does including a cholesterol by sex interaction provide more information for the model?
-
-```{r exercise-NormalExercise-hint-1, eval=FALSE}
-"Check which model has a higher `weight` or lower `AIC`."
-
-```
 ```{r determining-sex-interaction-with-the-predictor-MultipleChoiceExercise-mcq, echo=FALSE}
-# TODO: Add the question below in the quotation marks
-question("",
-  answer("Yes, but only by a bit.", correct = FALSE, message = "FIXME"),
-  answer("[No, since the models are not different.]", correct = FALSE, message = "FIXME"),
-  answer("No, but we should still add a sex interaction.", correct = FALSE, message = "FIXME"),
-  answer("None of the above.", correct = FALSE, message = "FIXME"),
+question("Does including a cholesterol by sex interaction provide more information for the model?",
+  answer("Yes, but only by a bit.", correct = FALSE),
+  answer("No, since the models are not different.", correct = TRUE),
+  answer("No, but we should still add a sex interaction.", correct = FALSE),
+  answer("None of the above.", correct = FALSE),
   allow_retry = TRUE
 )
 ```
 
-## Running sensitivity analyses with body mass index
+*Hint: Check which model has a higher `weight` or lower `AIC`.*
 
-Often times we make assumptions about our data and the participants that make up that data. For instance, with body mass index (BMI), we assume that the value represents a person regardless of how sick or healthy they are. However, usually if someone's BMI is really low (below around 18.5, which is considered underweight) or really high (above 40 which is considered morbidly obese), this could indicate a serious health problem that they may have. For example, people who are very ill usually lose a lot of weight. So if we include them in the model, we might get a biased estimate for the association of BMI on CVD. Run a sensitivity analysis removing these observations and compare the results.
+## Running sensitivity analyses with body mass index {data-progressive=TRUE}
+
+Often times we make assumptions about our data and the participants that make up
+that data. For instance, with body mass index (BMI), we assume that the value
+represents a person regardless of how sick or healthy they are. However, usually
+if someone's BMI is really low (below around 18.5, which is considered
+underweight) or really high (above 40 which is considered morbidly obese), this
+could indicate a serious health problem that they may have. For example, people
+who are very ill usually lose a lot of weight. So if we include them in the
+model, we might get a biased estimate for the association of BMI on CVD. Run a
+sensitivity analysis removing these observations and compare the results.
 
 Use the `sample_tidied_framingham` dataset.
 
 ```{r running-sensitivity-analyses-with-body-mass-index-NormalExercise-setup}
-load('datasets/sample_tidied_framingham.rda')
+capture.output({
+data("sample_tidied_framingham", package = "acdcourse")
 library(lme4)
 library(dplyr)
+})
 ```
 
-### Exercise
+### Exercise step
 
 **Instructions**:
 
-- Keep those people with `body_mass_index` equal to or above 18.5 and equal to or below 40.
+- Keep those people with `body_mass_index` equal to or above 18.5 and equal to
+or below 40.
 
-```{r exercise-NormalExercise-hint-1, eval=FALSE}
-"Include two conditions (`>=` and `<=`) to restrict the range of `body_mass_index`, separated by a comma."
-```
-
-```{r running-sensitivity-analyses-with-body-mass-index-NormalExercise, exercise=TRUE, exercise.setup='running-sensitivity-analyses-with-body-mass-index-NormalExercise-setup'}
+```{r running-sensitivity-analyses-with-body-mass-index-NormalExercise-1, exercise=TRUE, exercise.setup='running-sensitivity-analyses-with-body-mass-index-NormalExercise-setup'}
 # Remove low and high body masses
 bmi_check_data <- sample_tidied_framingham %>% 
     filter(___ >= ___, ___ <= ___)
 ```
 
-```{r running-sensitivity-analyses-with-body-mass-index-NormalExercise-hint-2, eval=FALSE}
+```{r running-sensitivity-analyses-with-body-mass-index-NormalExercise-1-hint-1, eval=FALSE}
+"Include two conditions (`>=` and `<=`) to restrict the range of `body_mass_index`, separated by a comma."
+```
+
+```{r running-sensitivity-analyses-with-body-mass-index-NormalExercise-1-hint-2, eval=FALSE}
 # Remove low and high body masses
 bmi_check_data <- sample_tidied_framingham %>% 
     filter(body_mass_index >= 18.5, body_mass_index <= 40)
 ```
 
-```{r running-sensitivity-analyses-with-body-mass-index-NormalExercise-check, eval=FALSE}
+```{r running-sensitivity-analyses-with-body-mass-index-NormalExercise-1-check, eval=FALSE}
 "Excellent! Next step."
 ```
 
-### Exercise
+### Exercise step
 
 **Instructions**:
 
-- Include `body_mass_index_scaled` and `followup_visit_number` in the formula and run the model with the `sample_tidied_framingham`.
+- Include `body_mass_index_scaled` and `followup_visit_number` in the formula
+and run the model with the `sample_tidied_framingham`.
 
-```{r exercise-NormalExercise-hint-1, eval=FALSE}
-"Use `sample_tidied_framingham` in the data argument."
-```
-
-```{r running-sensitivity-analyses-with-body-mass-index-NormalExercise, exercise=TRUE, exercise.setup='running-sensitivity-analyses-with-body-mass-index-NormalExercise-setup'}
+```{r running-sensitivity-analyses-with-body-mass-index-NormalExercise-2, exercise=TRUE, exercise.setup='running-sensitivity-analyses-with-body-mass-index-NormalExercise-setup'}
 bmi_check_data <- sample_tidied_framingham %>% 
     filter(body_mass_index >= 18.5, body_mass_index <= 40)
 
@@ -814,7 +874,11 @@ original_model <- glmer(
 fixef(original_model)
 ```
 
-```{r running-sensitivity-analyses-with-body-mass-index-NormalExercise-hint-2, eval=FALSE}
+```{r running-sensitivity-analyses-with-body-mass-index-NormalExercise-2-hint-1, eval=FALSE}
+"Use `sample_tidied_framingham` in the data argument."
+```
+
+```{r running-sensitivity-analyses-with-body-mass-index-NormalExercise-2-hint-2, eval=FALSE}
 bmi_check_data <- sample_tidied_framingham %>% 
     filter(body_mass_index >= 18.5, body_mass_index <= 40)
 
@@ -827,21 +891,17 @@ original_model <- glmer(
 fixef(original_model)
 ```
 
-```{r running-sensitivity-analyses-with-body-mass-index-NormalExercise-check, eval=FALSE}
+```{r running-sensitivity-analyses-with-body-mass-index-NormalExercise-2-check, eval=FALSE}
 "Excellent! Next step."
 ```
 
-### Exercise
+### Exercise step
 
 **Instructions**:
 
 - Now run the model with the data that excludes the body mass index values.
 
-```{r exercise-NormalExercise-hint-1, eval=FALSE}
-"Run the same model but use the newly created `bmi_check_data`."
-```
-
-```{r running-sensitivity-analyses-with-body-mass-index-NormalExercise, exercise=TRUE, exercise.setup='running-sensitivity-analyses-with-body-mass-index-NormalExercise-setup'}
+```{r running-sensitivity-analyses-with-body-mass-index-NormalExercise-3, exercise=TRUE, exercise.setup='running-sensitivity-analyses-with-body-mass-index-NormalExercise-setup'}
 bmi_check_data <- sample_tidied_framingham %>% 
     filter(body_mass_index >= 18.5, body_mass_index <= 40)
 
@@ -859,7 +919,11 @@ fixef(original_model)
 fixef(bmi_check_model)
 ```
 
-```{r running-sensitivity-analyses-with-body-mass-index-NormalExercise-hint-2, eval=FALSE}
+```{r running-sensitivity-analyses-with-body-mass-index-NormalExercise-3-hint-1, eval=FALSE}
+"Run the same model but use the newly created `bmi_check_data`."
+```
+
+```{r running-sensitivity-analyses-with-body-mass-index-NormalExercise-3-hint-2, eval=FALSE}
 bmi_check_data <- sample_tidied_framingham %>% 
     filter(body_mass_index >= 18.5, body_mass_index <= 40)
 
@@ -877,25 +941,19 @@ fixef(original_model)
 fixef(bmi_check_model)
 ```
 
-```{r running-sensitivity-analyses-with-body-mass-index-NormalExercise-check, eval=FALSE}
+```{r running-sensitivity-analyses-with-body-mass-index-NormalExercise-3-check, eval=FALSE}
 "Amazing!"
 ```
 
-### Exercise
+### Exercise step
 
-Look at the fixed effects estimates between each model, how do they differ?
-
-```{r exercise-NormalExercise-hint-1, eval=FALSE}
-
-```
 ```{r running-sensitivity-analyses-with-body-mass-index-MultipleChoiceExercise-mcq, echo=FALSE}
-# TODO: Add the question below in the quotation marks
-question("",
-  answer("The estimates for followup visit changes a lot.", correct = FALSE, message = "FIXME"),
-  answer("[The estimates for body mass index decreases a bit.]", correct = FALSE, message = "FIXME"),
+question("Look at the fixed effects estimates between each model, how do they differ?",
+  answer("The estimates for followup visit changes a lot.", correct = FALSE),
+  answer("The estimates for body mass index decreases a bit.", correct = TRUE),
   answer("There is no difference between model estimates for any variable.", correct = FALSE, message = "FIXME"),
-  answer("All of the above.", correct = FALSE, message = "FIXME"),
-  answer("None of the above.", correct = FALSE, message = "FIXME"),
+  answer("All of the above.", correct = FALSE),
+  answer("None of the above.", correct = FALSE),
   allow_retry = TRUE
 )
 ```
@@ -905,29 +963,32 @@ question("",
 ```{r, child='slides/chapter_3_video_4.Rmd'}
 ```
 
-## Tidy up with broom and interpret the results
+## Tidy up with broom and interpret the results {data-progressive=TRUE}
 
-Now that you've created several models, you need to do some tidying, adding confidence intervals, and transforming. Tidying mixed effects models requires the `broom.mixed` package. You'll also need to transform the estimates by exponentiating, since the model uses a binary outcome. Exponentiating converts the estimates from log-odds to odds ratios.
+Now that you've created several models, you need to do some tidying, adding
+confidence intervals, and transforming. Tidying mixed effects models requires
+the `broom.mixed` package. You'll also need to transform the estimates by
+exponentiating, since the model uses a binary outcome. Exponentiating converts
+the estimates from log-odds to odds ratios.
 
 A model has been created for you already called `main_model`.
 
 ```{r tidy-up-with-broom-and-interpret-the-results-NormalExercise-setup}
-main_model <- readRDS('datasets/main_model.Rds')
+capture.output({
+data("main_model", package = "acdcourse")
 library(dplyr)
 options(digits = 3, scipen = 4)
+})
 ```
 
-### Exercise
+### Exercise step
 
 **Instructions**:
 
-- Use the `tidy()` function on the `main_model` object and set `conf.int` and `exponentiate` to `TRUE`.
+- Use the `tidy()` function on the `main_model` object and set `conf.int` and
+`exponentiate` to `TRUE`.
 
-```{r exercise-NormalExercise-hint-1, eval=FALSE}
-"Place `main_model` as the first argument."
-```
-
-```{r tidy-up-with-broom-and-interpret-the-results-NormalExercise, exercise=TRUE, exercise.setup='tidy-up-with-broom-and-interpret-the-results-NormalExercise-setup'}
+```{r tidy-up-with-broom-and-interpret-the-results-NormalExercise-1, exercise=TRUE, exercise.setup='tidy-up-with-broom-and-interpret-the-results-NormalExercise-setup'}
 library(broom.mixed)
 
 # Tidy up main_model, include conf.int and exponentiate
@@ -937,7 +998,11 @@ tidy_model <- ___(___, conf.int = ___, exponentiate = ___)
 tidy_model
 ```
 
-```{r tidy-up-with-broom-and-interpret-the-results-NormalExercise-hint-2, eval=FALSE}
+```{r tidy-up-with-broom-and-interpret-the-results-NormalExercise-1-hint-1, eval=FALSE}
+"Place `main_model` as the first argument."
+```
+
+```{r tidy-up-with-broom-and-interpret-the-results-NormalExercise-1-hint-2, eval=FALSE}
 library(broom.mixed)
 
 # Tidy up main_model, include conf.int and exponentiate
@@ -947,21 +1012,18 @@ tidy_model <- tidy(main_model, conf.int = TRUE, exponentiate = TRUE)
 tidy_model
 ```
 
-```{r tidy-up-with-broom-and-interpret-the-results-NormalExercise-check, eval=FALSE}
+```{r tidy-up-with-broom-and-interpret-the-results-NormalExercise-1-check, eval=FALSE}
 "Amazing!"
 ```
 
-### Exercise
+### Exercise step
 
 **Instructions**:
 
-- `select()` only the most important results: `effect`, `terms`, `estimates`, `conf.low`, and `conf.high`.
+- `select()` only the most important results: `effect`, `terms`, `estimates`,
+`conf.low`, and `conf.high`.
 
-```{r exercise-NormalExercise-hint-1, eval=FALSE}
-"Use the `select()` function as you have done in previous exercises."
-```
-
-```{r tidy-up-with-broom-and-interpret-the-results-NormalExercise, exercise=TRUE, exercise.setup='tidy-up-with-broom-and-interpret-the-results-NormalExercise-setup'}
+```{r tidy-up-with-broom-and-interpret-the-results-NormalExercise-2, exercise=TRUE, exercise.setup='tidy-up-with-broom-and-interpret-the-results-NormalExercise-setup'}
 library(broom.mixed)
 
 tidy_model <- tidy(main_model, conf.int = TRUE, exponentiate = TRUE)
@@ -974,7 +1036,11 @@ relevant_results <- tidy_model %>%
 relevant_results
 ```
 
-```{r tidy-up-with-broom-and-interpret-the-results-NormalExercise-hint-2, eval=FALSE}
+```{r tidy-up-with-broom-and-interpret-the-results-NormalExercise-2-hint-1, eval=FALSE}
+"Use the `select()` function as you have done in previous exercises."
+```
+
+```{r tidy-up-with-broom-and-interpret-the-results-NormalExercise-2-hint-2, eval=FALSE}
 library(broom.mixed)
 
 tidy_model <- tidy(main_model, conf.int = TRUE, exponentiate = TRUE)
@@ -987,28 +1053,48 @@ relevant_results <- tidy_model %>%
 relevant_results
 ```
 
-```{r tidy-up-with-broom-and-interpret-the-results-NormalExercise-check, eval=FALSE}
+```{r tidy-up-with-broom-and-interpret-the-results-NormalExercise-2-check, eval=FALSE}
 "Amazing! You tidied up the model and extracted the most important results!"
 ```
 
 ## Interpreting the tidied results
 
-You've now created a tidied model output and kept the most relevant results. Now time to interpret! Which of the responses below is the *most* accurate interpretation of the results? 
+You've now created a tidied model output and kept the most relevant results. Now
+time to interpret! 
 
-The `relevant_results` model has been loaded for you to look over. Note that SD means standard deviation, CI means confidence interval, and CVD means cardiovascular disease.
+Note: SD means standard deviation, CI means confidence interval, and CVD means
+cardiovascular disease.
 
-```{r interpreting-the-tidied-results-MultipleChoiceExercise-hint-1, eval=FALSE}
-"There are several that are right, but only one is the **most** accurate statement."
-
+```{r interpreting-the-tidied-results-MultipleChoiceExercise-mcq-setup}
+capture.output({
+data("main_model", package = "acdcourse")
+library(dplyr)
+library(broom.mixed)
+options(digits = 3, scipen = 4)
+relevant_results <- tidy(main_model, conf.int = TRUE, exponentiate = TRUE) %>% 
+    select(effect, term, estimate, conf.low, conf.high) 
+})
+relevant_results
 ```
+
 ```{r interpreting-the-tidied-results-MultipleChoiceExercise-mcq, echo=FALSE}
-# TODO: Add the question below in the quotation marks
-question("",
-  answer("1 SD higher cholesterol has 1.1 times more CVD risk, but uncertain (0.5 to 2.8 CI).", correct = FALSE, message = "FIXME"),
-  answer("[1 SD higher cholesterol has 1.1 times more CVD risk (ranges 0.5 to 2.8 times), adjusted for time.]", correct = FALSE, message = "FIXME"),
-  answer("No significant relationships exist: CI passes 1.", correct = FALSE, message = "FIXME"),
-  answer("Cholesterol's relation to CVD is uncertain. Need more research.", correct = FALSE, message = "FIXME"),
+question(
+  "Which of the responses below is the *most* accurate interpretation of the results?",
+  answer(
+    "1 SD higher cholesterol has 1.1 times more CVD risk, but uncertain (0.5 to 2.8 CI).",
+    correct = FALSE
+  ),
+  answer(
+    "1 SD higher cholesterol has 1.1 times more CVD risk (ranges 0.5 to 2.8 times), adjusted for time.",
+    correct = TRUE
+  ),
+  answer("No significant relationships exist: CI passes 1.", correct = FALSE),
+  answer(
+    "Cholesterol's relation to CVD is uncertain. Need more research.",
+    correct = FALSE
+  ),
   allow_retry = TRUE
 )
 ```
 
+*Hint: There are several that are right, but only one is the **most** accurate statement.*

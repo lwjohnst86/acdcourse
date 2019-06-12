@@ -1,11 +1,6 @@
----
-title: Tidying and interpreting model results
 
----
-
-### Tidying and interpreting model results
-
-We've ran several models, checked them, and identified confounders. Now let's tidy these models up, extract relevant results, and interpret them.
+We've ran several models, checked them, and identified confounders. Now let's
+tidy these models up, extract relevant results, and interpret them.
 
 ### Tidying up with broom.mixed
 
@@ -21,7 +16,15 @@ model <- glmer(got_cvd ~ body_mass_index_scaled + sex + (1 | subject_id),
 tidy(model_object)
 ```
 
-Most statistical methods in R are developed by independent researchers, so there usually isn't an underlying consistency in presenting the method's results. They can be messy to deal with and it can be a frustrating experience when learning something new. Thankfully there is the tidy function from the broom package to help out! Tidy, which takes a model object, allows you to clean up many analyses, calculate confidence intervals for uncertainty, and, for logistic regression, calculates the odds ratio. Odds ratios are covered more in the Logistic Regression course, but briefly, it is the odds of an outcome occurring given a predictor's presence compared to the odds given the predictor's absence.
+Most statistical methods in R are developed by independent researchers, so there
+usually isn't an underlying consistency in presenting the method's results. They
+can be messy to deal with and it can be a frustrating experience when learning
+something new. Thankfully there is the tidy function from the broom package to
+help out! Tidy, which takes a model object, allows you to clean up many
+analyses, calculate confidence intervals for uncertainty, and, for logistic
+regression, calculates the odds ratio. Odds ratios are covered more in the
+Logistic Regression course, but briefly, it is the odds of an outcome occurring
+given a predictor's presence compared to the odds given the predictor's absence.
 
 ### Tidy output and confidence intervals
 
@@ -40,9 +43,13 @@ tidy(model_object, conf.int = TRUE)
 4 ran_p… subj… sd__…   56.1      NA         NA    NA        NA        NA    
 ```
 
-You've used summary on a model before, which isn't the best way of accessing results. Calculating the confidence interval in base R requires extra work. To use tidy, you provide the model object, and set conf dot int to true.
+You've used summary on a model before, which isn't the best way of accessing
+results. Calculating the confidence interval in base R requires extra work. To
+use tidy, you provide the model object, and set conf dot int to true.
 
-What you'll get is a nice dataframe of results and confidence intervals. Confidence intervals are, very simply, a range in uncertainty around the estimate.
+What you'll get is a nice dataframe of results and confidence intervals.
+Confidence intervals are, very simply, a range in uncertainty around the
+estimate.
 
 ### Back-transforming with broom (if binary outcome)
 
@@ -66,9 +73,19 @@ tidied_model
 - Emphasize estimation and uncertainty (as per STROBE best practices) 
 - Gives more insight and utility for health decision making 
 
-When you run analyses with a binary outcome, like disease status, you need to exponentiate the results. Exponentiating converts the original estimates from log-odds to odds ratios. In tidy set the exponentiate argument to true and you'll now have odds ratios. Next, we'll keep only the most important model results, the effect, term, estimate, and confidence interval. We can now easily wrangle and plot from this tidy dataframe. 
+When you run analyses with a binary outcome, like disease status, you need to
+exponentiate the results. Exponentiating converts the original estimates from
+log-odds to odds ratios. In tidy set the exponentiate argument to true and
+you'll now have odds ratios. Next, we'll keep only the most important model
+results, the effect, term, estimate, and confidence interval. We can now easily
+wrangle and plot from this tidy dataframe.
 
-So why are these particular variables important? We definitely need the effect and term column to identify the fixed and random effects. And keeping the estimate and confidence intervals gives us the magnitude and uncertainty around an association, which are vital to getting tangible and concrete answers to questions. This is especially crucial for health research, as this information can dictate future health policies.
+So why are these particular variables important? We definitely need the effect
+and term column to identify the fixed and random effects. And keeping the
+estimate and confidence intervals gives us the magnitude and uncertainty around
+an association, which are vital to getting tangible and concrete answers to
+questions. This is especially crucial for health research, as this information
+can dictate future health policies.
 
 ### Interpreting the model results
 
@@ -87,29 +104,46 @@ So why are these particular variables important? We definitely need the effect a
 - `estimate` ranges from `conf.low` to `conf.high` 
 - `estimate` for `ran_pars` effect indicates variation between subjects 
 
-Let's interpret these results. The estimates for the fixed effect rows are the values for the population level averages.
+Let's interpret these results. The estimates for the fixed effect rows are the
+values for the population level averages.
 
-The estimate value itself is the estimated odds when the predictor or term increases by one unit, after controlling for the other predictors, in this case sex. So, because BMI is scaled, we say that a one standard deviation increase in BMI is associated with a one point twenty-six times higher risk for getting CVD.
+The estimate value itself is the estimated odds when the predictor or term
+increases by one unit, after controlling for the other predictors, in this case
+sex. So, because BMI is scaled, we say that a one standard deviation increase in
+BMI is associated with a one point twenty-six times higher risk for getting CVD.
 
-We need to also consider the confidence interval. We interpret this by saying that for BMI, the estimated odds ranges from a zero point nine lower risk to a one point seventy-five higher risk.
+We need to also consider the confidence interval. We interpret this by saying
+that for BMI, the estimated odds ranges from a zero point nine lower risk to a
+one point seventy-five higher risk.
 
-Lastly, the estimate for the random effect indicates the variation between subjects. In this case, there is a lot, at fifty-six! We expect this, though, since individuals vary a lot.
+Lastly, the estimate for the random effect indicates the variation between
+subjects. In this case, there is a lot, at fifty-six! We expect this, though,
+since individuals vary a lot.
 
 ### American Statistical Association: Unreliable p-value 
 
-> "... conclusions and ... decisions should not be based on [if] a p-value passes a threshold."  ...
+> "... conclusions and ... decisions should not be based on [if] a p-value
+passes a threshold."  ...
 > 
-> "p-value [is] not ... a good measure of evidence ... [and] does not measure the size of an effect or the importance"
+> "p-value [is] not ... a good measure of evidence ... [and] does not measure
+the size of an effect or the importance"
 
-**Example**: Odds ratio of 0.8 (0.59, 1.01 95% CI), p>0.05 ("not significant"), *but* uncertainty could reach 0.59 times lower odds of disease 
+**Example**: Odds ratio of 0.8 (0.59, 1.01 95% CI), p>0.05 ("not significant"),
+*but* uncertainty could reach 0.59 times lower odds of disease
 
 DOI to statement: https://doi.org/10.1080/00031305.2016.1154108
 
-You may have noticed that I didn't discuss the p-value. Why? Because it provides little to no clinical or public health utility. The American Statistical Association released a statement highlighting the problems with the p-value, stating they are not good evidence for a hypothesis or the importance of a finding.
+You may have noticed that I didn't discuss the p-value. Why? Because it provides
+little to no clinical or public health utility. The American Statistical
+Association released a statement highlighting the problems with the p-value,
+stating they are not good evidence for a hypothesis or the importance of a
+finding.
 
-For example, a drug lowers risk of a disease by zero point eight times, but the p-value is above zero point zero five. Normally studies would say this is not significant. But the uncertainty at the lower end is an odds of zero point fifty-nine times lower risk for disease, so it could be clinically meaningful!
+For example, a drug lowers risk of a disease by zero point eight times, but the
+p-value is above zero point zero five. Normally studies would say this is not
+significant. But the uncertainty at the lower end is an odds of zero point
+fifty-nine times lower risk for disease, so it could be clinically meaningful!
 
 ### Let's get tidying!
 
 Alrighty, let's tidy up some models!
-
