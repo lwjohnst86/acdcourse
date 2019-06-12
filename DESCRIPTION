@@ -30,3 +30,4 @@ Imports:
     stringr (>= 1.4.0)
 URL: https://github.com/lwjohnst86/acdcourse
 BugReports: https://github.com/lwjohnst86/acdcourse/issues
+RoxygenNote: 6.1.1
