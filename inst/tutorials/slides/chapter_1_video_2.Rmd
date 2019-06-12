@@ -104,7 +104,7 @@ framingham %>%
 
 Next, let's see how many participants came to each visit. Again, we'll use
 select to keep and rename the visit number variable. Then we use the
-group-underscore-by function to then calculate the number of participants at
+`group_by()` function to then calculate the number of participants at
 each visit using summarize with the n function.
 
 More than four thousand participants were recruited, quite a large study!
