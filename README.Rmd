@@ -44,10 +44,10 @@ remotes::install_github("lwjohnst86/acdcourse")
 To work through each chapter, run these commands:
 
 ``` r
-learnr::run_tutorial("chapter1", package = "acd.course")
-learnr::run_tutorial("chapter2", package = "acd.course")
-learnr::run_tutorial("chapter3", package = "acd.course")
-learnr::run_tutorial("chapter4", package = "acd.course")
+learnr::run_tutorial("chapter1", package = "acdcourse")
+learnr::run_tutorial("chapter2", package = "acdcourse")
+learnr::run_tutorial("chapter3", package = "acdcourse")
+learnr::run_tutorial("chapter4", package = "acdcourse")
 ```
 
 ## General course outline
