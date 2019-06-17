@@ -1,11 +1,10 @@
 ^acdcourse\.Rproj$
 ^\.Rproj\.user$
-^inst/tutorials/chapter1\.Rmd$
-^inst/tutorials/chapter2\.Rmd$
-^inst/tutorials/chapter3\.Rmd$
-^inst/tutorials/chapter4\.Rmd$
+^inst/tutorials/chapter1/chapter1\.Rmd$
+^inst/tutorials/chapter2/chapter2\.Rmd$
+^inst/tutorials/chapter3/chapter3\.Rmd$
+^inst/tutorials/chapter4/chapter4\.Rmd$
 ^LICENSE\.md$
 ^data-raw$
 ^README\.Rmd$
 ^\.travis\.yml$
-^inst/tutorials/chapter6\.Rmd$

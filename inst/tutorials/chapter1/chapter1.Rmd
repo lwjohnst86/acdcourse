@@ -4,7 +4,7 @@ output:
  learnr::tutorial:
    theme: journal
    highlight: pygments
-   #ace_theme: chrome
+   ace_theme: chrome
    allow_skip: TRUE
 runtime: shiny_prerendered
 ---
