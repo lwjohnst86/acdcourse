@@ -1,6 +1,6 @@
 Package: acdcourse
 Title: Course on Analyzing Cohort Datasets in R
-Version: 0.0.0.9000
+Version: 0.1.0
 Authors@R: 
     person(given = "Luke",
            family = "Johnston",
@@ -33,6 +33,6 @@ Imports:
 URL: https://github.com/lwjohnst86/acdcourse
 BugReports: https://github.com/lwjohnst86/acdcourse/issues
 RoxygenNote: 6.1.1
-Remotes:  
+Remotes: 
     rstudio/learnr,
     rstudio/rmarkdown
