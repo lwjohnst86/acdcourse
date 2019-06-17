@@ -1,5 +1,6 @@
 Package: acdcourse
 Title: Course on Analyzing Cohort Datasets in R
+Date: 2019-06-17
 Version: 0.1.0
 Authors@R: 
     person(given = "Luke",
