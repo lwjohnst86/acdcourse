@@ -52,27 +52,24 @@ learnr::run_tutorial("chapter4", package = "acdcourse")
 
 ## General course outline
 
-- Chapter 1: Introduction to cohorts and types of research questions
+- Chapter 1: Introduction to cohorts and to analyzing them
     - Lesson 1: Introduction to cohort designs
-    - Lesson 2: Introduction to the datasets and exploring them
-    - Lesson 3: Scientific questions that can be asked of cohort data
-- Chapter 2: Data exploring, wrangling, and formatting
+    - Lesson 2: Cohort types, variables, and the Framingham Study
+    - Lesson 3: Prevalence and incidence in cohorts
+- Chapter 2: Exploring, wrangling, and transforming cohort data
     - Lesson 1: Pre-wrangling exploration
-    - Lesson 2: Tidy cohort data and wrangling into analyzable form.
-    - Lesson 3: Transforming and modifying variables (maybe into two lessons?)
-- Chapter 3: Running the statistical techniques
-    - Lesson 1: Common statistical techniques used for analyzing cohorts
-    - Lesson 2: Adjustment, confounding, and modelling.
-    - Lesson 3: Interaction testing and sensitivity analyses
-    - Lesson 4: Extracting relevant data from results and post-modelling-wrangling 
-- Chapter 4: Presentation of results from cohort studies
-    - Lesson 1: Language and information to use when communicating the findings
-    - Lesson 2: Back transforming results for easier interpretation
-    - Lesson 3: Communicating your results through graphs
-    - Lesson 4: Using tables to convey your findings
+    - Lesson 2: Discrete data and tidying it for later analysis
+    - Lesson 3: Variable transformations
+- Chapter 3: Statistical methods for cohort data
+    - Lesson 1: Statistical analyses for cohort studies
+    - Lesson 2: Adjustment, confounding, and model building
+    - Lesson 3: Testing for interactions and sensitivity analyses
+    - Lesson 4: Tidying and interpreting model results
+- Chapter 4: Presentation of results from cohort analyses
+    - Lesson 1: Presenting cohort findings is tricky, be careful
+    - Lesson 2: Communicating cohort findings through graphs
+    - Lesson 3: Use tables effectively to show your results
     
-<!-- TODO: Update this outline -->
-
 The dataset used is:
 
 - `framingham`: Framingham Heart Study.
@@ -100,12 +97,16 @@ programs, he would find this course very useful.
 
 ## Learning Objectives
 
+There general learning objectives are to:
+
 - Learn how cohort data looks like and what questions to ask of it
-- Learn what to look for when exploring and pre-processing the data before the
-main analysis that may be more specific to cohort datasets
+- Learn what to look for when exploring and pre-processing the cohort data
+before analyzing it
 - Learn how to think about and approach processing, analyzing, and presenting
-results from cohort studies in a way that is meaningful and interpretable to end
-users, the clinicians and the public health professionals
+results from cohort studies
+- Approach analyzing cohort in a way that allows the results to be meaningful
+and interpretable to main users, the clinicians and the public health
+professionals
 
 ## Prerequisite or familiar knowledge / concepts
 
