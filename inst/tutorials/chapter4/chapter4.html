@@ -333,7 +333,6 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li>Tidied models and exponentiated estimates.</li>
 </ul>
 <p>You have 8 models in total, stored as a list. We should add more details to each model to differentiate them from each other. Use <code>map()</code> from <code>purrr</code> to wrangle each model simultaneously. The new code here, <code>term[2]</code>, selects the main predictor, which is the second element in the <code>term</code> column.</p>
-<pre><code>## character(0)</code></pre>
 <div id="section-exercise-step" class="section level3">
 <h3>Exercise step</h3>
 <p><strong>Instructions</strong>:</p>
@@ -435,7 +434,7 @@ adjusted_models_list &lt;- map(
     adjusted_models_list,
     ~mutate(.x, predictor = term[2], model = &quot;Adjusted&quot;)
 )
-})</code></pre>
+}, file = tempfile())</code></pre>
 </div>
 <div class="tutorial-exercise" data-label="combining-the-list-of-models-into-one-data-frame-NormalExercise" data-caption="Code" data-completion="1" data-diagnostics="1" data-startover="1" data-lines="0">
 <pre class="text"><code>all_models &lt;- bind_rows(
@@ -458,7 +457,7 @@ adjusted_models_list &lt;- map(
         adjusted_models_list
     ) %&gt;% 
     mutate(outcome = &quot;got_cvd&quot;) %&gt;% 
-    # Keep only predictor rows and fixed effects
+      # Keep only predictor rows and fixed effects
     filter(predictor == term, effect == &quot;fixed&quot;)</code></pre>
 </div>
 <div class="tutorial-exercise-support" data-label="combining-the-list-of-models-into-one-data-frame-NormalExercise-check" data-caption="Code" data-completion="1" data-diagnostics="1" data-startover="1" data-lines="0">
@@ -521,13 +520,13 @@ adjusted_models_list &lt;- map(
 </div>
 <div id="section-plotting-estimates-and-confidence-intervals-ci" class="section level3">
 <h3>Plotting estimates and confidence intervals (CI)</h3>
-<div class="sourceCode" id="section-cb25"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb25-1" data-line-number="1">models <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb25-2" data-line-number="2"><span class="st">    </span><span class="kw">filter</span>(model <span class="op">==</span><span class="st"> &quot;unadjusted&quot;</span>) <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb25-3" data-line-number="3"><span class="st">    </span><span class="kw">ggplot</span>(<span class="kw">aes</span>(<span class="dt">y =</span> predictor, <span class="dt">x =</span> estimate, </a>
-<a class="sourceLine" id="cb25-4" data-line-number="4">               <span class="dt">xmin =</span> conf.low, <span class="dt">xmax =</span> conf.high)) <span class="op">+</span></a>
-<a class="sourceLine" id="cb25-5" data-line-number="5"><span class="st">    </span><span class="kw">geom_point</span>() <span class="op">+</span></a>
-<a class="sourceLine" id="cb25-6" data-line-number="6"><span class="st">    </span><span class="kw">geom_errorbarh</span>() <span class="op">+</span></a>
-<a class="sourceLine" id="cb25-7" data-line-number="7"><span class="st">    </span><span class="kw">geom_vline</span>(<span class="dt">xintercept =</span> <span class="dv">1</span>)</a></code></pre></div>
+<div class="sourceCode" id="section-cb24"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb24-1" data-line-number="1">models <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb24-2" data-line-number="2"><span class="st">    </span><span class="kw">filter</span>(model <span class="op">==</span><span class="st"> &quot;unadjusted&quot;</span>) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb24-3" data-line-number="3"><span class="st">    </span><span class="kw">ggplot</span>(<span class="kw">aes</span>(<span class="dt">y =</span> predictor, <span class="dt">x =</span> estimate, </a>
+<a class="sourceLine" id="cb24-4" data-line-number="4">               <span class="dt">xmin =</span> conf.low, <span class="dt">xmax =</span> conf.high)) <span class="op">+</span></a>
+<a class="sourceLine" id="cb24-5" data-line-number="5"><span class="st">    </span><span class="kw">geom_point</span>() <span class="op">+</span></a>
+<a class="sourceLine" id="cb24-6" data-line-number="6"><span class="st">    </span><span class="kw">geom_errorbarh</span>() <span class="op">+</span></a>
+<a class="sourceLine" id="cb24-7" data-line-number="7"><span class="st">    </span><span class="kw">geom_vline</span>(<span class="dt">xintercept =</span> <span class="dv">1</span>)</a></code></pre></div>
 <div class="figure">
 <img src="images/ch4-v2-estimate-ci-basic.png" alt="Plot of estimate and 95% confidence interval." />
 <p class="caption">Plot of estimate and 95% confidence interval.</p>
@@ -538,14 +537,14 @@ adjusted_models_list &lt;- map(
 </div>
 <div id="section-making-the-plot-prettier" class="section level3">
 <h3>Making the plot prettier</h3>
-<div class="sourceCode" id="section-cb26"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb26-1" data-line-number="1">models <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb26-2" data-line-number="2"><span class="st">    </span><span class="kw">filter</span>(model <span class="op">==</span><span class="st"> &quot;unadjusted&quot;</span>) <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb26-3" data-line-number="3"><span class="st">    </span><span class="kw">ggplot</span>(<span class="kw">aes</span>(<span class="dt">y =</span> predictor, <span class="dt">x =</span> estimate, </a>
-<a class="sourceLine" id="cb26-4" data-line-number="4">               <span class="dt">xmin =</span> conf.low, <span class="dt">xmax =</span> conf.high)) <span class="op">+</span></a>
-<a class="sourceLine" id="cb26-5" data-line-number="5"><span class="st">    </span><span class="kw">geom_point</span>(<span class="dt">size =</span> <span class="dv">2</span>) <span class="op">+</span></a>
-<a class="sourceLine" id="cb26-6" data-line-number="6"><span class="st">    </span><span class="kw">geom_errorbarh</span>(<span class="dt">height =</span> <span class="fl">0.1</span>) <span class="op">+</span></a>
-<a class="sourceLine" id="cb26-7" data-line-number="7"><span class="st">    </span><span class="kw">geom_vline</span>(<span class="dt">xintercept =</span> <span class="dv">1</span>, <span class="dt">linetype =</span> <span class="st">&quot;dashed&quot;</span>) <span class="op">+</span></a>
-<a class="sourceLine" id="cb26-8" data-line-number="8"><span class="st">    </span><span class="kw">theme_bw</span>()</a></code></pre></div>
+<div class="sourceCode" id="section-cb25"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb25-1" data-line-number="1">models <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb25-2" data-line-number="2"><span class="st">    </span><span class="kw">filter</span>(model <span class="op">==</span><span class="st"> &quot;unadjusted&quot;</span>) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb25-3" data-line-number="3"><span class="st">    </span><span class="kw">ggplot</span>(<span class="kw">aes</span>(<span class="dt">y =</span> predictor, <span class="dt">x =</span> estimate, </a>
+<a class="sourceLine" id="cb25-4" data-line-number="4">               <span class="dt">xmin =</span> conf.low, <span class="dt">xmax =</span> conf.high)) <span class="op">+</span></a>
+<a class="sourceLine" id="cb25-5" data-line-number="5"><span class="st">    </span><span class="kw">geom_point</span>(<span class="dt">size =</span> <span class="dv">2</span>) <span class="op">+</span></a>
+<a class="sourceLine" id="cb25-6" data-line-number="6"><span class="st">    </span><span class="kw">geom_errorbarh</span>(<span class="dt">height =</span> <span class="fl">0.1</span>) <span class="op">+</span></a>
+<a class="sourceLine" id="cb25-7" data-line-number="7"><span class="st">    </span><span class="kw">geom_vline</span>(<span class="dt">xintercept =</span> <span class="dv">1</span>, <span class="dt">linetype =</span> <span class="st">&quot;dashed&quot;</span>) <span class="op">+</span></a>
+<a class="sourceLine" id="cb25-8" data-line-number="8"><span class="st">    </span><span class="kw">theme_bw</span>()</a></code></pre></div>
 <div class="figure">
 <img src="images/ch4-v2-estimate-ci-nicer.png" alt="(Slightly nicer) plot of estimate and 95% confidence interval." />
 <p class="caption">(Slightly nicer) plot of estimate and 95% confidence interval.</p>
@@ -557,13 +556,13 @@ adjusted_models_list &lt;- map(
 </div>
 <div id="section-unadjusted-and-adjusted-models-in-a-single-plot" class="section level3">
 <h3>Unadjusted and adjusted models in a single plot</h3>
-<div class="sourceCode" id="section-cb27"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb27-1" data-line-number="1">models <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb27-2" data-line-number="2"><span class="st">    </span><span class="kw">ggplot</span>(<span class="kw">aes</span>(<span class="dt">y =</span> predictor, <span class="dt">x =</span> estimate, </a>
-<a class="sourceLine" id="cb27-3" data-line-number="3">               <span class="dt">xmin =</span> conf.low, <span class="dt">xmax =</span> conf.high)) <span class="op">+</span></a>
-<a class="sourceLine" id="cb27-4" data-line-number="4"><span class="st">    </span><span class="kw">geom_point</span>() <span class="op">+</span></a>
-<a class="sourceLine" id="cb27-5" data-line-number="5"><span class="st">    </span><span class="kw">geom_errorbarh</span>(<span class="dt">height =</span> <span class="fl">0.2</span>) <span class="op">+</span></a>
-<a class="sourceLine" id="cb27-6" data-line-number="6"><span class="st">    </span><span class="kw">geom_vline</span>(<span class="dt">xintercept =</span> <span class="dv">1</span>, <span class="dt">linetype =</span> <span class="st">&quot;dashed&quot;</span>) <span class="op">+</span></a>
-<a class="sourceLine" id="cb27-7" data-line-number="7"><span class="st">    </span><span class="kw">facet_grid</span>(<span class="dt">rows =</span> <span class="kw">vars</span>(model))</a></code></pre></div>
+<div class="sourceCode" id="section-cb26"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb26-1" data-line-number="1">models <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb26-2" data-line-number="2"><span class="st">    </span><span class="kw">ggplot</span>(<span class="kw">aes</span>(<span class="dt">y =</span> predictor, <span class="dt">x =</span> estimate, </a>
+<a class="sourceLine" id="cb26-3" data-line-number="3">               <span class="dt">xmin =</span> conf.low, <span class="dt">xmax =</span> conf.high)) <span class="op">+</span></a>
+<a class="sourceLine" id="cb26-4" data-line-number="4"><span class="st">    </span><span class="kw">geom_point</span>() <span class="op">+</span></a>
+<a class="sourceLine" id="cb26-5" data-line-number="5"><span class="st">    </span><span class="kw">geom_errorbarh</span>(<span class="dt">height =</span> <span class="fl">0.2</span>) <span class="op">+</span></a>
+<a class="sourceLine" id="cb26-6" data-line-number="6"><span class="st">    </span><span class="kw">geom_vline</span>(<span class="dt">xintercept =</span> <span class="dv">1</span>, <span class="dt">linetype =</span> <span class="st">&quot;dashed&quot;</span>) <span class="op">+</span></a>
+<a class="sourceLine" id="cb26-7" data-line-number="7"><span class="st">    </span><span class="kw">facet_grid</span>(<span class="dt">rows =</span> <span class="kw">vars</span>(model))</a></code></pre></div>
 <div class="figure">
 <img src="images/ch4-v2-unadjusted-adjusted.png" alt="Showing both unadjusted and adjusted model results." />
 <p class="caption">Showing both unadjusted and adjusted model results.</p>
@@ -600,7 +599,6 @@ adjusted_models_list &lt;- map(
 <h2>Plotting model estimate and uncertainty</h2>
 <p>Statistical analysis used on cohort data usually output some time of regression estimate along with a measure of uncertainty (e.g. 95% confidence interval). Sometimes it makes sense to present these results in a table, but often the better approach is to create a figure instead. Figures show magnitude, direction, uncertainty, and comparison of results very effectively.</p>
 <p>Create a plot of the unadjusted model results that highlights the estimate and uncertainty of the estimate.</p>
-<pre><code>## character(0)</code></pre>
 <div id="section-exercise-step-2" class="section level3">
 <h3>Exercise step</h3>
 <p><strong>Instructions</strong>:</p>
@@ -720,7 +718,7 @@ library(dplyr)
 library(ggplot2)
 unadjusted_results &lt;- all_models %&gt;% 
     filter(model == &quot;Unadjusted&quot;)
-})</code></pre>
+}, file = tempfile())</code></pre>
 </div>
 <div class="tutorial-exercise" data-label="create-a-more-polished-plot-NormalExercise" data-caption="Code" data-completion="1" data-diagnostics="1" data-startover="1" data-lines="0">
 <pre class="text"><code># Make the plot more polished
@@ -765,7 +763,7 @@ unadjusted_results %&gt;%
 data(&quot;all_models&quot;, package = &quot;acdcourse&quot;)
 library(ggplot2)
 library(magrittr)
-})</code></pre>
+}, file = tempfile())</code></pre>
 </div>
 <div class="tutorial-exercise" data-label="visualize-unadjusted-and-adjusted-model-results-NormalExercise" data-caption="Code" data-completion="1" data-diagnostics="1" data-startover="1" data-lines="0">
 <pre class="text"><code># Show results of both adjusted and unadjusted
@@ -819,13 +817,13 @@ all_models %&gt;%
 </div>
 <div id="section-creating-a-table-of-participant-characteristics" class="section level3">
 <h3>Creating a table of participant characteristics</h3>
-<div class="sourceCode" id="section-cb51"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb51-1" data-line-number="1"><span class="kw">library</span>(carpenter)</a>
-<a class="sourceLine" id="cb51-2" data-line-number="2">tidied_framingham <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb51-3" data-line-number="3"><span class="st">    </span><span class="kw">outline_table</span>()</a></code></pre></div>
+<div class="sourceCode" id="section-cb49"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb49-1" data-line-number="1"><span class="kw">library</span>(carpenter)</a>
+<a class="sourceLine" id="cb49-2" data-line-number="2">tidied_framingham <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb49-3" data-line-number="3"><span class="st">    </span><span class="kw">outline_table</span>()</a></code></pre></div>
 <pre><code># A tibble: 0 x 0</code></pre>
-<div class="sourceCode" id="section-cb53"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb53-1" data-line-number="1">tidied_framingham <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb53-2" data-line-number="2"><span class="st">    </span><span class="kw">outline_table</span>() <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb53-3" data-line-number="3"><span class="st">    </span><span class="kw">add_rows</span>(<span class="st">&quot;education_combined&quot;</span>, <span class="dt">stat =</span> stat_nPct)</a></code></pre></div>
+<div class="sourceCode" id="section-cb51"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb51-1" data-line-number="1">tidied_framingham <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb51-2" data-line-number="2"><span class="st">    </span><span class="kw">outline_table</span>() <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb51-3" data-line-number="3"><span class="st">    </span><span class="kw">add_rows</span>(<span class="st">&quot;education_combined&quot;</span>, <span class="dt">stat =</span> stat_nPct)</a></code></pre></div>
 <pre><code># A tibble: 4 x 2
   Variables          all         
   &lt;chr&gt;              &lt;chr&gt;       
@@ -839,12 +837,12 @@ all_models %&gt;%
 </div>
 <div id="section-creating-a-table-of-participant-characteristics-1" class="section level3">
 <h3>Creating a table of participant characteristics</h3>
-<div class="sourceCode" id="section-cb55"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb55-1" data-line-number="1">tidied_framingham <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb55-2" data-line-number="2"><span class="st">    </span><span class="kw">outline_table</span>() <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb55-3" data-line-number="3"><span class="st">    </span><span class="kw">add_rows</span>(<span class="st">&quot;education_combined&quot;</span>, <span class="dt">stat =</span> stat_nPct) <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb55-4" data-line-number="4"><span class="st">    </span><span class="kw">add_rows</span>(<span class="st">&quot;body_mass_index&quot;</span>, <span class="dt">stat =</span> stat_meanSD) <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb55-5" data-line-number="5"><span class="st">    </span><span class="kw">add_rows</span>(<span class="kw">c</span>(<span class="st">&quot;participant_age&quot;</span>, <span class="st">&quot;heart_rate&quot;</span>),</a>
-<a class="sourceLine" id="cb55-6" data-line-number="6">             <span class="dt">stat =</span> stat_medianIQR)</a></code></pre></div>
+<div class="sourceCode" id="section-cb53"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb53-1" data-line-number="1">tidied_framingham <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb53-2" data-line-number="2"><span class="st">    </span><span class="kw">outline_table</span>() <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb53-3" data-line-number="3"><span class="st">    </span><span class="kw">add_rows</span>(<span class="st">&quot;education_combined&quot;</span>, <span class="dt">stat =</span> stat_nPct) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb53-4" data-line-number="4"><span class="st">    </span><span class="kw">add_rows</span>(<span class="st">&quot;body_mass_index&quot;</span>, <span class="dt">stat =</span> stat_meanSD) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb53-5" data-line-number="5"><span class="st">    </span><span class="kw">add_rows</span>(<span class="kw">c</span>(<span class="st">&quot;participant_age&quot;</span>, <span class="st">&quot;heart_rate&quot;</span>),</a>
+<a class="sourceLine" id="cb53-6" data-line-number="6">             <span class="dt">stat =</span> stat_medianIQR)</a></code></pre></div>
 <pre><code># A tibble: 7 x 2
   Variables          all             
   &lt;chr&gt;              &lt;chr&gt;           
@@ -859,14 +857,14 @@ all_models %&gt;%
 </div>
 <div id="section-renaming-table-headers" class="section level3">
 <h3>Renaming table headers</h3>
-<div class="sourceCode" id="section-cb57"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb57-1" data-line-number="1">basic_char_table &lt;-<span class="st"> </span>tidied_framingham <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb57-2" data-line-number="2"><span class="st">    </span><span class="kw">outline_table</span>() <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb57-3" data-line-number="3"><span class="st">    </span><span class="kw">add_rows</span>(<span class="st">&quot;education_combined&quot;</span>, <span class="dt">stat =</span> stat_nPct) <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb57-4" data-line-number="4"><span class="st">    </span><span class="kw">add_rows</span>(<span class="st">&quot;body_mass_index&quot;</span>, <span class="dt">stat =</span> stat_meanSD) <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb57-5" data-line-number="5"><span class="st">    </span><span class="kw">add_rows</span>(<span class="kw">c</span>(<span class="st">&quot;participant_age&quot;</span>, <span class="st">&quot;heart_rate&quot;</span>),</a>
-<a class="sourceLine" id="cb57-6" data-line-number="6">             <span class="dt">stat =</span> stat_medianIQR) <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb57-7" data-line-number="7"><span class="st">    </span><span class="kw">renaming</span>(<span class="st">&quot;header&quot;</span>, <span class="kw">c</span>(<span class="st">&quot;&quot;</span>, <span class="st">&quot;Characteristics&quot;</span>))</a>
-<a class="sourceLine" id="cb57-8" data-line-number="8">basic_char_table</a></code></pre></div>
+<div class="sourceCode" id="section-cb55"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb55-1" data-line-number="1">basic_char_table &lt;-<span class="st"> </span>tidied_framingham <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb55-2" data-line-number="2"><span class="st">    </span><span class="kw">outline_table</span>() <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb55-3" data-line-number="3"><span class="st">    </span><span class="kw">add_rows</span>(<span class="st">&quot;education_combined&quot;</span>, <span class="dt">stat =</span> stat_nPct) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb55-4" data-line-number="4"><span class="st">    </span><span class="kw">add_rows</span>(<span class="st">&quot;body_mass_index&quot;</span>, <span class="dt">stat =</span> stat_meanSD) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb55-5" data-line-number="5"><span class="st">    </span><span class="kw">add_rows</span>(<span class="kw">c</span>(<span class="st">&quot;participant_age&quot;</span>, <span class="st">&quot;heart_rate&quot;</span>),</a>
+<a class="sourceLine" id="cb55-6" data-line-number="6">             <span class="dt">stat =</span> stat_medianIQR) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb55-7" data-line-number="7"><span class="st">    </span><span class="kw">renaming</span>(<span class="st">&quot;header&quot;</span>, <span class="kw">c</span>(<span class="st">&quot;&quot;</span>, <span class="st">&quot;Characteristics&quot;</span>))</a>
+<a class="sourceLine" id="cb55-8" data-line-number="8">basic_char_table</a></code></pre></div>
 <pre><code># A tibble: 7 x 2
   ``                 Characteristics 
   &lt;chr&gt;              &lt;chr&gt;           
@@ -881,7 +879,7 @@ all_models %&gt;%
 </div>
 <div id="section-render-data-into-actual-table" class="section level3">
 <h3>Render data into actual table</h3>
-<div class="sourceCode" id="section-cb59"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb59-1" data-line-number="1"><span class="kw">build_table</span>(basic_char_table)</a></code></pre></div>
+<div class="sourceCode" id="section-cb57"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb57-1" data-line-number="1"><span class="kw">build_table</span>(basic_char_table)</a></code></pre></div>
 <table>
 <thead>
 <tr class="header">
@@ -952,11 +950,11 @@ all_models %&gt;%
 </div>
 <div id="section-wrangling-data-into-table-form" class="section level3">
 <h3>Wrangling data into table form</h3>
-<div class="sourceCode" id="section-cb60"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb60-1" data-line-number="1"><span class="kw">library</span>(glue)</a>
-<a class="sourceLine" id="cb60-2" data-line-number="2">models <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb60-3" data-line-number="3"><span class="st">    </span><span class="kw">mutate_at</span>(<span class="kw">vars</span>(estimate, conf.low, conf.high), round, <span class="dt">digits =</span> <span class="dv">2</span>) <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb60-4" data-line-number="4"><span class="st">    </span><span class="kw">mutate</span>(<span class="dt">estimate_ci =</span> <span class="kw">glue</span>(<span class="st">&quot;{estimate} ({conf.low} to {conf.high})&quot;</span>)) <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb60-5" data-line-number="5"><span class="st">    </span><span class="kw">select</span>(model, predictor, estimate_ci)</a></code></pre></div>
+<div class="sourceCode" id="section-cb58"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb58-1" data-line-number="1"><span class="kw">library</span>(glue)</a>
+<a class="sourceLine" id="cb58-2" data-line-number="2">models <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb58-3" data-line-number="3"><span class="st">    </span><span class="kw">mutate_at</span>(<span class="kw">vars</span>(estimate, conf.low, conf.high), round, <span class="dt">digits =</span> <span class="dv">2</span>) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb58-4" data-line-number="4"><span class="st">    </span><span class="kw">mutate</span>(<span class="dt">estimate_ci =</span> <span class="kw">glue</span>(<span class="st">&quot;{estimate} ({conf.low} to {conf.high})&quot;</span>)) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb58-5" data-line-number="5"><span class="st">    </span><span class="kw">select</span>(model, predictor, estimate_ci)</a></code></pre></div>
 <pre><code># A tibble: 4 x 3
   model      predictor               estimate_ci        
   &lt;chr&gt;      &lt;chr&gt;                   &lt;S3: glue&gt;         
@@ -970,12 +968,12 @@ all_models %&gt;%
 </div>
 <div id="section-spreading-rows-across-to-make-table-columns" class="section level3">
 <h3>Spreading rows across to make table columns</h3>
-<div class="sourceCode" id="section-cb62"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb62-1" data-line-number="1">table_models &lt;-<span class="st"> </span>models <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb62-2" data-line-number="2"><span class="st">    </span><span class="kw">mutate_at</span>(<span class="kw">vars</span>(estimate, conf.low, conf.high), round, <span class="dt">digits =</span> <span class="dv">2</span>) <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb62-3" data-line-number="3"><span class="st">    </span><span class="kw">mutate</span>(<span class="dt">estimate_ci =</span> <span class="kw">glue</span>(<span class="st">&quot;{estimate} ({conf.low} to {conf.high})&quot;</span>)) <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb62-4" data-line-number="4"><span class="st">    </span><span class="kw">select</span>(model, predictor, estimate_ci) <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb62-5" data-line-number="5"><span class="st">    </span><span class="kw">spread</span>(model, estimate_ci)</a>
-<a class="sourceLine" id="cb62-6" data-line-number="6">table_models</a></code></pre></div>
+<div class="sourceCode" id="section-cb60"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb60-1" data-line-number="1">table_models &lt;-<span class="st"> </span>models <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb60-2" data-line-number="2"><span class="st">    </span><span class="kw">mutate_at</span>(<span class="kw">vars</span>(estimate, conf.low, conf.high), round, <span class="dt">digits =</span> <span class="dv">2</span>) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb60-3" data-line-number="3"><span class="st">    </span><span class="kw">mutate</span>(<span class="dt">estimate_ci =</span> <span class="kw">glue</span>(<span class="st">&quot;{estimate} ({conf.low} to {conf.high})&quot;</span>)) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb60-4" data-line-number="4"><span class="st">    </span><span class="kw">select</span>(model, predictor, estimate_ci) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb60-5" data-line-number="5"><span class="st">    </span><span class="kw">spread</span>(model, estimate_ci)</a>
+<a class="sourceLine" id="cb60-6" data-line-number="6">table_models</a></code></pre></div>
 <pre><code># A tibble: 2 x 3
   predictor               adjusted            unadjusted         
   &lt;chr&gt;                   &lt;S3: glue&gt;          &lt;S3: glue&gt;         
@@ -986,11 +984,11 @@ all_models %&gt;%
 </div>
 <div id="section-create-r-markdown-table-with-kable" class="section level3">
 <h3>Create R Markdown table with kable</h3>
-<div class="sourceCode" id="section-cb64"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb64-1" data-line-number="1"><span class="kw">library</span>(knitr)</a>
-<a class="sourceLine" id="cb64-2" data-line-number="2"><span class="kw">library</span>(stringr)</a>
-<a class="sourceLine" id="cb64-3" data-line-number="3">table_models <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb64-4" data-line-number="4"><span class="st">    </span><span class="kw">mutate</span>(<span class="dt">predictor =</span> <span class="kw">str_replace_all</span>(predictor, <span class="st">&quot;_&quot;</span>, <span class="st">&quot; &quot;</span>)) <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb64-5" data-line-number="5"><span class="st">    </span><span class="kw">kable</span>()</a></code></pre></div>
+<div class="sourceCode" id="section-cb62"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb62-1" data-line-number="1"><span class="kw">library</span>(knitr)</a>
+<a class="sourceLine" id="cb62-2" data-line-number="2"><span class="kw">library</span>(stringr)</a>
+<a class="sourceLine" id="cb62-3" data-line-number="3">table_models <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb62-4" data-line-number="4"><span class="st">    </span><span class="kw">mutate</span>(<span class="dt">predictor =</span> <span class="kw">str_replace_all</span>(predictor, <span class="st">&quot;_&quot;</span>, <span class="st">&quot; &quot;</span>)) <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb62-5" data-line-number="5"><span class="st">    </span><span class="kw">kable</span>()</a></code></pre></div>
 <table>
 <thead>
 <tr class="header">
@@ -1023,7 +1021,6 @@ all_models %&gt;%
 <h2>Present the basic characteristics of the cohort</h2>
 <p>A classic use for tables is showing the basic characteristics of a cohort dataset, as there are diverse data types and summary statistics that need to be shown. Including a basic participant characteristics table is part of the STROBE best practices. This table can be quite informative for others when they interpret your analysis results.</p>
 <p>Using the <code>carpenter</code> package, create a table showing summary statistics for each data collection visit.</p>
-<pre><code>## character(0)</code></pre>
 <div id="section-exercise-step-5" class="section level3">
 <h3>Exercise step</h3>
 <p><strong>Instructions</strong>:</p>
@@ -1157,7 +1154,6 @@ tidied_framingham %&gt;%
 <h2>Supplemental tables of raw numbers for results</h2>
 <p>While the main messaging and presentation of results should emphasize figures over tables, often it is useful to other researchers (especially those doing meta-analyses or aggregating results) that the raw model results be given as well. Here we can use tables to give this data, as a supplement to the figure.</p>
 <p>Provide the estimates and confidence intervals of the unadjusted and adjusted model results in a table format that you could include in a document or report. The packages <code>glue</code>, <code>stringr</code>, and <code>knitr</code> have been loaded.</p>
-<pre><code>## character(0)</code></pre>
 <div id="section-exercise-step-9" class="section level3">
 <h3>Exercise step</h3>
 <p><strong>Instructions</strong>:</p>

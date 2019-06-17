@@ -56,10 +56,12 @@ note that `framingham` has not yet been tidied up, which we will do later in the
 course.
 
 ```{r what-cohort-type-is-the-framingham-heart-study-NormalExercise-setup}
-library(dplyr)
-library(acdcourse)
-data("framingham")
-framingham$time <- NULL
+capture.output({
+  library(dplyr)
+  library(acdcourse)
+  data("framingham")
+  framingham$time <- NULL
+}, file = tempfile())
 ```
 
 ### Exercise step
@@ -136,9 +138,11 @@ and exploring them more.
 - Rename the `period` variable to `followup_visit_number`.
 
 ```{r select-the-outcome-and-some-exposures-NormalExercise-setup}
-library(dplyr)
-library(acdcourse)
-data("framingham")
+capture.output({
+  library(dplyr)
+  library(acdcourse)
+  data("framingham")
+}, file = tempfile())
 ```
 
 ```{r select-the-outcome-and-some-exposures-NormalExercise, exercise=TRUE, exercise.setup='select-the-outcome-and-some-exposures-NormalExercise-setup'}
@@ -155,7 +159,6 @@ explore_framingham <- framingham %>%
         # Visit number
         _____ = period 
     )
-explore_framingham
 ```
 
 ```{r select-the-outcome-and-some-exposures-NormalExercise-hint-1, eval=FALSE}
@@ -176,7 +179,6 @@ explore_framingham <- framingham %>%
         # Visit number
         followup_visit_number = period 
     )
-explore_framingham
 ```
 
 ```{r select-the-outcome-and-some-exposures-NormalExercise-check, eval=FALSE}
@@ -199,17 +201,19 @@ Using what was shown in the video, calculate some means based on some groupings.
 - Make sure that `mean()` drops `NA` values by setting the `na.rm` argument to `TRUE`.
 
 ```{r simple-summary-of-the-exposures-by-outcome-NormalExercise-setup}
-library(dplyr)
-library(acdcourse)
-data("framingham")
-explore_framingham <- framingham %>%
-    select(
-        got_cvd = cvd,
-        total_cholesterol = totchol,
-        body_mass_index = bmi,
-        currently_smokes = cursmoke,
-        followup_visit_number = period
-    )
+capture.output({
+  library(dplyr)
+  library(acdcourse)
+  data("framingham")
+  explore_framingham <- framingham %>%
+      select(
+          got_cvd = cvd,
+          total_cholesterol = totchol,
+          body_mass_index = bmi,
+          currently_smokes = cursmoke,
+          followup_visit_number = period
+      )
+}, file = tempfile())
 ```
 
 ```{r simple-summary-of-the-exposures-by-outcome-NormalExercise, exercise=TRUE, exercise.setup='simple-summary-of-the-exposures-by-outcome-NormalExercise-setup'}
@@ -260,6 +264,7 @@ will have several rows for each of the data collection visits.
 Both `dplyr` and `tidyr` are loaded and all variables have been added back into `explore_framingham`.
 
 ```{r count-number-of-participants-and-cases-per-visit-NormalExercise-setup}
+capture.output({
 library(dplyr)
 library(acdcourse)
 data("framingham")
@@ -273,6 +278,7 @@ explore_framingham <- framingham %>%
         prevalent_chd = prevchd,
         prevalent_mi = prevmi
     )
+}, file = tempfile())
 ```
 
 ### Exercise step
@@ -382,6 +388,7 @@ From the previous exercise, we know that there are prevalent cases of cardiovasc
 - Count the number of observations to make sure that patients with CHD at the first visit were dropped.
 
 ```{r remove-prevalent-cases-at-the-baseline-NormalExercise-setup}
+capture.output({
 library(dplyr)
 library(acdcourse)
 data("framingham")
@@ -396,6 +403,7 @@ explore_framingham <- framingham %>%
         prevalent_chd = prevchd,
         prevalent_mi = prevmi
     )
+}, file = tempfile())
 ```
 
 ```{r remove-prevalent-cases-at-the-baseline-NormalExercise, exercise=TRUE, exercise.setup='remove-prevalent-cases-at-the-baseline-NormalExercise-setup'}

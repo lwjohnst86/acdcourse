@@ -40,7 +40,7 @@ data("unadjusted_models_list", package = "acdcourse")
 data("adjusted_models_list", package = "acdcourse")
 library(dplyr)
 library(purrr)
-})
+}, file = tempfile())
 ```
 
 ### Exercise step
@@ -151,7 +151,7 @@ adjusted_models_list <- map(
     adjusted_models_list,
     ~mutate(.x, predictor = term[2], model = "Adjusted")
 )
-})
+}, file = tempfile())
 ```
 
 ```{r combining-the-list-of-models-into-one-data-frame-NormalExercise, exercise=TRUE, exercise.setup='combining-the-list-of-models-into-one-data-frame-NormalExercise-setup'}
@@ -161,7 +161,7 @@ all_models <- bind_rows(
   		___
 	) %>% 
     mutate(outcome = ___) %>% 
-	# Keep only predictor rows and fixed effects
+    # Keep only predictor rows and fixed effects
     filter(___ == , ___ == ___)
 ```
 
@@ -176,7 +176,7 @@ all_models <- bind_rows(
   		adjusted_models_list
 	) %>% 
     mutate(outcome = "got_cvd") %>% 
-	# Keep only predictor rows and fixed effects
+	  # Keep only predictor rows and fixed effects
     filter(predictor == term, effect == "fixed")
 ```
 
@@ -205,7 +205,7 @@ capture.output({
 data("all_models", package = "acdcourse")
 library(dplyr)
 library(ggplot2)
-})
+}, file = tempfile())
 ```
 
 ### Exercise step
@@ -341,7 +341,7 @@ library(dplyr)
 library(ggplot2)
 unadjusted_results <- all_models %>% 
     filter(model == "Unadjusted")
-})
+}, file = tempfile())
 ```
 
 ```{r create-a-more-polished-plot-NormalExercise, exercise=TRUE, exercise.setup='create-a-more-polished-plot-NormalExercise-setup'}
@@ -390,7 +390,7 @@ capture.output({
 data("all_models", package = "acdcourse")
 library(ggplot2)
 library(magrittr)
-})
+}, file = tempfile())
 ```
 
 ```{r visualize-unadjusted-and-adjusted-model-results-NormalExercise, exercise=TRUE, eval=FALSE, exercise.setup='visualize-unadjusted-and-adjusted-model-results-NormalExercise-setup'}
@@ -448,7 +448,7 @@ capture.output({
 data("tidied_framingham", package = "acdcourse")
 library(carpenter)
 library(dplyr)
-})
+}, file = tempfile())
 ```
 
 ### Exercise step
@@ -609,7 +609,7 @@ library(glue)
 library(dplyr)
 library(tidyr)
 library(stringr)
-})
+}, file = tempfile())
 ```
 
 ### Exercise step

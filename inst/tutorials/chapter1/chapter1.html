@@ -301,10 +301,12 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <p>It’s usually possible to determine the cohort design from the variables within the dataset. There are at least two variables in the Framingham Heart study that give us some indication of the cohort design. Recall that cohorts involve a data collection <em>period</em>.</p>
 <p>The <code>dplyr</code> package has been loaded, as well as the <code>framingham</code> dataset. Again, note that <code>framingham</code> has not yet been tidied up, which we will do later in the course.</p>
 <div class="tutorial-exercise-support" data-label="what-cohort-type-is-the-framingham-heart-study-NormalExercise-setup" data-caption="Code" data-completion="1" data-diagnostics="1" data-startover="1" data-lines="0">
-<pre class="text"><code>library(dplyr)
-library(acdcourse)
-data(&quot;framingham&quot;)
-framingham$time &lt;- NULL</code></pre>
+<pre class="text"><code>capture.output({
+  library(dplyr)
+  library(acdcourse)
+  data(&quot;framingham&quot;)
+  framingham$time &lt;- NULL
+}, file = tempfile())</code></pre>
 </div>
 <div id="section-exercise-step" class="section level3">
 <h3>Exercise step</h3>
@@ -464,9 +466,11 @@ framingham %&gt;%
 <li>Rename the <code>period</code> variable to <code>followup_visit_number</code>.</li>
 </ul>
 <div class="tutorial-exercise-support" data-label="select-the-outcome-and-some-exposures-NormalExercise-setup" data-caption="Code" data-completion="1" data-diagnostics="1" data-startover="1" data-lines="0">
-<pre class="text"><code>library(dplyr)
-library(acdcourse)
-data(&quot;framingham&quot;)</code></pre>
+<pre class="text"><code>capture.output({
+  library(dplyr)
+  library(acdcourse)
+  data(&quot;framingham&quot;)
+}, file = tempfile())</code></pre>
 </div>
 <div class="tutorial-exercise" data-label="select-the-outcome-and-some-exposures-NormalExercise" data-caption="Code" data-completion="1" data-diagnostics="1" data-startover="1" data-lines="0">
 <pre class="text"><code># Select and rename the potential predictors and outcome
@@ -481,8 +485,7 @@ explore_framingham &lt;- framingham %&gt;%
         _____ = cursmoke,
         # Visit number
         _____ = period 
-    )
-explore_framingham</code></pre>
+    )</code></pre>
 <script type="application/json" data-opts-chunk="1">{"fig.width":6.5,"fig.height":4,"fig.retina":2,"fig.align":"default","fig.keep":"high","fig.show":"asis","out.width":624,"warning":false,"error":false,"message":false,"exercise.df_print":"paged","exercise.setup":"select-the-outcome-and-some-exposures-NormalExercise-setup","exercise.checker":"NULL"}</script>
 </div>
 <div class="tutorial-exercise-support" data-label="select-the-outcome-and-some-exposures-NormalExercise-hint-1" data-caption="Code" data-completion="1" data-diagnostics="1" data-startover="1" data-lines="0">
@@ -501,8 +504,7 @@ explore_framingham &lt;- framingham %&gt;%
         currently_smokes = cursmoke,
         # Visit number
         followup_visit_number = period 
-    )
-explore_framingham</code></pre>
+    )</code></pre>
 </div>
 <div class="tutorial-exercise-support" data-label="select-the-outcome-and-some-exposures-NormalExercise-check" data-caption="Code" data-completion="1" data-diagnostics="1" data-startover="1" data-lines="0">
 <pre class="text"><code>&quot;Great job! You&#39;ve selected and renamed the variables correctly.&quot;</code></pre>
@@ -519,17 +521,19 @@ explore_framingham</code></pre>
 <li>Make sure that <code>mean()</code> drops <code>NA</code> values by setting the <code>na.rm</code> argument to <code>TRUE</code>.</li>
 </ul>
 <div class="tutorial-exercise-support" data-label="simple-summary-of-the-exposures-by-outcome-NormalExercise-setup" data-caption="Code" data-completion="1" data-diagnostics="1" data-startover="1" data-lines="0">
-<pre class="text"><code>library(dplyr)
-library(acdcourse)
-data(&quot;framingham&quot;)
-explore_framingham &lt;- framingham %&gt;%
-    select(
-        got_cvd = cvd,
-        total_cholesterol = totchol,
-        body_mass_index = bmi,
-        currently_smokes = cursmoke,
-        followup_visit_number = period
-    )</code></pre>
+<pre class="text"><code>capture.output({
+  library(dplyr)
+  library(acdcourse)
+  data(&quot;framingham&quot;)
+  explore_framingham &lt;- framingham %&gt;%
+      select(
+          got_cvd = cvd,
+          total_cholesterol = totchol,
+          body_mass_index = bmi,
+          currently_smokes = cursmoke,
+          followup_visit_number = period
+      )
+}, file = tempfile())</code></pre>
 </div>
 <div class="tutorial-exercise" data-label="simple-summary-of-the-exposures-by-outcome-NormalExercise" data-caption="Code" data-completion="1" data-diagnostics="1" data-startover="1" data-lines="0">
 <pre class="text"><code>explore_framingham %&gt;% 
@@ -636,7 +640,8 @@ explore_framingham &lt;- framingham %&gt;%
 <p>Here, you will count the number of cases and non-cases for both prevalent myocardial infarction (MI), or <code>prevalent_mi</code>, and coronary heart disease (CHD), or <code>prevalent_chd</code>, at each visit. Remember, for longitudinal data, like that in prospective cohorts, you need to count by the time period since each participant will have several rows for each of the data collection visits.</p>
 <p>Both <code>dplyr</code> and <code>tidyr</code> are loaded and all variables have been added back into <code>explore_framingham</code>.</p>
 <div class="tutorial-exercise-support" data-label="count-number-of-participants-and-cases-per-visit-NormalExercise-setup" data-caption="Code" data-completion="1" data-diagnostics="1" data-startover="1" data-lines="0">
-<pre class="text"><code>library(dplyr)
+<pre class="text"><code>capture.output({
+library(dplyr)
 library(acdcourse)
 data(&quot;framingham&quot;)
 explore_framingham &lt;- framingham %&gt;%
@@ -648,7 +653,8 @@ explore_framingham &lt;- framingham %&gt;%
         followup_visit_number = period,
         prevalent_chd = prevchd,
         prevalent_mi = prevmi
-    )</code></pre>
+    )
+}, file = tempfile())</code></pre>
 </div>
 <div id="section-exercise-step-2" class="section level3">
 <h3>Exercise step</h3>
@@ -750,7 +756,8 @@ explore_framingham %&gt;%
 <li>Count the number of observations to make sure that patients with CHD at the first visit were dropped.</li>
 </ul>
 <div class="tutorial-exercise-support" data-label="remove-prevalent-cases-at-the-baseline-NormalExercise-setup" data-caption="Code" data-completion="1" data-diagnostics="1" data-startover="1" data-lines="0">
-<pre class="text"><code>library(dplyr)
+<pre class="text"><code>capture.output({
+library(dplyr)
 library(acdcourse)
 data(&quot;framingham&quot;)
 explore_framingham &lt;- framingham %&gt;%
@@ -763,7 +770,8 @@ explore_framingham &lt;- framingham %&gt;%
         followup_visit_number = period,
         prevalent_chd = prevchd,
         prevalent_mi = prevmi
-    )</code></pre>
+    )
+}, file = tempfile())</code></pre>
 </div>
 <div class="tutorial-exercise" data-label="remove-prevalent-cases-at-the-baseline-NormalExercise" data-caption="Code" data-completion="1" data-diagnostics="1" data-startover="1" data-lines="0">
 <pre class="text"><code># Drop prevalent chd cases from first visit
@@ -801,7 +809,7 @@ learnr:::register_http_handlers(session, metadata = NULL)
 </script>
  
 <script type="application/shiny-prerendered" data-context="server">
-learnr:::question_prerendered_chunk(structure(list(type = "radio", label = "what-makes-it-a-cohort-MultipleChoiceExercise-mcq",     question = structure("What specifically distinguishes the Framingham study as a <em>cohort<\u002fem>?", html = TRUE, class = c("html",     "character")), answers = list(structure(list(id = "lnr_ans_cbac09a",         option = "It studies a disease (CVD).", label = structure("It studies a disease (CVD).", html = TRUE, class = c("html",         "character")), is_correct = FALSE, message = structure("Almost, but incorrect. Many types of scientific studies study a disease, but that alone doesn&#39;t distinguish them as a cohort study.", html = TRUE, class = c("html",         "character"))), class = c("tutorial_question_answer",     "tutorial_quiz_answer")), structure(list(id = "lnr_ans_299bba7",         option = "Participants all came from the town of Framingham, USA.",         label = structure("Participants all came from the town of Framingham, USA.", html = TRUE, class = c("html",         "character")), is_correct = TRUE, message = structure("Cohorts are people who share a common characteristic. In this case, the participants come from the same town and so have a similar environment.", html = TRUE, class = c("html",         "character"))), class = c("tutorial_question_answer",     "tutorial_quiz_answer")), structure(list(id = "lnr_ans_9c7186a",         option = "Participants were followed over time.", label = structure("Participants were followed over time.", html = TRUE, class = c("html",         "character")), is_correct = FALSE, message = structure("Almost, but incorrect. Many types of scientific studies follow their subjects over time (e.g. clinical trials), but that alone doesn&#39;t distinguish them as a cohort study.", html = TRUE, class = c("html",         "character"))), class = c("tutorial_question_answer",     "tutorial_quiz_answer")), structure(list(id = "lnr_ans_d60b939",         option = "Participants had risk factors measured.", label = structure("Participants had risk factors measured.", html = TRUE, class = c("html",         "character")), is_correct = FALSE, message = structure("Incorrect. Many types of scientific studies measure risk factors, but that alone doesn&#39;t distinguish them as a cohort.", html = TRUE, class = c("html",         "character"))), class = c("tutorial_question_answer",     "tutorial_quiz_answer"))), button_labels = list(submit = structure("Submit Answer", html = TRUE, class = c("html",     "character")), try_again = structure("Try Again", html = TRUE, class = c("html",     "character"))), messages = list(correct = structure("Correct!", html = TRUE, class = c("html",     "character")), try_again = structure("Incorrect", html = TRUE, class = c("html",     "character")), incorrect = structure("Incorrect", html = TRUE, class = c("html",     "character")), message = NULL, post_message = NULL), ids = list(        answer = "what-makes-it-a-cohort-MultipleChoiceExercise-mcq-answer",         question = "what-makes-it-a-cohort-MultipleChoiceExercise-mcq"),     loading = structure("<strong>Loading:<\u002fstrong> \nWhat specifically distinguishes the Framingham study as a <em>cohort<\u002fem>?\n<br/><br/><br/>", html = TRUE, class = c("html",     "character")), random_answer_order = FALSE, allow_retry = TRUE), class = c("radio", "tutorial_question")))
+learnr:::question_prerendered_chunk(structure(list(type = "radio", label = "what-makes-it-a-cohort-MultipleChoiceExercise-mcq",     question = structure("What specifically distinguishes the Framingham study as a <em>cohort<\u002fem>?", html = TRUE, class = c("html",     "character")), answers = list(structure(list(id = "lnr_ans_fc24a37",         option = "It studies a disease (CVD).", label = structure("It studies a disease (CVD).", html = TRUE, class = c("html",         "character")), is_correct = FALSE, message = structure("Almost, but incorrect. Many types of scientific studies study a disease, but that alone doesn&#39;t distinguish them as a cohort study.", html = TRUE, class = c("html",         "character"))), class = c("tutorial_question_answer",     "tutorial_quiz_answer")), structure(list(id = "lnr_ans_38100ab",         option = "Participants all came from the town of Framingham, USA.",         label = structure("Participants all came from the town of Framingham, USA.", html = TRUE, class = c("html",         "character")), is_correct = TRUE, message = structure("Cohorts are people who share a common characteristic. In this case, the participants come from the same town and so have a similar environment.", html = TRUE, class = c("html",         "character"))), class = c("tutorial_question_answer",     "tutorial_quiz_answer")), structure(list(id = "lnr_ans_ef90d5c",         option = "Participants were followed over time.", label = structure("Participants were followed over time.", html = TRUE, class = c("html",         "character")), is_correct = FALSE, message = structure("Almost, but incorrect. Many types of scientific studies follow their subjects over time (e.g. clinical trials), but that alone doesn&#39;t distinguish them as a cohort study.", html = TRUE, class = c("html",         "character"))), class = c("tutorial_question_answer",     "tutorial_quiz_answer")), structure(list(id = "lnr_ans_9dc8a84",         option = "Participants had risk factors measured.", label = structure("Participants had risk factors measured.", html = TRUE, class = c("html",         "character")), is_correct = FALSE, message = structure("Incorrect. Many types of scientific studies measure risk factors, but that alone doesn&#39;t distinguish them as a cohort.", html = TRUE, class = c("html",         "character"))), class = c("tutorial_question_answer",     "tutorial_quiz_answer"))), button_labels = list(submit = structure("Submit Answer", html = TRUE, class = c("html",     "character")), try_again = structure("Try Again", html = TRUE, class = c("html",     "character"))), messages = list(correct = structure("Correct!", html = TRUE, class = c("html",     "character")), try_again = structure("Incorrect", html = TRUE, class = c("html",     "character")), incorrect = structure("Incorrect", html = TRUE, class = c("html",     "character")), message = NULL, post_message = NULL), ids = list(        answer = "what-makes-it-a-cohort-MultipleChoiceExercise-mcq-answer",         question = "what-makes-it-a-cohort-MultipleChoiceExercise-mcq"),     loading = structure("<strong>Loading:<\u002fstrong> \nWhat specifically distinguishes the Framingham study as a <em>cohort<\u002fem>?\n<br/><br/><br/>", html = TRUE, class = c("html",     "character")), random_answer_order = FALSE, allow_retry = TRUE), class = c("radio", "tutorial_question")))
 </script>
  
 <script type="application/shiny-prerendered" data-context="server">
@@ -812,7 +820,7 @@ output$`tutorial-exercise-what-cohort-type-is-the-framingham-heart-study-NormalE
 </script>
  
 <script type="application/shiny-prerendered" data-context="server">
-learnr:::question_prerendered_chunk(structure(list(type = "radio", label = "what-cohort-type-is-the-framingham-heart-study-MultipleChoiceExercise-mcq",     question = structure("What is Framingham&#39;s cohort design? Remember, <em>when<\u002fem> the disease occurs is what\ndistinguishes prospective from retrospective cohorts.", html = TRUE, class = c("html",     "character")), answers = list(structure(list(id = "lnr_ans_b7982a9",         option = "Prospective.", label = structure("Prospective.", html = TRUE, class = c("html",         "character")), is_correct = TRUE, message = NULL), class = c("tutorial_question_answer",     "tutorial_quiz_answer")), structure(list(id = "lnr_ans_7d96fa1",         option = "Retrospective.", label = structure("Retrospective.", html = TRUE, class = c("html",         "character")), is_correct = FALSE, message = structure("Incorrect. Participants enter the study with a disease. In Framingham, participants did not have the disease.", html = TRUE, class = c("html",         "character"))), class = c("tutorial_question_answer",     "tutorial_quiz_answer")), structure(list(id = "lnr_ans_e978b1",         option = "Neither.", label = structure("Neither.", html = TRUE, class = c("html",         "character")), is_correct = FALSE, message = structure("Incorrect.", html = TRUE, class = c("html",         "character"))), class = c("tutorial_question_answer",     "tutorial_quiz_answer")), structure(list(id = "lnr_ans_a40f5a5",         option = "Both.", label = structure("Both.", html = TRUE, class = c("html",         "character")), is_correct = FALSE, message = structure("Incorrect. It can&#39;t be both!", html = TRUE, class = c("html",         "character"))), class = c("tutorial_question_answer",     "tutorial_quiz_answer"))), button_labels = list(submit = structure("Submit Answer", html = TRUE, class = c("html",     "character")), try_again = structure("Try Again", html = TRUE, class = c("html",     "character"))), messages = list(correct = structure("Correct!", html = TRUE, class = c("html",     "character")), try_again = structure("Incorrect", html = TRUE, class = c("html",     "character")), incorrect = structure("Incorrect", html = TRUE, class = c("html",     "character")), message = NULL, post_message = NULL), ids = list(        answer = "what-cohort-type-is-the-framingham-heart-study-MultipleChoiceExercise-mcq-answer",         question = "what-cohort-type-is-the-framingham-heart-study-MultipleChoiceExercise-mcq"),     loading = structure("<strong>Loading:<\u002fstrong> \nWhat is Framingham&#39;s cohort design? Remember, <em>when<\u002fem> the disease occurs is what\ndistinguishes prospective from retrospective cohorts.\n<br/><br/><br/>", html = TRUE, class = c("html",     "character")), random_answer_order = FALSE, allow_retry = TRUE), class = c("radio", "tutorial_question")))
+learnr:::question_prerendered_chunk(structure(list(type = "radio", label = "what-cohort-type-is-the-framingham-heart-study-MultipleChoiceExercise-mcq",     question = structure("What is Framingham&#39;s cohort design? Remember, <em>when<\u002fem> the disease occurs is what\ndistinguishes prospective from retrospective cohorts.", html = TRUE, class = c("html",     "character")), answers = list(structure(list(id = "lnr_ans_efa0931",         option = "Prospective.", label = structure("Prospective.", html = TRUE, class = c("html",         "character")), is_correct = TRUE, message = NULL), class = c("tutorial_question_answer",     "tutorial_quiz_answer")), structure(list(id = "lnr_ans_9941a04",         option = "Retrospective.", label = structure("Retrospective.", html = TRUE, class = c("html",         "character")), is_correct = FALSE, message = structure("Incorrect. Participants enter the study with a disease. In Framingham, participants did not have the disease.", html = TRUE, class = c("html",         "character"))), class = c("tutorial_question_answer",     "tutorial_quiz_answer")), structure(list(id = "lnr_ans_d8648ba",         option = "Neither.", label = structure("Neither.", html = TRUE, class = c("html",         "character")), is_correct = FALSE, message = structure("Incorrect.", html = TRUE, class = c("html",         "character"))), class = c("tutorial_question_answer",     "tutorial_quiz_answer")), structure(list(id = "lnr_ans_3b96c54",         option = "Both.", label = structure("Both.", html = TRUE, class = c("html",         "character")), is_correct = FALSE, message = structure("Incorrect. It can&#39;t be both!", html = TRUE, class = c("html",         "character"))), class = c("tutorial_question_answer",     "tutorial_quiz_answer"))), button_labels = list(submit = structure("Submit Answer", html = TRUE, class = c("html",     "character")), try_again = structure("Try Again", html = TRUE, class = c("html",     "character"))), messages = list(correct = structure("Correct!", html = TRUE, class = c("html",     "character")), try_again = structure("Incorrect", html = TRUE, class = c("html",     "character")), incorrect = structure("Incorrect", html = TRUE, class = c("html",     "character")), message = NULL, post_message = NULL), ids = list(        answer = "what-cohort-type-is-the-framingham-heart-study-MultipleChoiceExercise-mcq-answer",         question = "what-cohort-type-is-the-framingham-heart-study-MultipleChoiceExercise-mcq"),     loading = structure("<strong>Loading:<\u002fstrong> \nWhat is Framingham&#39;s cohort design? Remember, <em>when<\u002fem> the disease occurs is what\ndistinguishes prospective from retrospective cohorts.\n<br/><br/><br/>", html = TRUE, class = c("html",     "character")), random_answer_order = FALSE, allow_retry = TRUE), class = c("radio", "tutorial_question")))
 </script>
  
 <script type="application/shiny-prerendered" data-context="server">

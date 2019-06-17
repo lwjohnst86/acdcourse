@@ -283,7 +283,6 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <div id="section-plot-univariate-distributions" class="section level2" data-progressive="TRUE">
 <h2>Plot univariate distributions</h2>
 <p>Let’s get comfortable creating some univariate histograms to start exploring the data. Create several histograms of a couple variables. The <code>ggplot2</code> package has been loaded.</p>
-<pre><code>## character(0)</code></pre>
 <div id="section-exercise-step" class="section level3">
 <h3>Exercise step</h3>
 <p><strong>Instructions</strong>:</p>
@@ -336,7 +335,6 @@ ggplot(tidier_framingham, aes(x = systolic_blood_pressure)) +
 <div id="section-long-data-and-visualizing-variables-over-time" class="section level2" data-progressive="TRUE">
 <h2>Long data and visualizing variables over time</h2>
 <p>Now that you’ve learned how to create histograms, let’s convert some of the Framingham dataset into the long data format using <code>gather()</code>. Then, using the long data form, create histograms for multiple variables simultaneously for each followup visit. This will give us a quick overview of the data and their distribution. Pay attention to how the distribution of each variable looks like.</p>
-<pre><code>## character(0)</code></pre>
 <div id="section-exercise-step-2" class="section level3">
 <h3>Exercise step</h3>
 <p><strong>Instructions</strong>:</p>
@@ -481,7 +479,7 @@ library(tidyr, quietly = TRUE)
 library(ggplot2, quietly = TRUE)
 tidier_framingham &lt;- tidier_framingham %&gt;% 
     mutate(got_cvd = as.character(got_cvd))
-})</code></pre>
+}, file = tempfile())</code></pre>
 </div>
 <div class="tutorial-exercise" data-label="visually-examine-the-outcomes-with-the-exposures-NormalExercise" data-caption="Code" data-completion="1" data-diagnostics="1" data-startover="1" data-lines="0">
 <pre class="text"><code>tidier_framingham %&gt;% 
@@ -577,11 +575,11 @@ tidier_framingham &lt;- tidier_framingham %&gt;%
 </tr>
 </tbody>
 </table>
-<div class="sourceCode" id="section-cb35"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb35-1" data-line-number="1"><span class="co"># For next figure:</span></a>
-<a class="sourceLine" id="cb35-2" data-line-number="2">tidier_framingham <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb35-3" data-line-number="3"><span class="st">    </span><span class="kw">ggplot</span>(<span class="kw">aes</span>(<span class="dt">x =</span> body_mass_index)) <span class="op">+</span></a>
-<a class="sourceLine" id="cb35-4" data-line-number="4"><span class="st">    </span><span class="kw">geom_histogram</span>(<span class="dt">colour =</span> <span class="st">&quot;black&quot;</span>, <span class="dt">fill =</span> <span class="st">&quot;grey80&quot;</span>) <span class="op">+</span></a>
-<a class="sourceLine" id="cb35-5" data-line-number="5"><span class="st">    </span><span class="kw">geom_vline</span>(<span class="dt">xintercept =</span> <span class="kw">c</span>(<span class="dv">20</span>, <span class="dv">25</span>, <span class="dv">30</span>), <span class="dt">linetype =</span> <span class="st">&quot;dashed&quot;</span>)</a></code></pre></div>
+<div class="sourceCode" id="section-cb33"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb33-1" data-line-number="1"><span class="co"># For next figure:</span></a>
+<a class="sourceLine" id="cb33-2" data-line-number="2">tidier_framingham <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb33-3" data-line-number="3"><span class="st">    </span><span class="kw">ggplot</span>(<span class="kw">aes</span>(<span class="dt">x =</span> body_mass_index)) <span class="op">+</span></a>
+<a class="sourceLine" id="cb33-4" data-line-number="4"><span class="st">    </span><span class="kw">geom_histogram</span>(<span class="dt">colour =</span> <span class="st">&quot;black&quot;</span>, <span class="dt">fill =</span> <span class="st">&quot;grey80&quot;</span>) <span class="op">+</span></a>
+<a class="sourceLine" id="cb33-5" data-line-number="5"><span class="st">    </span><span class="kw">geom_vline</span>(<span class="dt">xintercept =</span> <span class="kw">c</span>(<span class="dv">20</span>, <span class="dv">25</span>, <span class="dv">30</span>), <span class="dt">linetype =</span> <span class="st">&quot;dashed&quot;</span>)</a></code></pre></div>
 <p>You may be familiar with the different weight classes used according to your body mass index, or BMI. These classes, shown in the table, are often used in health research. Let’s visually show why this is a problem. The code provided creates the image shown next.</p>
 </div>
 <div id="section-the-problem-of-discretizing-an-visual-example-1" class="section level3">
@@ -611,8 +609,8 @@ tidier_framingham &lt;- tidier_framingham %&gt;%
 </div>
 <div id="section-reducing-levels-of-naturally-discrete-variables-1" class="section level3">
 <h3>Reducing levels of naturally discrete variables</h3>
-<div class="sourceCode" id="section-cb36"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb36-1" data-line-number="1">tidier_framingham <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb36-2" data-line-number="2"><span class="st">    </span><span class="kw">count</span>(cigarettes_per_day)</a></code></pre></div>
+<div class="sourceCode" id="section-cb34"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb34-1" data-line-number="1">tidier_framingham <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb34-2" data-line-number="2"><span class="st">    </span><span class="kw">count</span>(cigarettes_per_day)</a></code></pre></div>
 <pre><code># A tibble: 46 x 2
    cigarettes_per_day     n
                 &lt;dbl&gt; &lt;int&gt;
@@ -631,18 +629,18 @@ tidier_framingham &lt;- tidier_framingham %&gt;%
 </div>
 <div id="section-reducing-levels-of-a-discrete-variable" class="section level3">
 <h3>Reducing levels of a discrete variable</h3>
-<div class="sourceCode" id="section-cb38"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb38-1" data-line-number="1">tidier_framingham &lt;-<span class="st"> </span>tidier_framingham <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb38-2" data-line-number="2"><span class="st">    </span><span class="kw">mutate</span>(<span class="dt">cig_packs_per_day =</span> <span class="kw">case_when</span>(</a>
-<a class="sourceLine" id="cb38-3" data-line-number="3">        cigarettes_per_day <span class="op">==</span><span class="st"> </span><span class="dv">0</span> <span class="op">~</span><span class="st"> &quot;None&quot;</span>,</a>
-<a class="sourceLine" id="cb38-4" data-line-number="4">        cigarettes_per_day <span class="op">&gt;=</span><span class="st"> </span><span class="dv">1</span> <span class="op">&amp;</span></a>
-<a class="sourceLine" id="cb38-5" data-line-number="5"><span class="st">            </span>cigarettes_per_day <span class="op">&lt;=</span><span class="st"> </span><span class="dv">20</span> <span class="op">~</span><span class="st"> &quot;Up to one&quot;</span>,</a>
-<a class="sourceLine" id="cb38-6" data-line-number="6">        cigarettes_per_day <span class="op">&gt;=</span><span class="st"> </span><span class="dv">21</span> <span class="op">&amp;</span></a>
-<a class="sourceLine" id="cb38-7" data-line-number="7"><span class="st">            </span>cigarettes_per_day <span class="op">&lt;=</span><span class="st"> </span><span class="dv">40</span> <span class="op">~</span><span class="st"> &quot;One to two&quot;</span>,</a>
-<a class="sourceLine" id="cb38-8" data-line-number="8">        cigarettes_per_day <span class="op">&gt;</span><span class="st"> </span><span class="dv">40</span> <span class="op">~</span><span class="st"> &quot;More than two&quot;</span>,</a>
-<a class="sourceLine" id="cb38-9" data-line-number="9">        <span class="ot">TRUE</span> <span class="op">~</span><span class="st"> </span><span class="ot">NA_character_</span></a>
-<a class="sourceLine" id="cb38-10" data-line-number="10">    ))</a>
-<a class="sourceLine" id="cb38-11" data-line-number="11">tidier_framingham <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb38-12" data-line-number="12"><span class="st">    </span><span class="kw">count</span>(cig_packs_per_day)</a></code></pre></div>
+<div class="sourceCode" id="section-cb36"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb36-1" data-line-number="1">tidier_framingham &lt;-<span class="st"> </span>tidier_framingham <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb36-2" data-line-number="2"><span class="st">    </span><span class="kw">mutate</span>(<span class="dt">cig_packs_per_day =</span> <span class="kw">case_when</span>(</a>
+<a class="sourceLine" id="cb36-3" data-line-number="3">        cigarettes_per_day <span class="op">==</span><span class="st"> </span><span class="dv">0</span> <span class="op">~</span><span class="st"> &quot;None&quot;</span>,</a>
+<a class="sourceLine" id="cb36-4" data-line-number="4">        cigarettes_per_day <span class="op">&gt;=</span><span class="st"> </span><span class="dv">1</span> <span class="op">&amp;</span></a>
+<a class="sourceLine" id="cb36-5" data-line-number="5"><span class="st">            </span>cigarettes_per_day <span class="op">&lt;=</span><span class="st"> </span><span class="dv">20</span> <span class="op">~</span><span class="st"> &quot;Up to one&quot;</span>,</a>
+<a class="sourceLine" id="cb36-6" data-line-number="6">        cigarettes_per_day <span class="op">&gt;=</span><span class="st"> </span><span class="dv">21</span> <span class="op">&amp;</span></a>
+<a class="sourceLine" id="cb36-7" data-line-number="7"><span class="st">            </span>cigarettes_per_day <span class="op">&lt;=</span><span class="st"> </span><span class="dv">40</span> <span class="op">~</span><span class="st"> &quot;One to two&quot;</span>,</a>
+<a class="sourceLine" id="cb36-8" data-line-number="8">        cigarettes_per_day <span class="op">&gt;</span><span class="st"> </span><span class="dv">40</span> <span class="op">~</span><span class="st"> &quot;More than two&quot;</span>,</a>
+<a class="sourceLine" id="cb36-9" data-line-number="9">        <span class="ot">TRUE</span> <span class="op">~</span><span class="st"> </span><span class="ot">NA_character_</span></a>
+<a class="sourceLine" id="cb36-10" data-line-number="10">    ))</a>
+<a class="sourceLine" id="cb36-11" data-line-number="11">tidier_framingham <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb36-12" data-line-number="12"><span class="st">    </span><span class="kw">count</span>(cig_packs_per_day)</a></code></pre></div>
 <pre><code># A tibble: 5 x 2
   cig_packs_per_day     n
   &lt;chr&gt;             &lt;int&gt;
@@ -655,14 +653,14 @@ tidier_framingham &lt;- tidier_framingham %&gt;%
 </div>
 <div id="section-further-tidying-up" class="section level3">
 <h3>Further tidying up</h3>
-<div class="sourceCode" id="section-cb40"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb40-1" data-line-number="1"><span class="kw">library</span>(forcats)</a>
-<a class="sourceLine" id="cb40-2" data-line-number="2">tidier_framingham <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb40-3" data-line-number="3"><span class="st">    </span><span class="kw">mutate</span>(<span class="dt">cig_packs_per_day =</span> <span class="kw">fct_recode</span>(</a>
-<a class="sourceLine" id="cb40-4" data-line-number="4">        cig_packs_per_day, </a>
-<a class="sourceLine" id="cb40-5" data-line-number="5">        <span class="co"># Form: &quot;New level&quot; = &quot;Old level&quot;</span></a>
-<a class="sourceLine" id="cb40-6" data-line-number="6">        <span class="st">&quot;More than two&quot;</span> =<span class="st"> &quot;One to two&quot;</span></a>
-<a class="sourceLine" id="cb40-7" data-line-number="7">    )) <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb40-8" data-line-number="8"><span class="st">    </span><span class="kw">count</span>(cig_packs_per_day)</a></code></pre></div>
+<div class="sourceCode" id="section-cb38"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb38-1" data-line-number="1"><span class="kw">library</span>(forcats)</a>
+<a class="sourceLine" id="cb38-2" data-line-number="2">tidier_framingham <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb38-3" data-line-number="3"><span class="st">    </span><span class="kw">mutate</span>(<span class="dt">cig_packs_per_day =</span> <span class="kw">fct_recode</span>(</a>
+<a class="sourceLine" id="cb38-4" data-line-number="4">        cig_packs_per_day, </a>
+<a class="sourceLine" id="cb38-5" data-line-number="5">        <span class="co"># Form: &quot;New level&quot; = &quot;Old level&quot;</span></a>
+<a class="sourceLine" id="cb38-6" data-line-number="6">        <span class="st">&quot;More than two&quot;</span> =<span class="st"> &quot;One to two&quot;</span></a>
+<a class="sourceLine" id="cb38-7" data-line-number="7">    )) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb38-8" data-line-number="8"><span class="st">    </span><span class="kw">count</span>(cig_packs_per_day)</a></code></pre></div>
 <pre><code># A tibble: 4 x 2
   cig_packs_per_day     n
   &lt;fct&gt;             &lt;int&gt;
@@ -689,7 +687,6 @@ tidier_framingham &lt;- tidier_framingham %&gt;%
 <div id="section-make-discrete-variables-human-readable" class="section level2" data-progressive="TRUE">
 <h2>Make discrete variables human-readable</h2>
 <p>As you may have noticed, there are several discrete variables with ambiguous values. For instance, sex has the values as either 1 or 2, but what do those numbers mean? Often, you will encounter discrete data as integers rather than descriptive strings when working with cohort datasets. With data like this, you need to have a data dictionary to know what the numbers mean. Let’s fix this problem and tidy up the data so it is more intuitive and descriptive.</p>
-<pre><code>## character(0)</code></pre>
 <div id="section-exercise-step-6" class="section level3">
 <h3>Exercise step</h3>
 <p><strong>Instructions</strong>:</p>
@@ -779,7 +776,7 @@ data(tidier2_framingham, package = &quot;acdcourse&quot;)
 library(forcats)
 library(dplyr)
 tidier2_framingham$education_combined &lt;- NULL
-})</code></pre>
+}, file = tempfile())</code></pre>
 </div>
 <div class="tutorial-exercise" data-label="merge-factor-categories-together-NormalExercise" data-caption="Code" data-completion="1" data-diagnostics="1" data-startover="1" data-lines="0">
 <pre class="text"><code>tidier2_framingham &lt;- tidier2_framingham %&gt;% 
@@ -881,16 +878,16 @@ count(tidier2_framingham, education_combined)</code></pre>
 </div>
 <div id="section-transforming-your-data-in-r" class="section level3">
 <h3>Transforming your data in R</h3>
-<div class="sourceCode" id="section-cb56"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb56-1" data-line-number="1"><span class="co"># Typical way of transforming:</span></a>
-<a class="sourceLine" id="cb56-2" data-line-number="2">transformed &lt;-<span class="st"> </span>tidier2_framingham <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb56-3" data-line-number="3"><span class="st">    </span><span class="kw">mutate</span>(<span class="dt">body_mass_index_log =</span> <span class="kw">log</span>(body_mass_index_log),</a>
-<a class="sourceLine" id="cb56-4" data-line-number="4">           <span class="dt">heart_rate_log =</span> <span class="kw">log</span>(heart_rate))</a></code></pre></div>
-<div class="sourceCode" id="section-cb57"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb57-1" data-line-number="1"><span class="co"># More efficient way:</span></a>
-<a class="sourceLine" id="cb57-2" data-line-number="2">invert &lt;-<span class="st"> </span><span class="cf">function</span>(x) <span class="dv">1</span> <span class="op">/</span><span class="st"> </span>x</a>
-<a class="sourceLine" id="cb57-3" data-line-number="3">transformed &lt;-<span class="st"> </span>tidier2_framingham <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb57-4" data-line-number="4"><span class="st">    </span><span class="kw">mutate_at</span>(<span class="kw">vars</span>(body_mass_index, heart_rate),</a>
-<a class="sourceLine" id="cb57-5" data-line-number="5">              <span class="co"># Form: name_to_append = function</span></a>
-<a class="sourceLine" id="cb57-6" data-line-number="6">              <span class="kw">list</span>(<span class="dt">scale =</span> scale, <span class="dt">log =</span> log, <span class="dt">invert =</span> invert))</a></code></pre></div>
+<div class="sourceCode" id="section-cb53"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb53-1" data-line-number="1"><span class="co"># Typical way of transforming:</span></a>
+<a class="sourceLine" id="cb53-2" data-line-number="2">transformed &lt;-<span class="st"> </span>tidier2_framingham <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb53-3" data-line-number="3"><span class="st">    </span><span class="kw">mutate</span>(<span class="dt">body_mass_index_log =</span> <span class="kw">log</span>(body_mass_index_log),</a>
+<a class="sourceLine" id="cb53-4" data-line-number="4">           <span class="dt">heart_rate_log =</span> <span class="kw">log</span>(heart_rate))</a></code></pre></div>
+<div class="sourceCode" id="section-cb54"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb54-1" data-line-number="1"><span class="co"># More efficient way:</span></a>
+<a class="sourceLine" id="cb54-2" data-line-number="2">invert &lt;-<span class="st"> </span><span class="cf">function</span>(x) <span class="dv">1</span> <span class="op">/</span><span class="st"> </span>x</a>
+<a class="sourceLine" id="cb54-3" data-line-number="3">transformed &lt;-<span class="st"> </span>tidier2_framingham <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb54-4" data-line-number="4"><span class="st">    </span><span class="kw">mutate_at</span>(<span class="kw">vars</span>(body_mass_index, heart_rate),</a>
+<a class="sourceLine" id="cb54-5" data-line-number="5">              <span class="co"># Form: name_to_append = function</span></a>
+<a class="sourceLine" id="cb54-6" data-line-number="6">              <span class="kw">list</span>(<span class="dt">scale =</span> scale, <span class="dt">log =</span> log, <span class="dt">invert =</span> invert))</a></code></pre></div>
 <pre><code>[1] &quot;body_mass_index&quot;        &quot;heart_rate&quot;          &quot;body_mass_index_scale&quot; 
 [4] &quot;heart_rate_scale&quot;       &quot;body_mass_index_log&quot; &quot;heart_rate_log&quot;        
 [7] &quot;body_mass_index_invert&quot; &quot;heart_rate_invert&quot;     </code></pre>
@@ -900,14 +897,14 @@ count(tidier2_framingham, education_combined)</code></pre>
 </div>
 <div id="section-visualizing-the-transformations" class="section level3">
 <h3>Visualizing the transformations</h3>
-<div class="sourceCode" id="section-cb59"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb59-1" data-line-number="1"><span class="co"># Long data and facets to show all plots</span></a>
-<a class="sourceLine" id="cb59-2" data-line-number="2">transformed <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb59-3" data-line-number="3"><span class="st">    </span><span class="kw">select</span>(<span class="kw">contains</span>(<span class="st">&quot;heart_rate&quot;</span>)) <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb59-4" data-line-number="4"><span class="st">    </span><span class="kw">gather</span>(variable, value) <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb59-5" data-line-number="5"><span class="st">    </span><span class="kw">ggplot</span>(<span class="kw">aes</span>(<span class="dt">x =</span> value, <span class="dt">y =</span> <span class="kw">stat</span>(density))) <span class="op">+</span></a>
-<a class="sourceLine" id="cb59-6" data-line-number="6"><span class="st">    </span><span class="kw">geom_histogram</span>(<span class="dt">colour =</span> <span class="st">&quot;black&quot;</span>, <span class="dt">fill =</span> <span class="st">&quot;grey80&quot;</span>) <span class="op">+</span></a>
-<a class="sourceLine" id="cb59-7" data-line-number="7"><span class="st">    </span><span class="kw">geom_density</span>() <span class="op">+</span></a>
-<a class="sourceLine" id="cb59-8" data-line-number="8"><span class="st">    </span><span class="kw">facet_wrap</span>(<span class="kw">vars</span>(variable), <span class="dt">scales =</span> <span class="st">&quot;free&quot;</span>)</a></code></pre></div>
+<div class="sourceCode" id="section-cb56"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb56-1" data-line-number="1"><span class="co"># Long data and facets to show all plots</span></a>
+<a class="sourceLine" id="cb56-2" data-line-number="2">transformed <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb56-3" data-line-number="3"><span class="st">    </span><span class="kw">select</span>(<span class="kw">contains</span>(<span class="st">&quot;heart_rate&quot;</span>)) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb56-4" data-line-number="4"><span class="st">    </span><span class="kw">gather</span>(variable, value) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb56-5" data-line-number="5"><span class="st">    </span><span class="kw">ggplot</span>(<span class="kw">aes</span>(<span class="dt">x =</span> value, <span class="dt">y =</span> <span class="kw">stat</span>(density))) <span class="op">+</span></a>
+<a class="sourceLine" id="cb56-6" data-line-number="6"><span class="st">    </span><span class="kw">geom_histogram</span>(<span class="dt">colour =</span> <span class="st">&quot;black&quot;</span>, <span class="dt">fill =</span> <span class="st">&quot;grey80&quot;</span>) <span class="op">+</span></a>
+<a class="sourceLine" id="cb56-7" data-line-number="7"><span class="st">    </span><span class="kw">geom_density</span>() <span class="op">+</span></a>
+<a class="sourceLine" id="cb56-8" data-line-number="8"><span class="st">    </span><span class="kw">facet_wrap</span>(<span class="kw">vars</span>(variable), <span class="dt">scales =</span> <span class="st">&quot;free&quot;</span>)</a></code></pre></div>
 <p>Let’s look at what the transformations do. Here is the code that will create the next figure. Notice the contains function in select. This function finds all variables with this string. We’ll plot both a histogram and a density curve. Since both geoms are used, we need to use the stat function with density as the y argument. We convert the data to long form and combine with facet as we’ve done previously, to plot each transformation.</p>
 </div>
 <div id="section-visualizing-the-transformations-1" class="section level3">
@@ -939,12 +936,12 @@ count(tidier2_framingham, education_combined)</code></pre>
 <h2>Apply variable transformations</h2>
 <p>There are several types of transformations you can choose from. Which one you choose depends on the question, the type of data and their values (e.g. discrete vs continuous), the statistical method you will use, and how you want your results to be interpreted.</p>
 <p>Recall the form for <code>mutate_at()</code> is:</p>
-<div class="sourceCode" id="section-cb60"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb60-1" data-line-number="1"><span class="kw">mutate_at</span>(</a>
-<a class="sourceLine" id="cb60-2" data-line-number="2">    <span class="co"># List variables in here:</span></a>
-<a class="sourceLine" id="cb60-3" data-line-number="3">    <span class="kw">vars</span>(...), </a>
-<a class="sourceLine" id="cb60-4" data-line-number="4">    <span class="co"># List functions in here, with name-function pair:</span></a>
-<a class="sourceLine" id="cb60-5" data-line-number="5">    <span class="kw">list</span>(<span class="dt">name =</span> <span class="cf">function</span>, ...)</a>
-<a class="sourceLine" id="cb60-6" data-line-number="6">)</a></code></pre></div>
+<div class="sourceCode" id="section-cb57"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb57-1" data-line-number="1"><span class="kw">mutate_at</span>(</a>
+<a class="sourceLine" id="cb57-2" data-line-number="2">    <span class="co"># List variables in here:</span></a>
+<a class="sourceLine" id="cb57-3" data-line-number="3">    <span class="kw">vars</span>(...), </a>
+<a class="sourceLine" id="cb57-4" data-line-number="4">    <span class="co"># List functions in here, with name-function pair:</span></a>
+<a class="sourceLine" id="cb57-5" data-line-number="5">    <span class="kw">list</span>(<span class="dt">name =</span> <span class="cf">function</span>, ...)</a>
+<a class="sourceLine" id="cb57-6" data-line-number="6">)</a></code></pre></div>
 <p><strong>Instructions</strong>:</p>
 <ul>
 <li>In <code>vars()</code>, add <code>body_mass_index</code> and <code>cigarettes_per_day</code>.</li>
@@ -956,7 +953,7 @@ count(tidier2_framingham, education_combined)</code></pre>
 data(tidier2_framingham, package = &quot;acdcourse&quot;)
 library(dplyr)
 invert &lt;- function(x) 1 / x
-})</code></pre>
+}, file = tempfile())</code></pre>
 </div>
 <div class="tutorial-exercise" data-label="apply-variable-transformations-NormalExercise" data-caption="Code" data-completion="1" data-diagnostics="1" data-startover="1" data-lines="0">
 <pre class="text"><code># Use three transformations on body mass index
@@ -995,7 +992,6 @@ transformed_framingham %&gt;%
 <p>Visualize how each transformation influences the distribution of the data. Graphing these transformations can provide insight into helping you choose a transformation for the variable.</p>
 <p>Since we have several transformations, we want to plot them all on one plot. As we’ve done several times throughout the course, we need to use a long data format combined with facets to achieve this.</p>
 <p>The <code>transformed_framingham</code> dataset you previously wrangled has been loaded.</p>
-<pre><code>## character(0)</code></pre>
 <div id="section-exercise-step-8" class="section level3">
 <h3>Exercise step</h3>
 <p><strong>Instructions</strong>:</p>
@@ -1004,15 +1000,13 @@ transformed_framingham %&gt;%
 </ul>
 <div class="tutorial-exercise" data-label="compare-the-different-transformations-NormalExercise-1" data-caption="Code" data-completion="1" data-diagnostics="1" data-startover="1" data-lines="0">
 <pre class="text"><code># Plot a histogram of body mass transforms
-bmi_transforms_plot &lt;- ___ %&gt;% 
+___ %&gt;% 
     # Keep variables with string in variable name
     select(contains(___)) %&gt;% 
     gather(variable, value) %&gt;% 
     ggplot(aes(x = value)) +
     geom_histogram() +
-    facet_wrap(vars(variable), scale = &quot;free&quot;)
-
-bmi_transforms_plot</code></pre>
+    facet_wrap(vars(variable), scale = &quot;free&quot;)</code></pre>
 <script type="application/json" data-opts-chunk="1">{"fig.width":6.5,"fig.height":4,"fig.retina":2,"fig.align":"default","fig.keep":"high","fig.show":"asis","out.width":624,"warning":false,"error":false,"message":false,"exercise.df_print":"paged","exercise.setup":"compare-the-different-transformations-NormalExercise-setup","exercise.checker":"NULL"}</script>
 </div>
 <div class="tutorial-exercise-support" data-label="compare-the-different-transformations-NormalExercise-1-hint-1" data-caption="Code" data-completion="1" data-diagnostics="1" data-startover="1" data-lines="0">
@@ -1020,15 +1014,13 @@ bmi_transforms_plot</code></pre>
 </div>
 <div class="tutorial-exercise-support" data-label="compare-the-different-transformations-NormalExercise-1-hint-2" data-caption="Code" data-completion="1" data-diagnostics="1" data-startover="1" data-lines="0">
 <pre class="text"><code># Plot a histogram of body mass transforms
-bmi_transforms_plot &lt;- transformed_framingham %&gt;% 
+transformed_framingham %&gt;% 
     # Keep variables with string in variable name
     select(contains(&quot;body_mass_index&quot;)) %&gt;% 
     gather(variable, value) %&gt;% 
     ggplot(aes(x = value)) +
     geom_histogram() +
-    facet_wrap(vars(variable), scale = &quot;free&quot;)
-
-bmi_transforms_plot</code></pre>
+    facet_wrap(vars(variable), scale = &quot;free&quot;)</code></pre>
 </div>
 <div class="tutorial-exercise-support" data-label="compare-the-different-transformations-NormalExercise-1-check" data-caption="Code" data-completion="1" data-diagnostics="1" data-startover="1" data-lines="0">
 <pre class="text"><code>&quot;Amazing!&quot;</code></pre>
@@ -1042,15 +1034,13 @@ bmi_transforms_plot</code></pre>
 </ul>
 <div class="tutorial-exercise" data-label="compare-the-different-transformations-NormalExercise-2" data-caption="Code" data-completion="1" data-diagnostics="1" data-startover="1" data-lines="0">
 <pre class="text"><code># Plot a histogram of cigarettes per day transforms
-cpd_transforms_plot &lt;- transformed_framingham %&gt;% 
+transformed_framingham %&gt;% 
     # Keep variables with string in variable name
     select(contains(&quot;___&quot;)) %&gt;% 
     gather(variable, value) %&gt;% 
     ggplot(aes(x = value)) +
     geom_histogram() +
-    facet_wrap(vars(variable), scale = &quot;free&quot;)
-
-cpd_transforms_plot</code></pre>
+    facet_wrap(vars(variable), scale = &quot;free&quot;)</code></pre>
 <script type="application/json" data-opts-chunk="1">{"fig.width":6.5,"fig.height":4,"fig.retina":2,"fig.align":"default","fig.keep":"high","fig.show":"asis","out.width":624,"warning":false,"error":false,"message":false,"exercise.df_print":"paged","exercise.setup":"compare-the-different-transformations-NormalExercise-setup","exercise.checker":"NULL"}</script>
 </div>
 <div class="tutorial-exercise-support" data-label="compare-the-different-transformations-NormalExercise-2-hint-1" data-caption="Code" data-completion="1" data-diagnostics="1" data-startover="1" data-lines="0">
@@ -1058,15 +1048,13 @@ cpd_transforms_plot</code></pre>
 </div>
 <div class="tutorial-exercise-support" data-label="compare-the-different-transformations-NormalExercise-2-hint-2" data-caption="Code" data-completion="1" data-diagnostics="1" data-startover="1" data-lines="0">
 <pre class="text"><code># Plot a histogram of cigarettes per day transforms
-cpd_transforms_plot &lt;- transformed_framingham %&gt;% 
+transformed_framingham %&gt;% 
     # Keep variables with string in variable name
     select(contains(&quot;cigarettes_per_day&quot;)) %&gt;% 
     gather(variable, value) %&gt;% 
     ggplot(aes(x = value)) +
     geom_histogram() +
-    facet_wrap(vars(variable), scale = &quot;free&quot;)
-
-cpd_transforms_plot</code></pre>
+    facet_wrap(vars(variable), scale = &quot;free&quot;)</code></pre>
 </div>
 <div class="tutorial-exercise-support" data-label="compare-the-different-transformations-NormalExercise-2-check" data-caption="Code" data-completion="1" data-diagnostics="1" data-startover="1" data-lines="0">
 <pre class="text"><code>&quot;Great! Check out how each transformation influences the distribution of body mass index and of the number of cigarettes smoked.&quot;</code></pre>
@@ -1128,7 +1116,7 @@ output$`tutorial-exercise-long-data-and-visualizing-variables-over-time-NormalEx
 </script>
  
 <script type="application/shiny-prerendered" data-context="server">
-learnr:::question_prerendered_chunk(structure(list(type = "radio", label = "long-data-and-visualizing-variables-over-time-MultipleChoiceExercise-mcq",     question = structure("Which of the answers below describes some observations about the data.", html = TRUE, class = c("html",     "character")), answers = list(structure(list(id = "lnr_ans_6a643ad",         option = "The lipoprotein data was not available at visits 1 and 2.",         label = structure("The lipoprotein data was not available at visits 1 and 2.", html = TRUE, class = c("html",         "character")), is_correct = FALSE, message = NULL), class = c("tutorial_question_answer",     "tutorial_quiz_answer")), structure(list(id = "lnr_ans_bb83371",         option = "Most people smoked zero cigarettes per day.",         label = structure("Most people smoked zero cigarettes per day.", html = TRUE, class = c("html",         "character")), is_correct = FALSE, message = NULL), class = c("tutorial_question_answer",     "tutorial_quiz_answer")), structure(list(id = "lnr_ans_4a33e1e",         option = "The participants' age had a 'jagged', uneven distribution.",         label = structure("The participants&#39; age had a &#39;jagged&#39;, uneven distribution.", html = TRUE, class = c("html",         "character")), is_correct = FALSE, message = NULL), class = c("tutorial_question_answer",     "tutorial_quiz_answer")), structure(list(id = "lnr_ans_31bdd8e",         option = "All of the above.", label = structure("All of the above.", html = TRUE, class = c("html",         "character")), is_correct = TRUE, message = NULL), class = c("tutorial_question_answer",     "tutorial_quiz_answer")), structure(list(id = "lnr_ans_b1d3c98",         option = "None of the above.", label = structure("None of the above.", html = TRUE, class = c("html",         "character")), is_correct = FALSE, message = NULL), class = c("tutorial_question_answer",     "tutorial_quiz_answer"))), button_labels = list(submit = structure("Submit Answer", html = TRUE, class = c("html",     "character")), try_again = structure("Try Again", html = TRUE, class = c("html",     "character"))), messages = list(correct = structure("Correct!", html = TRUE, class = c("html",     "character")), try_again = structure("Incorrect", html = TRUE, class = c("html",     "character")), incorrect = structure("Incorrect", html = TRUE, class = c("html",     "character")), message = NULL, post_message = NULL), ids = list(        answer = "long-data-and-visualizing-variables-over-time-MultipleChoiceExercise-mcq-answer",         question = "long-data-and-visualizing-variables-over-time-MultipleChoiceExercise-mcq"),     loading = structure("<strong>Loading:<\u002fstrong> \nWhich of the answers below describes some observations about the data.\n<br/><br/><br/>", html = TRUE, class = c("html",     "character")), random_answer_order = FALSE, allow_retry = TRUE), class = c("radio", "tutorial_question")))
+learnr:::question_prerendered_chunk(structure(list(type = "radio", label = "long-data-and-visualizing-variables-over-time-MultipleChoiceExercise-mcq",     question = structure("Which of the answers below describes some observations about the data.", html = TRUE, class = c("html",     "character")), answers = list(structure(list(id = "lnr_ans_58d5272",         option = "The lipoprotein data was not available at visits 1 and 2.",         label = structure("The lipoprotein data was not available at visits 1 and 2.", html = TRUE, class = c("html",         "character")), is_correct = FALSE, message = NULL), class = c("tutorial_question_answer",     "tutorial_quiz_answer")), structure(list(id = "lnr_ans_75b8dc4",         option = "Most people smoked zero cigarettes per day.",         label = structure("Most people smoked zero cigarettes per day.", html = TRUE, class = c("html",         "character")), is_correct = FALSE, message = NULL), class = c("tutorial_question_answer",     "tutorial_quiz_answer")), structure(list(id = "lnr_ans_d3f95f6",         option = "The participants' age had a 'jagged', uneven distribution.",         label = structure("The participants&#39; age had a &#39;jagged&#39;, uneven distribution.", html = TRUE, class = c("html",         "character")), is_correct = FALSE, message = NULL), class = c("tutorial_question_answer",     "tutorial_quiz_answer")), structure(list(id = "lnr_ans_7610493",         option = "All of the above.", label = structure("All of the above.", html = TRUE, class = c("html",         "character")), is_correct = TRUE, message = NULL), class = c("tutorial_question_answer",     "tutorial_quiz_answer")), structure(list(id = "lnr_ans_d71b441",         option = "None of the above.", label = structure("None of the above.", html = TRUE, class = c("html",         "character")), is_correct = FALSE, message = NULL), class = c("tutorial_question_answer",     "tutorial_quiz_answer"))), button_labels = list(submit = structure("Submit Answer", html = TRUE, class = c("html",     "character")), try_again = structure("Try Again", html = TRUE, class = c("html",     "character"))), messages = list(correct = structure("Correct!", html = TRUE, class = c("html",     "character")), try_again = structure("Incorrect", html = TRUE, class = c("html",     "character")), incorrect = structure("Incorrect", html = TRUE, class = c("html",     "character")), message = NULL, post_message = NULL), ids = list(        answer = "long-data-and-visualizing-variables-over-time-MultipleChoiceExercise-mcq-answer",         question = "long-data-and-visualizing-variables-over-time-MultipleChoiceExercise-mcq"),     loading = structure("<strong>Loading:<\u002fstrong> \nWhich of the answers below describes some observations about the data.\n<br/><br/><br/>", html = TRUE, class = c("html",     "character")), random_answer_order = FALSE, allow_retry = TRUE), class = c("radio", "tutorial_question")))
 </script>
  
 <script type="application/shiny-prerendered" data-context="server">
@@ -1181,7 +1169,7 @@ output$`tutorial-exercise-compare-the-different-transformations-NormalExercise-2
 </script>
  
 <script type="application/shiny-prerendered" data-context="server">
-learnr:::question_prerendered_chunk(structure(list(type = "radio", label = "how-does-the-distribution-change-MultipleChoiceExercise-mcq",     question = structure("Which statement is true?", html = TRUE, class = c("html",     "character")), answers = list(structure(list(id = "lnr_ans_8b45e16",         option = "Square root and scale don't change the distribution but do change the unit.",         label = structure("Square root and scale don&#39;t change the distribution but do change the unit.", html = TRUE, class = c("html",         "character")), is_correct = FALSE, message = structure("Almost. While this is true, it&#39;s not the only true answer.", html = TRUE, class = c("html",         "character"))), class = c("tutorial_question_answer",     "tutorial_quiz_answer")), structure(list(id = "lnr_ans_3449959",         option = "Logarithm changes the distribution and unit.",         label = structure("Logarithm changes the distribution and unit.", html = TRUE, class = c("html",         "character")), is_correct = FALSE, message = structure("Almost. While this is true, it&#39;s not the only true answer.", html = TRUE, class = c("html",         "character"))), class = c("tutorial_question_answer",     "tutorial_quiz_answer")), structure(list(id = "lnr_ans_788097c",         option = "Body mass already has a good distribution and has the original unit.",         label = structure("Body mass already has a good distribution and has the original unit.", html = TRUE, class = c("html",         "character")), is_correct = FALSE, message = structure("Almost. While this is true, it&#39;s not the only true answer.", html = TRUE, class = c("html",         "character"))), class = c("tutorial_question_answer",     "tutorial_quiz_answer")), structure(list(id = "lnr_ans_efa4f54",         option = "Scale can make interpreting easier as 1 unit = 1 standard deviation of the original unit.",         label = structure("Scale can make interpreting easier as 1 unit = 1 standard deviation of the original unit.", html = TRUE, class = c("html",         "character")), is_correct = FALSE, message = structure("Almost. While this is true, it&#39;s not the only true answer.", html = TRUE, class = c("html",         "character"))), class = c("tutorial_question_answer",     "tutorial_quiz_answer")), structure(list(id = "lnr_ans_e31983",         option = "All of the above.", label = structure("All of the above.", html = TRUE, class = c("html",         "character")), is_correct = TRUE, message = structure("Yes! Which type of and when you might transform really depends on the research question, the data values, and how you will want the results from your analyses to be interpreted. This means you need to carefully think about and have justifications for what you do to the data.", html = TRUE, class = c("html",         "character"))), class = c("tutorial_question_answer",     "tutorial_quiz_answer"))), button_labels = list(submit = structure("Submit Answer", html = TRUE, class = c("html",     "character")), try_again = structure("Try Again", html = TRUE, class = c("html",     "character"))), messages = list(correct = structure("Correct!", html = TRUE, class = c("html",     "character")), try_again = structure("Incorrect", html = TRUE, class = c("html",     "character")), incorrect = structure("Incorrect", html = TRUE, class = c("html",     "character")), message = NULL, post_message = NULL), ids = list(        answer = "how-does-the-distribution-change-MultipleChoiceExercise-mcq-answer",         question = "how-does-the-distribution-change-MultipleChoiceExercise-mcq"),     loading = structure("<strong>Loading:<\u002fstrong> \nWhich statement is true?\n<br/><br/><br/>", html = TRUE, class = c("html",     "character")), random_answer_order = FALSE, allow_retry = TRUE), class = c("radio", "tutorial_question")))
+learnr:::question_prerendered_chunk(structure(list(type = "radio", label = "how-does-the-distribution-change-MultipleChoiceExercise-mcq",     question = structure("Which statement is true?", html = TRUE, class = c("html",     "character")), answers = list(structure(list(id = "lnr_ans_786ee84",         option = "Square root and scale don't change the distribution but do change the unit.",         label = structure("Square root and scale don&#39;t change the distribution but do change the unit.", html = TRUE, class = c("html",         "character")), is_correct = FALSE, message = structure("Almost. While this is true, it&#39;s not the only true answer.", html = TRUE, class = c("html",         "character"))), class = c("tutorial_question_answer",     "tutorial_quiz_answer")), structure(list(id = "lnr_ans_d7913d2",         option = "Logarithm changes the distribution and unit.",         label = structure("Logarithm changes the distribution and unit.", html = TRUE, class = c("html",         "character")), is_correct = FALSE, message = structure("Almost. While this is true, it&#39;s not the only true answer.", html = TRUE, class = c("html",         "character"))), class = c("tutorial_question_answer",     "tutorial_quiz_answer")), structure(list(id = "lnr_ans_1e7308a",         option = "Body mass already has a good distribution and has the original unit.",         label = structure("Body mass already has a good distribution and has the original unit.", html = TRUE, class = c("html",         "character")), is_correct = FALSE, message = structure("Almost. While this is true, it&#39;s not the only true answer.", html = TRUE, class = c("html",         "character"))), class = c("tutorial_question_answer",     "tutorial_quiz_answer")), structure(list(id = "lnr_ans_7452c2e",         option = "Scale can make interpreting easier as 1 unit = 1 standard deviation of the original unit.",         label = structure("Scale can make interpreting easier as 1 unit = 1 standard deviation of the original unit.", html = TRUE, class = c("html",         "character")), is_correct = FALSE, message = structure("Almost. While this is true, it&#39;s not the only true answer.", html = TRUE, class = c("html",         "character"))), class = c("tutorial_question_answer",     "tutorial_quiz_answer")), structure(list(id = "lnr_ans_c0a050",         option = "All of the above.", label = structure("All of the above.", html = TRUE, class = c("html",         "character")), is_correct = TRUE, message = structure("Yes! Which type of and when you might transform really depends on the research question, the data values, and how you will want the results from your analyses to be interpreted. This means you need to carefully think about and have justifications for what you do to the data.", html = TRUE, class = c("html",         "character"))), class = c("tutorial_question_answer",     "tutorial_quiz_answer"))), button_labels = list(submit = structure("Submit Answer", html = TRUE, class = c("html",     "character")), try_again = structure("Try Again", html = TRUE, class = c("html",     "character"))), messages = list(correct = structure("Correct!", html = TRUE, class = c("html",     "character")), try_again = structure("Incorrect", html = TRUE, class = c("html",     "character")), incorrect = structure("Incorrect", html = TRUE, class = c("html",     "character")), message = NULL, post_message = NULL), ids = list(        answer = "how-does-the-distribution-change-MultipleChoiceExercise-mcq-answer",         question = "how-does-the-distribution-change-MultipleChoiceExercise-mcq"),     loading = structure("<strong>Loading:<\u002fstrong> \nWhich statement is true?\n<br/><br/><br/>", html = TRUE, class = c("html",     "character")), random_answer_order = FALSE, allow_retry = TRUE), class = c("radio", "tutorial_question")))
 </script>
  <!--html_preserve-->
 <script type="application/shiny-prerendered" data-context="dependencies">

@@ -27,9 +27,9 @@ been loaded.
 
 ```{r plot-univariate-distributions-NormalExercise-setup}
 capture.output({
-data(tidier_framingham, package = "acdcourse")
+data("tidier_framingham", package = "acdcourse")
 library(ggplot2)
-})
+}, file = tempfile())
 ```
 
 ### Exercise step
@@ -98,7 +98,7 @@ data(tidier_framingham, package = "acdcourse")
 library(dplyr)
 library(tidyr)
 library(ggplot2)
-})
+}, file = tempfile())
 ```
 
 ### Exercise step
@@ -272,7 +272,7 @@ library(tidyr, quietly = TRUE)
 library(ggplot2, quietly = TRUE)
 tidier_framingham <- tidier_framingham %>% 
     mutate(got_cvd = as.character(got_cvd))
-})
+}, file = tempfile())
 ```
 
 ```{r visually-examine-the-outcomes-with-the-exposures-NormalExercise, exercise=TRUE, exercise.setup='visually-examine-the-outcomes-with-the-exposures-NormalExercise-setup'}
@@ -334,7 +334,7 @@ problem and tidy up the data so it is more intuitive and descriptive.
 capture.output({
 data(tidier_framingham, package = "acdcourse")
 library(dplyr)
-})
+}, file = tempfile())
 ```
 
 ### Exercise step
@@ -436,7 +436,7 @@ data(tidier2_framingham, package = "acdcourse")
 library(forcats)
 library(dplyr)
 tidier2_framingham$education_combined <- NULL
-})
+}, file = tempfile())
 ```
 
 ```{r merge-factor-categories-together-NormalExercise, exercise=TRUE, exercise.setup='merge-factor-categories-together-NormalExercise-setup'}
@@ -508,7 +508,7 @@ capture.output({
 data(tidier2_framingham, package = "acdcourse")
 library(dplyr)
 invert <- function(x) 1 / x
-})
+}, file = tempfile())
 ```
 
 ```{r apply-variable-transformations-NormalExercise, exercise=TRUE, exercise.setup='apply-variable-transformations-NormalExercise-setup'}
@@ -563,7 +563,7 @@ data(transformed_framingham, package = "acdcourse")
 library(tidyr)
 library(dplyr)
 library(ggplot2)
-})
+}, file = tempfile())
 ```
 
 ### Exercise step
@@ -575,15 +575,13 @@ variables with `body_mass_index` in the name.
 
 ```{r compare-the-different-transformations-NormalExercise-1, exercise=TRUE, exercise.setup='compare-the-different-transformations-NormalExercise-setup'}
 # Plot a histogram of body mass transforms
-bmi_transforms_plot <- ___ %>% 
+___ %>% 
 	# Keep variables with string in variable name
     select(contains(___)) %>% 
     gather(variable, value) %>% 
     ggplot(aes(x = value)) +
     geom_histogram() +
     facet_wrap(vars(variable), scale = "free")
-
-bmi_transforms_plot
 ```
 
 ```{r compare-the-different-transformations-NormalExercise-1-hint-1, eval=FALSE}
@@ -592,15 +590,13 @@ bmi_transforms_plot
 
 ```{r compare-the-different-transformations-NormalExercise-1-hint-2, eval=FALSE}
 # Plot a histogram of body mass transforms
-bmi_transforms_plot <- transformed_framingham %>% 
+transformed_framingham %>% 
 	# Keep variables with string in variable name
     select(contains("body_mass_index")) %>% 
     gather(variable, value) %>% 
     ggplot(aes(x = value)) +
     geom_histogram() +
     facet_wrap(vars(variable), scale = "free")
-
-bmi_transforms_plot
 ```
 
 ```{r compare-the-different-transformations-NormalExercise-1-check, eval=FALSE}
@@ -615,15 +611,13 @@ bmi_transforms_plot
 
 ```{r compare-the-different-transformations-NormalExercise-2, exercise=TRUE, exercise.setup='compare-the-different-transformations-NormalExercise-setup'}
 # Plot a histogram of cigarettes per day transforms
-cpd_transforms_plot <- transformed_framingham %>% 
+transformed_framingham %>% 
 	# Keep variables with string in variable name
     select(contains("___")) %>% 
     gather(variable, value) %>% 
     ggplot(aes(x = value)) +
     geom_histogram() +
     facet_wrap(vars(variable), scale = "free")
-
-cpd_transforms_plot
 ```
 
 ```{r compare-the-different-transformations-NormalExercise-2-hint-1, eval=FALSE}
@@ -632,15 +626,13 @@ cpd_transforms_plot
 
 ```{r compare-the-different-transformations-NormalExercise-2-hint-2, eval=FALSE}
 # Plot a histogram of cigarettes per day transforms
-cpd_transforms_plot <- transformed_framingham %>% 
+transformed_framingham %>% 
 	# Keep variables with string in variable name
     select(contains("cigarettes_per_day")) %>% 
     gather(variable, value) %>% 
     ggplot(aes(x = value)) +
     geom_histogram() +
     facet_wrap(vars(variable), scale = "free")
-
-cpd_transforms_plot
 ```
 
 ```{r compare-the-different-transformations-NormalExercise-2-check, eval=FALSE}
